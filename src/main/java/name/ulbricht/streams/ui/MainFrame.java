@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
@@ -43,7 +44,7 @@ public final class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Logger log = Logger.getLogger("name.ulbricht.streams");
+	private static final Logger log = Logger.getLogger("name.ulbricht.streams");
 
 	private JTabbedPane tabbedPane;
 
@@ -56,9 +57,9 @@ public final class MainFrame extends JFrame {
 				.collect(Collectors.toList()));
 
 		this.tabbedPane = new JTabbedPane();
-		this.tabbedPane.add(Messages.getString("MainFrame.tabSetup.title"), createSetupPanel());
-		this.tabbedPane.add(Messages.getString("MainFrame.tabCode.title"), createCodePanel());
-		this.tabbedPane.add(Messages.getString("MainFrame.tabExecution.title"), createExecutionPanel());
+		this.tabbedPane.add(Messages.getString("tabSetup.title"), createSetupPanel());
+		this.tabbedPane.add(Messages.getString("tabCode.title"), createCodePanel());
+		this.tabbedPane.add(Messages.getString("tabExecution.title"), createExecutionPanel());
 
 		final var contentPane = new JPanel(new BorderLayout());
 		contentPane.setBackground(SystemColor.window);
@@ -91,7 +92,7 @@ public final class MainFrame extends JFrame {
 	private JPanel createSourcePanel() {
 		final var panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
-		panel.setBorder(new TitledBorder(Messages.getString("SourcePanel.title")));
+		panel.setBorder(new TitledBorder(Messages.getString("sourcePanel.title")));
 
 		this.streamSourceComboBoxModel = new MutableComboBoxModel<>(StreamSources.IMPLEMENTATIONS);
 		this.streamSourceComboBox = new JComboBox<>(this.streamSourceComboBoxModel);
@@ -129,10 +130,13 @@ public final class MainFrame extends JFrame {
 
 				this.streamSourcePanel.updateContent(this.currentStreamSource);
 				streamSetupChanged();
-			} catch (StreamOperationException ex) {
+			} catch (final StreamOperationException ex) {
 				Alerts.showError(this, ex);
 			}
 		}
+
+		this.configureStreamSourceButton.setEnabled(
+				this.currentStreamSource != null && StreamOperation.supportsConfiguration(this.currentStreamSource));
 	}
 
 	private void configureStreamSource() {
@@ -157,7 +161,7 @@ public final class MainFrame extends JFrame {
 	private JPanel createIntermediatePanel() {
 		final var panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
-		panel.setBorder(new TitledBorder(Messages.getString("IntermediatePanel.title")));
+		panel.setBorder(new TitledBorder(Messages.getString("intermediatePanel.title")));
 
 		this.intermediateOperationComboBoxModel = new MutableComboBoxModel<>(IntermediateOperations.IMPLEMENTATIONS);
 		this.intermediateOperationComboBox = new JComboBox<>(this.intermediateOperationComboBoxModel);
@@ -170,6 +174,9 @@ public final class MainFrame extends JFrame {
 		this.intermediateOperationListModel = new MutableListModel<>();
 		this.intermediateOperationList = new JList<>(this.intermediateOperationListModel);
 		this.intermediateOperationList.setCellRenderer(new StreamOperationListCellRenderer());
+		this.intermediateOperationList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.intermediateOperationList.getSelectionModel()
+				.addListSelectionListener(e -> updateIntermediateOperationsButtons());
 
 		this.moveIntermediateOperationUpButton = new JButton(
 				Messages.getString("moveIntermediateOperationUpButton.text"));
@@ -209,6 +216,8 @@ public final class MainFrame extends JFrame {
 		panel.add(this.configureIntermediateOperationButton, new GridBagConstraints(1, buttonRow++, 1, 1, 0, 0,
 				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
 
+		SwingUtilities.invokeLater(() -> updateIntermediateOperationsButtons());
+
 		return panel;
 	}
 
@@ -236,6 +245,8 @@ public final class MainFrame extends JFrame {
 				Alerts.showError(this, ex);
 			}
 		}
+
+		updateIntermediateOperationsButtons();
 	}
 
 	private void moveIntermediateOperationUp() {
@@ -260,6 +271,7 @@ public final class MainFrame extends JFrame {
 		final var selectedIndex = this.intermediateOperationList.getSelectedIndex();
 		if (selectedIndex >= 0) {
 			this.intermediateOperationListModel.removeElementAt(selectedIndex);
+			updateIntermediateOperationsButtons();
 			streamSetupChanged();
 		}
 	}
@@ -267,6 +279,7 @@ public final class MainFrame extends JFrame {
 	private void removeAllIntermediateOperations() {
 		if (this.intermediateOperationListModel.getSize() > 0) {
 			this.intermediateOperationListModel.removeAllElements();
+			updateIntermediateOperationsButtons();
 			streamSetupChanged();
 		}
 	}
@@ -280,6 +293,20 @@ public final class MainFrame extends JFrame {
 		}
 	}
 
+	private void updateIntermediateOperationsButtons() {
+		final var size = this.intermediateOperationListModel.getSize();
+		final var selectedIndex = this.intermediateOperationList.getSelectedIndex();
+
+		this.moveIntermediateOperationUpButton.setEnabled(selectedIndex > 0);
+		this.moveIntermediateOperationDownButton.setEnabled(selectedIndex >= 0 && selectedIndex < (size - 1));
+		this.removeIntermediateOperationButton.setEnabled(selectedIndex >= 0);
+		this.removeAllIntermediateOperationsButton.setEnabled(size > 0);
+
+		final var selectedOperation = this.intermediateOperationList.getSelectedValue();
+		this.configureIntermediateOperationButton
+				.setEnabled(selectedOperation != null && StreamOperation.supportsConfiguration(selectedOperation));
+	}
+
 	private MutableComboBoxModel<Class<? extends TerminalOperation<?>>> terminalOperationComboBoxModel;
 	private JComboBox<Class<? extends TerminalOperation<?>>> terminalOperationComboBox;
 	private StreamOperationPanel terminalOperationPanel;
@@ -288,7 +315,7 @@ public final class MainFrame extends JFrame {
 	private JPanel createTerminalPanel() {
 		final var panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
-		panel.setBorder(new TitledBorder(Messages.getString("TerminalPanel.title")));
+		panel.setBorder(new TitledBorder(Messages.getString("terminalPanel.title")));
 
 		this.terminalOperationComboBoxModel = new MutableComboBoxModel<>(TerminalOperations.IMPLEMENTATIONS);
 		this.terminalOperationComboBox = new JComboBox<>(this.terminalOperationComboBoxModel);
@@ -327,10 +354,13 @@ public final class MainFrame extends JFrame {
 
 				this.terminalOperationPanel.updateContent(this.currentTerminalOperation);
 				streamSetupChanged();
-			} catch (StreamOperationException ex) {
+			} catch (final StreamOperationException ex) {
 				Alerts.showError(this, ex);
 			}
 		}
+
+		this.configureTerminalOperationButton.setEnabled(this.currentTerminalOperation != null
+				&& StreamOperation.supportsConfiguration(this.currentTerminalOperation));
 	}
 
 	private void configureTerminalOperation() {
@@ -344,16 +374,12 @@ public final class MainFrame extends JFrame {
 	private <T extends StreamOperation> boolean showConfigureDialog(final T operation) {
 		try {
 			final var pane = StreamOperation.getConfigurationPane(operation);
-			if (pane != null) {
-				pane.setOperation(operation);
-				if (ConfigurationDialog.showModal(this, pane)) {
-					streamSetupChanged();
-					return true;
-				}
-			} else {
-				Alerts.showInfo(this, Messages.getString("MainFrame.noConfiguration"));
+			pane.setOperation(operation);
+			if (ConfigurationDialog.showModal(this, pane)) {
+				streamSetupChanged();
+				return true;
 			}
-		} catch (StreamOperationException ex) {
+		} catch (final StreamOperationException ex) {
 			Alerts.showError(this, ex);
 		}
 		return false;

@@ -65,21 +65,25 @@ public interface StreamOperation {
 		throw new IllegalArgumentException("Cannot handle " + streamOperationClass);
 	}
 
+	static boolean supportsConfiguration(final StreamOperation streamOperation) {
+		return Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass()
+				.getAnnotation(Configuration.class) != null;
+	}
+
 	@SuppressWarnings("unchecked")
 	static <T extends StreamOperation> ConfigurationPane<T> getConfigurationPane(final T streamOperation)
 			throws StreamOperationException {
 		final var configuration = Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass()
 				.getAnnotation(Configuration.class);
-		if (configuration != null) {
-			try {
-				return (ConfigurationPane<T>) configuration.value().getConstructor((Class[]) null)
-						.newInstance((Object[]) null);
-			} catch (final ReflectiveOperationException ex) {
-				throw new StreamOperationException("Could not create configuration pane from " + configuration.value(),
-						ex);
-			}
+		if (configuration == null)
+			throw new StreamOperationException(
+					"Configuration not supported by operation " + getDisplayName(streamOperation));
+		try {
+			return (ConfigurationPane<T>) configuration.value().getConstructor((Class[]) null)
+					.newInstance((Object[]) null);
+		} catch (final ReflectiveOperationException ex) {
+			throw new StreamOperationException("Could not create configuration pane from " + configuration.value(), ex);
 		}
-		return null;
 	}
 
 	static <T extends StreamOperation> T createOperation(final Class<T> streamOperationClass)
