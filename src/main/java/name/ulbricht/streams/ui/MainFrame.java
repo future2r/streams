@@ -197,7 +197,7 @@ public final class MainFrame extends JFrame {
 		panel.add(new JScrollPane(this.intermediateOperationList), new GridBagConstraints(0, 1, 1, 10, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(4, 4, 4, 4), 0, 0));
 
-		var buttonRow = 0;
+		var buttonRow = 1;
 		panel.add(this.moveIntermediateOperationUpButton, new GridBagConstraints(1, buttonRow++, 1, 1, 0, 0,
 				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
 		panel.add(this.moveIntermediateOperationDownButton, new GridBagConstraints(1, buttonRow++, 1, 1, 0, 0,
