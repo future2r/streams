@@ -34,8 +34,8 @@ public final class TextFileWriter implements TerminalOperation<String> {
 	public String getSourceCode() {
 		return ".map(s -> s + '\\n').forEach(s -> {\n" //
 				+ "  try {\n" //
-				+ "    Files.writeString(\"" + quote(this.file.toString())
-				+ "\", s, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.APPEND);\n"
+				+ "    Files.writeString(Paths.get(\"" + quote(this.file.toString())
+				+ "\"), s, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.APPEND);\n"
 				+ "  } catch (IOException ex) {}\n" //
 				+ "})";
 	}

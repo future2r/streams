@@ -16,7 +16,7 @@ public final class TextLines implements StreamSource<String> {
 	private String text = "Hello World!\n" // en
 			+ "Hallo Welt!\n" // de
 			+ "Salut tout le monde!\n" // fr
-			+ "¡Hola mundo!\n" // es
+			+ "Â¡Hola mundo!\n" // es
 			+ "Salve, mondo!\n" // it
 			+ "qo' vIvan!"; // tlh
 
