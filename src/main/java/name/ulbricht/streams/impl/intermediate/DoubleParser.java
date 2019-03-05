@@ -14,7 +14,7 @@ public final class DoubleParser implements IntermediateOperation<String, Double>
 
 	@Override
 	public String getSourceCode() {
-		return ".map(Double::parseInt)";
+		return ".map(Double::parseDouble)";
 	}
 
 	@Override

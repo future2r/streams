@@ -36,7 +36,7 @@ public final class IntegerCompareFilter implements IntermediateOperation<Integer
 		return this.compareOperation;
 	}
 
-	void setCompareOperation(CompareOperation compareOperation) {
+	void setCompareOperation(final CompareOperation compareOperation) {
 		this.compareOperation = compareOperation;
 	}
 
@@ -44,7 +44,7 @@ public final class IntegerCompareFilter implements IntermediateOperation<Integer
 		return this.compareValue;
 	}
 
-	void setCompareValue(int compareValue) {
+	void setCompareValue(final int compareValue) {
 		this.compareValue = compareValue;
 	}
 

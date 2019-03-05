@@ -8,16 +8,16 @@ import name.ulbricht.streams.ui.MainFrame;
 
 public final class Streams {
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) {
+		} catch (final ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException ex) {
 			// fall back to the default look and feel
 		}
 
 		SwingUtilities.invokeLater(() -> {
-			MainFrame mainFrame = new MainFrame();
+			final var mainFrame = new MainFrame();
 			mainFrame.setVisible(true);
 		});
 	}

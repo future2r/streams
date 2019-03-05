@@ -48,7 +48,7 @@ final class StreamOperationPanel extends JPanel {
 	}
 
 	@Override
-	public void setForeground(Color fg) {
+	public void setForeground(final Color fg) {
 		super.setForeground(fg);
 		if (this.nameLabel != null)
 			this.nameLabel.setForeground(fg);

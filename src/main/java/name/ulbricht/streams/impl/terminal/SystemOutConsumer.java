@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.api.TerminalOperation;
 
-@Name("System.out Consumer")
+@Name("System.out")
 public final class SystemOutConsumer implements TerminalOperation<Object> {
 
 	@Override

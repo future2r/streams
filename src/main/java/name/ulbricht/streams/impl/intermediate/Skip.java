@@ -20,12 +20,12 @@ public final class Skip implements IntermediateOperation<Object, Object> {
 
 	@Override
 	public String getSourceCode() {
-		return ".skip(" + this.skip + ")";
+		return String.format(".skip(%s)", Integer.toString(this.skip));
 	}
 
 	@Override
 	public String getConfigurationText() {
-		return "skip=" + this.skip;
+		return String.format("skip=%s", Integer.toString(this.skip));
 	}
 
 	@Override

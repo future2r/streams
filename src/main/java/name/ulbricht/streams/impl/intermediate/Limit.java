@@ -20,12 +20,12 @@ public final class Limit implements IntermediateOperation<Object, Object> {
 
 	@Override
 	public String getSourceCode() {
-		return ".limit(" + this.limit + ")";
+		return String.format(".limit(%s)", Integer.toString(this.limit));
 	}
 
 	@Override
 	public String getConfigurationText() {
-		return "limit=" + this.limit;
+		return String.format("limit=%s", Integer.toString(this.limit));
 	}
 
 	@Override

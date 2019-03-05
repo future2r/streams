@@ -13,9 +13,10 @@ final class StreamOperationClassListCellRenderer implements ListCellRenderer<Cla
 	private final ListCellRenderer<Object> delegate = new DefaultListCellRenderer();
 
 	@Override
-	public Component getListCellRendererComponent(JList<? extends Class<? extends StreamOperation>> list,
-			Class<? extends StreamOperation> value, int index, boolean isSelected, boolean cellHasFocus) {
-		final String text = value != null ? StreamOperation.getDisplayName(value) : " ";
+	public Component getListCellRendererComponent(final JList<? extends Class<? extends StreamOperation>> list,
+			final Class<? extends StreamOperation> value, final int index, final boolean isSelected,
+			final boolean cellHasFocus) {
+		final var text = value != null ? StreamOperation.getDisplayName(value) : " ";
 
 		return delegate.getListCellRendererComponent(list, text, index, isSelected, cellHasFocus);
 	}

@@ -1,5 +1,7 @@
 package name.ulbricht.streams.impl.intermediate;
 
+import static name.ulbricht.streams.api.StreamOperation.quote;
+
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
@@ -18,13 +20,13 @@ public final class StringFormatter implements IntermediateOperation<Object, Stri
 		return this.format;
 	}
 
-	void setFormat(String format) {
+	void setFormat(final String format) {
 		this.format = format;
 	}
 
 	@Override
 	public String getSourceCode() {
-		return ".map(e -> String.format(\"" + this.format + "\", e))";
+		return String.format(".map(e -> String.format(\"%s\", e))", quote(this.format));
 	}
 
 	@Override

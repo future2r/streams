@@ -45,7 +45,7 @@ public final class StringJoiner implements TerminalOperation<String> {
 
 	@Override
 	public String getSourceCode() {
-		return String.format(".collect(Collectors.joining(\"%s\", \\\"%s\\\", \\\"%s\\\"))", quote(this.delimiter),
+		return String.format(".collect(Collectors.joining(\"%s\", \"%s\", \"%s\"))", quote(this.delimiter),
 				quote(this.prefix), quote(this.suffix));
 	}
 

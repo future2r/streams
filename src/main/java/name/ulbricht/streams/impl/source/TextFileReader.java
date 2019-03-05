@@ -25,7 +25,7 @@ public final class TextFileReader implements StreamSource<String> {
 		return this.file;
 	}
 
-	void setFile(Path file) {
+	void setFile(final Path file) {
 		this.file = file;
 	}
 

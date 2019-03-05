@@ -17,9 +17,8 @@ public interface StreamOperation {
 	static <T extends StreamOperation> String getName(final Class<T> streamOperationClass) {
 		final var name = Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
 				.getAnnotation(Name.class);
-		if (name != null) {
+		if (name != null)
 			return name.value();
-		}
 		return streamOperationClass.getSimpleName();
 	}
 
