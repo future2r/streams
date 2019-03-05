@@ -462,7 +462,8 @@ public final class MainFrame extends JFrame {
 
 			try {
 				final var result = worker.get();
-				log.info(() -> "Result: " + toString(result));
+				log.info(() -> String.format("Result (class: %s): %s",
+						result != null ? result.getClass().getName() : "n/a", toString(result)));
 			} catch (final InterruptedException | ExecutionException ex) {
 				Alerts.showError(this, ex);
 			}
@@ -473,7 +474,7 @@ public final class MainFrame extends JFrame {
 		}
 	}
 
-	private String toString(final Object result) {
+	private static String toString(final Object result) {
 		if (result != null && result.getClass().isArray())
 			return Arrays.toString((Object[]) result);
 		return Objects.toString(result);
