@@ -1,7 +1,6 @@
 package name.ulbricht.streams.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -21,6 +20,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
@@ -402,7 +402,7 @@ public final class MainFrame extends JFrame {
 		this.copyCodeButton = new JButton(Messages.getString("copyCodeButton.text"));
 		this.copyCodeButton.addActionListener(e -> copyCode());
 
-		panel.add(scrollableNoBorder(this.codeTextArea), new GridBagConstraints(0, 0, 1, 1, 1, 1,
+		panel.add(new JScrollPane(this.codeTextArea), new GridBagConstraints(0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(4, 4, 4, 4), 0, 0));
 		panel.add(this.copyCodeButton, new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(4, 4, 4, 4), 0, 0));
@@ -424,9 +424,11 @@ public final class MainFrame extends JFrame {
 	}
 
 	private JButton executeButton;
-	private JTabbedPane logTabbedPane;
+	private JTabbedPane executionTabbedPane;
 	private JTextArea sysOutTextArea;
 	private JTextArea logTextArea;
+	private ExecutionLoggerTableModel statisticsTableModel;
+	private JTable statisticsTable;
 
 	private JPanel createExecutionPanel() {
 		final var panel = new JPanel(new GridBagLayout());
@@ -445,14 +447,17 @@ public final class MainFrame extends JFrame {
 
 		log.addHandler(new TextAreaLogHandler(this.logTextArea));
 
-		this.logTabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
+		this.statisticsTableModel = new ExecutionLoggerTableModel();
+		this.statisticsTable = new JTable(this.statisticsTableModel);
 
-		this.logTabbedPane.add(Messages.getString("tabLog.title"), scrollableNoBorder(this.logTextArea));
-		this.logTabbedPane.add(Messages.getString("tabSysOut.title"), scrollableNoBorder(this.sysOutTextArea));
+		this.executionTabbedPane = new JTabbedPane();
+		this.executionTabbedPane.add(Messages.getString("tabLog.title"), new JScrollPane(this.logTextArea));
+		this.executionTabbedPane.add(Messages.getString("tabSysOut.title"), new JScrollPane(this.sysOutTextArea));
+		this.executionTabbedPane.add(Messages.getString("tabStatistics.title"), new JScrollPane(this.statisticsTable));
 
 		panel.add(this.executeButton, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(4, 4, 4, 4), 0, 0));
-		panel.add(this.logTabbedPane, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.CENTER,
+		panel.add(this.executionTabbedPane, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.CENTER,
 				GridBagConstraints.BOTH, new Insets(4, 4, 4, 4), 0, 0));
 
 		return panel;
@@ -464,6 +469,7 @@ public final class MainFrame extends JFrame {
 		if (this.executionWorker == null) {
 			this.logTextArea.setText("");
 			this.sysOutTextArea.setText("");
+			this.statisticsTableModel.removeAll();
 
 			final var executor = new StreamExecutor(this.currentStreamSource,
 					this.intermediateOperationListModel.getAllElements(), this.currentTerminalOperation);
@@ -490,6 +496,8 @@ public final class MainFrame extends JFrame {
 				final var result = worker.get();
 				log.info(() -> String.format("Result (class: %s): %s",
 						result != null ? result.getClass().getName() : "n/a", toString(result)));
+
+				this.statisticsTableModel.replaceAll(worker.getExecutor().getExecutionLoggers());
 			} catch (final InterruptedException | ExecutionException ex) {
 				Alerts.showError(this, ex);
 			}
@@ -504,11 +512,5 @@ public final class MainFrame extends JFrame {
 		if (result != null && result.getClass().isArray())
 			return Arrays.toString((Object[]) result);
 		return Objects.toString(result);
-	}
-
-	private static JScrollPane scrollableNoBorder(final Component component) {
-		final var scrollPane = new JScrollPane(component);
-		scrollPane.setBorder(null);
-		return scrollPane;
 	}
 }

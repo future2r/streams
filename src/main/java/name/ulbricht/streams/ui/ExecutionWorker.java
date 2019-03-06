@@ -18,4 +18,8 @@ final class ExecutionWorker extends SwingWorker<Object, Object> {
 	protected Object doInBackground() throws Exception {
 		return this.executor.execute();
 	}
+
+	StreamExecutor getExecutor() {
+		return this.executor;
+	}
 }
