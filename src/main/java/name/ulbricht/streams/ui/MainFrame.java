@@ -496,12 +496,12 @@ public final class MainFrame extends JFrame {
 				final var result = worker.get();
 				log.info(() -> String.format("Result (class: %s): %s",
 						result != null ? result.getClass().getName() : "n/a", toString(result)));
-
-				this.statisticsTableModel.replaceAll(worker.getExecutor().getExecutionLoggers());
 			} catch (final InterruptedException | ExecutionException ex) {
 				Alerts.showError(this, ex);
 			}
 
+			this.statisticsTableModel.replaceAll(worker.getExecutor().getExecutionLoggers());
+			
 			this.executeButton.setEnabled(true);
 			break;
 		default: // ignore
