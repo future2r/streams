@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.SystemColor;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
@@ -427,7 +428,7 @@ public final class MainFrame extends JFrame {
 	private JTabbedPane executionTabbedPane;
 	private JTextArea sysOutTextArea;
 	private JTextArea logTextArea;
-	private ExecutionLoggerTableModel statisticsTableModel;
+	private MutableTableModel<StreamExecutor.ExecutionLogger> statisticsTableModel;
 	private JTable statisticsTable;
 
 	private JPanel createExecutionPanel() {
@@ -447,7 +448,11 @@ public final class MainFrame extends JFrame {
 
 		log.addHandler(new TextAreaLogHandler(this.logTextArea));
 
-		this.statisticsTableModel = new ExecutionLoggerTableModel();
+		this.statisticsTableModel = new MutableTableModel<>(List.of(
+				new MutableTableModel.Column<>(Messages.getString("statisticsTableModel.nameColumn"),
+						StreamExecutor.ExecutionLogger::getOperationName, String.class),
+				new MutableTableModel.Column<>(Messages.getString("statisticsTableModel.elementsColumn"),
+						StreamExecutor.ExecutionLogger::getElementsProvided, Long.class)));
 		this.statisticsTable = new JTable(this.statisticsTableModel);
 
 		this.executionTabbedPane = new JTabbedPane();
@@ -501,7 +506,7 @@ public final class MainFrame extends JFrame {
 			}
 
 			this.statisticsTableModel.replaceAll(worker.getExecutor().getExecutionLoggers());
-			
+
 			this.executeButton.setEnabled(true);
 			break;
 		default: // ignore

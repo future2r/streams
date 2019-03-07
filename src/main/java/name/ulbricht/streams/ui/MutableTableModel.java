@@ -2,6 +2,7 @@ package name.ulbricht.streams.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import javax.swing.event.EventListenerList;
@@ -9,52 +10,67 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-import name.ulbricht.streams.api.StreamExecutor;
-import name.ulbricht.streams.api.StreamExecutor.ExecutionLogger;
+final class MutableTableModel<T> implements TableModel {
 
-final class ExecutionLoggerTableModel implements TableModel {
+	static final class Column<T> {
 
-	private enum Column {
-		NAME(String.class, ExecutionLogger::getOperationName),
-		ELEMENTS(Long.class, ExecutionLogger::getElementsProvided);
-
+		private final String columnName;
 		private final Class<?> columnClass;
-		private final Function<ExecutionLogger, ?> valueAccessor;
+		private final Function<T, ?> valueAccessor;
 
-		Column(final Class<?> columnClass, final Function<ExecutionLogger, ?> valueAccessor) {
-			this.columnClass = columnClass;
+		Column(final String columnName) {
+			this(columnName, null, null);
+		}
+
+		Column(final String columnName, final Function<T, ?> valueAccessor) {
+			this(columnName, valueAccessor, null);
+		}
+
+		Column(final String columnName, final Function<T, ?> valueAccessor, final Class<?> columnClass) {
+			this.columnName = Objects.requireNonNull(columnName, "columnName must not be null");
 			this.valueAccessor = valueAccessor;
+			this.columnClass = columnClass;
 		}
 
 		String getColumnName() {
-			return Messages.getString("ExecutionLoggerTableModel." + name() + ".name");
+			return this.columnName;
 		}
 
 		Class<?> getColumnClass() {
-			return this.columnClass;
+			return this.columnClass != null ? this.columnClass : Object.class;
 		}
 
-		Object getValue(final StreamExecutor.ExecutionLogger logger) {
-			return this.valueAccessor.apply(logger);
+		Object getValue(final T logger) {
+			return this.valueAccessor != null ? this.valueAccessor.apply(logger) : null;
 		}
 	}
 
-	private final List<StreamExecutor.ExecutionLogger> rows = new ArrayList<>();
+	private final List<Column<T>> columns = new ArrayList<>();
+	private final List<T> rows = new ArrayList<>();
 	private final EventListenerList eventListeners = new EventListenerList();
+
+	public MutableTableModel(final List<Column<T>> columns) {
+		this(columns, List.of());
+	}
+
+	public MutableTableModel(final List<Column<T>> columns, final List<T> initialRows) {
+		this.columns.addAll(Objects.requireNonNull(columns, "columns must not be null"));
+		this.rows.addAll(Objects.requireNonNull(initialRows, "initialRows must not be null"));
+	}
 
 	@Override
 	public int getColumnCount() {
-		return Column.values().length;
+		return this.columns.size();
 	}
 
 	@Override
 	public String getColumnName(final int columnIndex) {
-		return Column.values()[columnIndex].getColumnName();
+		return this.columns.get(columnIndex).getColumnName();
 	}
 
 	@Override
 	public Class<?> getColumnClass(final int columnIndex) {
-		return Column.values()[columnIndex].getColumnClass();
+		return this.columns.get(columnIndex).getColumnClass();
 	}
 
 	@Override
@@ -64,7 +80,7 @@ final class ExecutionLoggerTableModel implements TableModel {
 
 	@Override
 	public Object getValueAt(final int rowIndex, final int columnIndex) {
-		return Column.values()[columnIndex].getValue(this.rows.get(rowIndex));
+		return this.columns.get(columnIndex).getValue(this.rows.get(rowIndex));
 	}
 
 	@Override
@@ -96,9 +112,9 @@ final class ExecutionLoggerTableModel implements TableModel {
 		}
 	}
 
-	void replaceAll(final List<StreamExecutor.ExecutionLogger> executionLoggers) {
+	void replaceAll(final List<T> newRows) {
 		removeAll();
-		this.rows.addAll(executionLoggers);
+		this.rows.addAll(newRows);
 		if (!this.rows.isEmpty())
 			fireRowsInserted(0, this.rows.size() - 1);
 	}
