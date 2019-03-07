@@ -1,6 +1,7 @@
 package name.ulbricht.streams.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -58,9 +59,9 @@ public final class MainFrame extends JFrame {
 				.collect(Collectors.toList()));
 
 		this.tabbedPane = new JTabbedPane();
-		this.tabbedPane.add(Messages.getString("tabSetup.title"), createSetupPanel());
-		this.tabbedPane.add(Messages.getString("tabCode.title"), createCodePanel());
-		this.tabbedPane.add(Messages.getString("tabExecution.title"), createExecutionPanel());
+		addTabPane(this.tabbedPane, createSetupPanel(), "tabSetup.title", "tabSetup.icon");
+		addTabPane(this.tabbedPane, createCodePanel(), "tabCode.title", "tabCode.icon");
+		addTabPane(this.tabbedPane, createExecutionPanel(), "tabExecution.title", "tabExecution.icon");
 
 		final var contentPane = new JPanel(new BorderLayout());
 		contentPane.setBackground(SystemColor.window);
@@ -454,6 +455,8 @@ public final class MainFrame extends JFrame {
 				new MutableTableModel.Column<>(Messages.getString("statisticsTableModel.elementsColumn"),
 						StreamExecutor.ExecutionLogger::getElementsProvided, Long.class)));
 		this.statisticsTable = new JTable(this.statisticsTableModel);
+		final var nameColumn = this.statisticsTable.getColumnModel().getColumn(0);
+		nameColumn.setCellRenderer(new StreamOperationTableCellRenderer());
 
 		this.executionTabbedPane = new JTabbedPane();
 		this.executionTabbedPane.add(Messages.getString("tabLog.title"), new JScrollPane(this.logTextArea));
@@ -517,5 +520,12 @@ public final class MainFrame extends JFrame {
 		if (result != null && result.getClass().isArray())
 			return Arrays.toString((Object[]) result);
 		return Objects.toString(result);
+	}
+
+	private static void addTabPane(final JTabbedPane tabbedPane, final Component component, final String titleResource,
+			final String iconResource) {
+		tabbedPane.add(Messages.getString(titleResource), component);
+		final var tabIndex = tabbedPane.indexOfComponent(component);
+		tabbedPane.setIconAt(tabIndex, Messages.getIcon(iconResource));
 	}
 }

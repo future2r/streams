@@ -27,6 +27,10 @@ public final class StreamExecutor extends StreamHandler {
 			this.elementsProvided++;
 			log.info(() -> String.format("%s: %s", this.operationName, element));
 		}
+		
+		public StreamOperation getOperation() {
+			return this.operation;
+		}
 
 		public String getOperationName() {
 			return this.operationName;

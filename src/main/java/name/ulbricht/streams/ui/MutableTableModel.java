@@ -103,6 +103,10 @@ final class MutableTableModel<T> implements TableModel {
 	public void removeTableModelListener(final TableModelListener l) {
 		this.eventListeners.remove(TableModelListener.class, l);
 	}
+	
+	public T getRow(final int rowIndex) {
+		return this.rows.get(rowIndex);
+	}
 
 	void removeAll() {
 		if (!this.rows.isEmpty()) {

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 
+import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -11,11 +12,18 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
+import name.ulbricht.streams.api.IntermediateOperation;
 import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.StreamSource;
+import name.ulbricht.streams.api.TerminalOperation;
 
 final class StreamOperationPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+
+	private static Icon sourceIcon = Messages.getIcon("StreamSource.icon");
+	private static Icon intermediateIcon = Messages.getIcon("IntermediateOperation.icon");
+	private static Icon terminalIcon = Messages.getIcon("TerminalOperation.icon");
 
 	private final JLabel nameLabel;
 	private final JTextField configTextField;
@@ -58,6 +66,18 @@ final class StreamOperationPanel extends JPanel {
 
 	void updateContent(final StreamOperation streamOperation) {
 		this.nameLabel.setText(streamOperation != null ? StreamOperation.getDisplayName(streamOperation) : " ");
+
+		final Icon icon;
+		if (streamOperation instanceof StreamSource)
+			icon = sourceIcon;
+		else if (streamOperation instanceof IntermediateOperation)
+			icon = intermediateIcon;
+		else if (streamOperation instanceof TerminalOperation)
+			icon = terminalIcon;
+		else
+			icon = null;
+		this.nameLabel.setIcon(icon);
+
 		this.configTextField.setText(streamOperation != null ? streamOperation.getConfigurationText() : " ");
 	}
 }
