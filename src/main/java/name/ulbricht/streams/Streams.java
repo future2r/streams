@@ -17,8 +17,7 @@ public final class Streams {
 		}
 
 		SwingUtilities.invokeLater(() -> {
-			final var mainFrame = new MainFrame();
-			mainFrame.setVisible(true);
+			MainFrame.getInstance().setVisible(true);
 		});
 	}
 }
