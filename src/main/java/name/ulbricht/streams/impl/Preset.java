@@ -6,6 +6,8 @@ import java.util.function.Supplier;
 import name.ulbricht.streams.api.StreamOperationSet;
 import name.ulbricht.streams.impl.intermediate.Distinct;
 import name.ulbricht.streams.impl.intermediate.FileLines;
+import name.ulbricht.streams.impl.intermediate.JavaScriptFilter;
+import name.ulbricht.streams.impl.intermediate.JavaScriptMapper;
 import name.ulbricht.streams.impl.intermediate.LowerCase;
 import name.ulbricht.streams.impl.intermediate.RegExSplitter;
 import name.ulbricht.streams.impl.intermediate.Sorted;
@@ -13,6 +15,7 @@ import name.ulbricht.streams.impl.intermediate.StringMapper;
 import name.ulbricht.streams.impl.source.Empty;
 import name.ulbricht.streams.impl.source.FindFiles;
 import name.ulbricht.streams.impl.source.RandomIntegerGenerator;
+import name.ulbricht.streams.impl.source.SystemProperties;
 import name.ulbricht.streams.impl.source.TextFileReader;
 import name.ulbricht.streams.impl.source.TextLines;
 import name.ulbricht.streams.impl.terminal.Count;
@@ -26,11 +29,15 @@ public enum Preset {
 
 	SPLIT_WORDS("Word length statistics", Preset::createSplitWords),
 
+	FILTER_JAVA_SCRIPT("Filter by JavaScript", Preset::createFilterJavaScript),
+
 	SORT_LINES("Sort lines in a file", Preset::createSortLines),
 
 	COUNT_LINES("Count lines in all files", Preset::createCountLines),
 
-	GENERATE_NUMBERS("Generate a file with sorted numbers", Preset::createGenerateNumbers);
+	GENERATE_NUMBERS("Generate a file with sorted numbers", Preset::createGenerateNumbers),
+
+	SYSTEM_PROPERTIES("Display Java system properties", Preset::createSystemProperties);
 
 	private final String displayName;
 	private final Supplier<StreamOperationSet> operationsFactory;
@@ -64,6 +71,13 @@ public enum Preset {
 				new StringLengthGrouping());
 	}
 
+	private static StreamOperationSet createFilterJavaScript() {
+		final var filter = new JavaScriptFilter();
+		filter.setScript("result = element.indexOf('H') >= 0");
+
+		return new StreamOperationSet(new TextLines(), List.of(filter), new SystemOut());
+	}
+
 	private static StreamOperationSet createSortLines() {
 		return new StreamOperationSet(new TextFileReader(), List.of(new Distinct(), new Sorted()),
 				new TextFileWriter());
@@ -76,5 +90,12 @@ public enum Preset {
 	private static StreamOperationSet createGenerateNumbers() {
 		return new StreamOperationSet(new RandomIntegerGenerator(),
 				List.of(new Distinct(), new Sorted(), new StringMapper()), new TextFileWriter());
+	}
+
+	private static StreamOperationSet createSystemProperties() {
+		final var propertyReader = new JavaScriptMapper();
+		propertyReader.setScript("result = element + \":\\t\" + java.lang.System.getProperty(element);");
+
+		return new StreamOperationSet(new SystemProperties(), List.of(new Sorted(), propertyReader), new SystemOut());
 	}
 }
