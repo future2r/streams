@@ -37,6 +37,7 @@ import name.ulbricht.streams.api.SourceCodeBuilder;
 import name.ulbricht.streams.api.StreamExecutor;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.api.StreamOperationException;
+import name.ulbricht.streams.api.StreamOperationSet;
 import name.ulbricht.streams.api.StreamSource;
 import name.ulbricht.streams.api.TerminalOperation;
 import name.ulbricht.streams.impl.intermediate.IntermediateOperations;
@@ -448,8 +449,9 @@ public final class MainFrame extends JFrame {
 
 	private void updateSourceCode() {
 		if (this.currentStreamSource != null && this.currentTerminalOperation != null) {
-			SourceCodeBuilder builder = new SourceCodeBuilder(this.currentStreamSource,
+			final var operations = new StreamOperationSet(this.currentStreamSource,
 					this.intermediateOperationListModel.getAllElements(), this.currentTerminalOperation);
+			SourceCodeBuilder builder = new SourceCodeBuilder(operations);
 			this.codeTextArea.setText(builder.getSourceCode());
 		}
 	}
@@ -507,8 +509,9 @@ public final class MainFrame extends JFrame {
 			this.sysOutTextArea.setText("");
 			this.statisticsTableModel.removeAll();
 
-			final var executor = new StreamExecutor(this.currentStreamSource,
+			final var operations = new StreamOperationSet(this.currentStreamSource,
 					this.intermediateOperationListModel.getAllElements(), this.currentTerminalOperation);
+			final var executor = new StreamExecutor(operations);
 
 			this.executionWorker = new ExecutionWorker(executor);
 			this.executionWorker.addPropertyChangeListener(e -> {

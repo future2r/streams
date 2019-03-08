@@ -3,11 +3,12 @@ package name.ulbricht.streams.api;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
-public final class StreamExecutor extends StreamHandler {
+public final class StreamExecutor {
 
 	private static final Logger log = Logger.getLogger("name.ulbricht.streams");
 
@@ -27,7 +28,7 @@ public final class StreamExecutor extends StreamHandler {
 			this.elementsProvided++;
 			log.info(() -> String.format("%s: %s", this.operationName, element));
 		}
-		
+
 		public StreamOperation getOperation() {
 			return this.operation;
 		}
@@ -41,27 +42,26 @@ public final class StreamExecutor extends StreamHandler {
 		}
 	}
 
+	private final StreamOperationSet operations;
 	private final List<ExecutionLogger> executionLoggers = new ArrayList<>();
 
-	public StreamExecutor(final StreamSource<?> streamSource,
-			final List<IntermediateOperation<?, ?>> intermediatOperations,
-			final TerminalOperation<?> terminalOperation) {
-		super(streamSource, intermediatOperations, terminalOperation);
+	public StreamExecutor(final StreamOperationSet operations) {
+		this.operations = Objects.requireNonNull(operations, "operations must not be null");
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object execute() {
 		this.executionLoggers.clear();
 
-		Stream stream = this.streamSource.createStream();
-		stream = addExecutionLogger(stream, this.streamSource);
+		Stream stream = this.operations.getStreamSource().createStream();
+		stream = addExecutionLogger(stream, this.operations.getStreamSource());
 
-		for (final var intermediatOperation : this.intermediatOperations) {
+		for (final var intermediatOperation : this.operations.getIntermediatOperations()) {
 			stream = intermediatOperation.processStream(stream);
 			stream = addExecutionLogger(stream, intermediatOperation);
 		}
 
-		return this.terminalOperation.terminateStream(stream);
+		return this.operations.getTerminalOperation().terminateStream(stream);
 	}
 
 	private Stream<?> addExecutionLogger(final Stream<?> stream, final StreamOperation operation) {
