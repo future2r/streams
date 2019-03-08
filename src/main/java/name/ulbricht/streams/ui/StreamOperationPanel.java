@@ -21,10 +21,6 @@ final class StreamOperationPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Icon sourceIcon = Messages.getIcon("StreamSource.icon");
-	private static Icon intermediateIcon = Messages.getIcon("IntermediateOperation.icon");
-	private static Icon terminalIcon = Messages.getIcon("TerminalOperation.icon");
-
 	private final JLabel nameLabel;
 	private final JTextField configTextField;
 
@@ -69,11 +65,11 @@ final class StreamOperationPanel extends JPanel {
 
 		final Icon icon;
 		if (streamOperation instanceof StreamSource)
-			icon = sourceIcon;
+			icon = Images.getSmallIcon(Images.STREAM_SOURCE);
 		else if (streamOperation instanceof IntermediateOperation)
-			icon = intermediateIcon;
+			icon = Images.getSmallIcon(Images.INTERMEDIATE_OPERATION);
 		else if (streamOperation instanceof TerminalOperation)
-			icon = terminalIcon;
+			icon = Images.getSmallIcon(Images.TERMINAL_OPERATION);
 		else
 			icon = null;
 		this.nameLabel.setIcon(icon);

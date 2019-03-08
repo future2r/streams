@@ -11,10 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -54,14 +51,12 @@ public final class MainFrame extends JFrame {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setLocationByPlatform(true);
 		setTitle(Messages.getString("MainFrame.title"));
-		setIconImages(IntStream.of(16, 24, 32, 48, 64, 128, 256, 512).mapToObj(i -> "app-" + i + ".png")
-				.map(getClass()::getResource).map(ImageIcon::new).map(ImageIcon::getImage)
-				.collect(Collectors.toList()));
+		setIconImages(Images.getImages(Images.APPLICATION));
 
 		this.tabbedPane = new JTabbedPane();
-		addTabPane(this.tabbedPane, createSetupPanel(), "tabSetup.title", "tabSetup.icon");
-		addTabPane(this.tabbedPane, createCodePanel(), "tabCode.title", "tabCode.icon");
-		addTabPane(this.tabbedPane, createExecutionPanel(), "tabExecution.title", "tabExecution.icon");
+		addTabPane(this.tabbedPane, createSetupPanel(), "tabSetup.title", Images.SETUP);
+		addTabPane(this.tabbedPane, createCodePanel(), "tabCode.title", Images.CODE);
+		addTabPane(this.tabbedPane, createExecutionPanel(), "tabExecution.title", Images.EXECUTION);
 
 		final var contentPane = new JPanel(new BorderLayout());
 		contentPane.setBackground(SystemColor.window);
@@ -459,9 +454,10 @@ public final class MainFrame extends JFrame {
 		nameColumn.setCellRenderer(new StreamOperationTableCellRenderer());
 
 		this.executionTabbedPane = new JTabbedPane();
-		this.executionTabbedPane.add(Messages.getString("tabLog.title"), new JScrollPane(this.logTextArea));
-		this.executionTabbedPane.add(Messages.getString("tabSysOut.title"), new JScrollPane(this.sysOutTextArea));
-		this.executionTabbedPane.add(Messages.getString("tabStatistics.title"), new JScrollPane(this.statisticsTable));
+		addTabPane(this.executionTabbedPane, new JScrollPane(this.logTextArea), "tabLog.title", Images.LOG);
+		addTabPane(this.executionTabbedPane, new JScrollPane(this.sysOutTextArea), "tabSysOut.title", Images.CONSOLE);
+		addTabPane(this.executionTabbedPane, new JScrollPane(this.statisticsTable), "tabStatistics.title",
+				Images.STATISTICS);
 
 		panel.add(this.executeButton, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(4, 4, 4, 4), 0, 0));
@@ -526,6 +522,6 @@ public final class MainFrame extends JFrame {
 			final String iconResource) {
 		tabbedPane.add(Messages.getString(titleResource), component);
 		final var tabIndex = tabbedPane.indexOfComponent(component);
-		tabbedPane.setIconAt(tabIndex, Messages.getIcon(iconResource));
+		tabbedPane.setIconAt(tabIndex, Images.getSmallIcon(iconResource));
 	}
 }

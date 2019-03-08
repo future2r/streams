@@ -15,10 +15,6 @@ import name.ulbricht.streams.api.TerminalOperation;
 
 final class StreamOperationClassListCellRenderer implements ListCellRenderer<Class<? extends StreamOperation>> {
 
-	private static Icon sourceIcon = Messages.getIcon("StreamSource.icon");
-	private static Icon intermediateIcon = Messages.getIcon("IntermediateOperation.icon");
-	private static Icon terminalIcon = Messages.getIcon("TerminalOperation.icon");
-
 	private final ListCellRenderer<Object> delegate = new DefaultListCellRenderer();
 
 	@Override
@@ -34,11 +30,11 @@ final class StreamOperationClassListCellRenderer implements ListCellRenderer<Cla
 			Icon icon = null;
 			if (value != null) {
 				if (StreamSource.class.isAssignableFrom(value))
-					icon = sourceIcon;
+					icon = Images.getSmallIcon(Images.STREAM_SOURCE);
 				else if (IntermediateOperation.class.isAssignableFrom(value))
-					icon = intermediateIcon;
+					icon = Images.getSmallIcon(Images.INTERMEDIATE_OPERATION);
 				else if (TerminalOperation.class.isAssignableFrom(value))
-					icon = terminalIcon;
+					icon = Images.getSmallIcon(Images.TERMINAL_OPERATION);
 			}
 			label.setIcon(icon);
 		}

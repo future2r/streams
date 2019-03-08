@@ -15,10 +15,6 @@ import name.ulbricht.streams.api.TerminalOperation;
 
 public class StreamOperationTableCellRenderer implements TableCellRenderer {
 
-	private static Icon sourceIcon = Messages.getIcon("StreamSource.icon");
-	private static Icon intermediateIcon = Messages.getIcon("IntermediateOperation.icon");
-	private static Icon terminalIcon = Messages.getIcon("TerminalOperation.icon");
-
 	private final TableCellRenderer delegate = new DefaultTableCellRenderer();
 
 	@Override
@@ -36,11 +32,11 @@ public class StreamOperationTableCellRenderer implements TableCellRenderer {
 			Icon icon = null;
 			if (operation != null) {
 				if (operation instanceof StreamSource)
-					icon = sourceIcon;
+					icon = Images.getSmallIcon(Images.STREAM_SOURCE);
 				else if (operation instanceof IntermediateOperation)
-					icon = intermediateIcon;
+					icon = Images.getSmallIcon(Images.INTERMEDIATE_OPERATION);
 				else if (operation instanceof TerminalOperation)
-					icon = terminalIcon;
+					icon = Images.getSmallIcon(Images.TERMINAL_OPERATION);
 			}
 			label.setIcon(icon);
 		}
