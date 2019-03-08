@@ -20,11 +20,11 @@ public final class TextLines implements StreamSource<String> {
 			+ "Salve, mondo!\n" // it
 			+ "qo' vIvan!"; // tlh
 
-	String getText() {
+	public String getText() {
 		return this.text;
 	}
 
-	void setText(final String text) {
+	public void setText(final String text) {
 		this.text = text;
 	}
 

@@ -58,6 +58,14 @@ class MutableListModel<T> implements ListModel<T> {
 		}
 	}
 
+	void replaceAllElements(final List<T> newElemens) {
+		removeAllElements();
+		if (!newElemens.isEmpty()) {
+			this.elements.addAll(newElemens);
+			fireIntervalAdded(0, this.elements.size() - 1);
+		}
+	}
+
 	void moveElementUp(final int index) {
 		if (index > 0) {
 			final var previousIndex = index - 1;

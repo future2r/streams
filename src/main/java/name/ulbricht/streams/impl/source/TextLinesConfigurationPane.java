@@ -17,6 +17,8 @@ public final class TextLinesConfigurationPane extends AbstractConfigurationPane<
 	@Override
 	protected void createContent(final Container contentPane) {
 		this.linesTextArea = new JTextArea(10, 50);
+		this.linesTextArea.setLineWrap(true);
+		this.linesTextArea.setWrapStyleWord(true);
 		final var linesLabel = new JLabel("Text Lines:");
 
 		contentPane.add(linesLabel, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.WEST,

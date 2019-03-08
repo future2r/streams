@@ -19,27 +19,27 @@ public final class StringJoiner implements TerminalOperation<String> {
 	private String prefix = "{";
 	private String suffix = "}";
 
-	String getDelimiter() {
+	public String getDelimiter() {
 		return this.delimiter;
 	}
 
-	void setDelimiter(final String delimiter) {
+	public void setDelimiter(final String delimiter) {
 		this.delimiter = delimiter;
 	}
 
-	String getPrefix() {
+	public String getPrefix() {
 		return this.prefix;
 	}
 
-	void setPrefix(final String prefix) {
+	public void setPrefix(final String prefix) {
 		this.prefix = prefix;
 	}
 
-	String getSuffix() {
+	public String getSuffix() {
 		return this.suffix;
 	}
 
-	void setSuffix(final String suffix) {
+	public void setSuffix(final String suffix) {
 		this.suffix = suffix;
 	}
 

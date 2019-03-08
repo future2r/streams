@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -40,6 +42,7 @@ import name.ulbricht.streams.api.StreamOperationException;
 import name.ulbricht.streams.api.StreamOperationSet;
 import name.ulbricht.streams.api.StreamSource;
 import name.ulbricht.streams.api.TerminalOperation;
+import name.ulbricht.streams.impl.Preset;
 import name.ulbricht.streams.impl.intermediate.IntermediateOperations;
 import name.ulbricht.streams.impl.source.StreamSources;
 import name.ulbricht.streams.impl.terminal.TerminalOperations;
@@ -96,10 +99,26 @@ public final class MainFrame extends JFrame {
 		final var fileMenu = menuBar.add(new JMenu(Messages.getString("fileMenu.text")));
 		fileMenu.add(this.actions.add(Actions.action("exit", this::dispose)));
 
+		final var presetsMenu = menuBar.add(new JMenu(Messages.getString("presetsMenu.text")));
+		Stream.of(Preset.values()).forEach(preset -> {
+			final var menuItem = presetsMenu.add(new JMenuItem(preset.getDisplayName()));
+			menuItem.addActionListener(e -> presetSelected(preset));
+		});
+
 		final var helpMenu = menuBar.add(new JMenu(Messages.getString("helpMenu.text")));
 		helpMenu.add(this.actions.add(Actions.action("about", this::showAbout)));
 
 		return menuBar;
+	}
+
+	private void presetSelected(final Preset preset) {
+		final var operations = preset.operations();
+
+		setStreamSource(operations.getStreamSource());
+		this.intermediateOperationListModel.replaceAllElements(operations.getIntermediatOperations());
+		setTerminalOperation(operations.getTerminalOperation());
+
+		this.actions.validate();
 	}
 
 	private JPanel createSetupPanel() {
@@ -129,7 +148,7 @@ public final class MainFrame extends JFrame {
 		this.streamSourceComboBox = new JComboBox<>(this.streamSourceComboBoxModel);
 		this.streamSourceComboBox.setSelectedIndex(0);
 		this.streamSourceComboBox.setRenderer(new StreamOperationClassListCellRenderer());
-		this.streamSourceComboBox.addActionListener(e -> setStreamSource());
+		this.streamSourceComboBox.addActionListener(e -> streamSourceSelected());
 
 		this.streamSourcePanel = new StreamOperationPanel();
 
@@ -144,29 +163,31 @@ public final class MainFrame extends JFrame {
 		panel.add(this.streamSourcePanel, new GridBagConstraints(0, 1, 2, 1, 1, 0, GridBagConstraints.NORTH,
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
 
-		SwingUtilities.invokeLater(() -> setStreamSource());
+		SwingUtilities.invokeLater(this::streamSourceSelected);
 
 		return panel;
 	}
 
 	private StreamSource<?> currentStreamSource;
 
-	private void setStreamSource() {
+	private void streamSourceSelected() {
 		@SuppressWarnings("unchecked")
 		final var selectedStreamSourceClass = (Class<? extends StreamSource<?>>) this.streamSourceComboBox
 				.getSelectedItem();
 
 		if (selectedStreamSourceClass != null) {
 			try {
-				this.currentStreamSource = StreamOperation.createOperation(selectedStreamSourceClass);
-
-				this.streamSourcePanel.updateContent(this.currentStreamSource);
-				streamSetupChanged();
+				setStreamSource(StreamOperation.createOperation(selectedStreamSourceClass));
 			} catch (final StreamOperationException ex) {
 				Alerts.showError(this, ex);
 			}
 		}
+	}
 
+	private void setStreamSource(final StreamSource<?> streamSource) {
+		this.currentStreamSource = streamSource;
+		this.streamSourcePanel.updateContent(this.currentStreamSource);
+		streamSetupChanged();
 		this.actions.validate();
 	}
 
@@ -355,7 +376,7 @@ public final class MainFrame extends JFrame {
 		this.terminalOperationComboBox = new JComboBox<>(this.terminalOperationComboBoxModel);
 		this.terminalOperationComboBox.setSelectedIndex(0);
 		this.terminalOperationComboBox.setRenderer(new StreamOperationClassListCellRenderer());
-		this.terminalOperationComboBox.addActionListener(e -> setTerminalOperation());
+		this.terminalOperationComboBox.addActionListener(e -> terminalOperationSelected());
 
 		this.terminalOperationPanel = new StreamOperationPanel();
 
@@ -371,29 +392,31 @@ public final class MainFrame extends JFrame {
 		panel.add(this.terminalOperationPanel, new GridBagConstraints(0, 1, 2, 1, 1, 0, GridBagConstraints.NORTH,
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
 
-		SwingUtilities.invokeLater(() -> setTerminalOperation());
+		SwingUtilities.invokeLater(this::terminalOperationSelected);
 
 		return panel;
 	}
 
 	private TerminalOperation<?> currentTerminalOperation;
 
-	private void setTerminalOperation() {
+	private void terminalOperationSelected() {
 		@SuppressWarnings("unchecked")
 		final var selectedTerminalOperation = (Class<? extends TerminalOperation<?>>) this.terminalOperationComboBox
 				.getSelectedItem();
 
 		if (selectedTerminalOperation != null) {
 			try {
-				this.currentTerminalOperation = StreamOperation.createOperation(selectedTerminalOperation);
-
-				this.terminalOperationPanel.updateContent(this.currentTerminalOperation);
-				streamSetupChanged();
+				setTerminalOperation(StreamOperation.createOperation(selectedTerminalOperation));
 			} catch (final StreamOperationException ex) {
 				Alerts.showError(this, ex);
 			}
 		}
+	}
 
+	private void setTerminalOperation(final TerminalOperation<?> terminalOperation) {
+		this.currentTerminalOperation = terminalOperation;
+		this.terminalOperationPanel.updateContent(this.currentTerminalOperation);
+		streamSetupChanged();
 		this.actions.validate();
 	}
 

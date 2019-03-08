@@ -5,7 +5,6 @@ import java.awt.image.BaseMultiResolutionImage;
 import java.awt.image.MultiResolutionImage;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collections;
 import java.util.List;
 import java.util.ListResourceBundle;
 import java.util.MissingResourceException;
@@ -61,7 +60,7 @@ public final class Images extends ListResourceBundle {
 		try {
 			return ((MultiResolutionImage) RESOURCE_BUNDLE.getObject(key)).getResolutionVariants();
 		} catch (final MissingResourceException ex) {
-			return Collections.emptyList();
+			return List.of();
 		}
 	}
 

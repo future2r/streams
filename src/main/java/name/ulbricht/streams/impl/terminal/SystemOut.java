@@ -6,7 +6,7 @@ import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.api.TerminalOperation;
 
 @Name("System.out")
-public final class SystemOutConsumer implements TerminalOperation<Object> {
+public final class SystemOut implements TerminalOperation<Object> {
 
 	@Override
 	public String getSourceCode() {
