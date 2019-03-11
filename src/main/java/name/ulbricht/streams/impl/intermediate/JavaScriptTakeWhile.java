@@ -1,34 +1,34 @@
-package name.ulbricht.streams.impl.terminal;
+package name.ulbricht.streams.impl.intermediate;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.IntermediateOperation;
 import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.api.TerminalOperation;
 import name.ulbricht.streams.impl.JavaScriptConfigurationPane;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@Name("JavaScript All Match")
+@Name("JavaScript Take While")
 @Configuration(value = JavaScriptConfigurationPane.class, hint = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
-public final class JavaScriptAllMatch extends JavaScriptOperation implements TerminalOperation<Object> {
+public final class JavaScriptTakeWhile extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
 
-	public JavaScriptAllMatch() {
+	public JavaScriptTakeWhile() {
 		super("result = true;");
 	}
-	
+
 	@Override
 	public String getSourceCode() {
-		return ".allMatch( /* please check source code for JavaScript execution */)";
+		return ".takeWhile( /* please check source code for JavaScript execution */)";
 	}
 	
 	@Override
-	public Object terminateStream(final Stream<Object> stream) {
-		return stream.allMatch(this::matches);
+	public Stream<Object> processStream(final Stream<Object> stream) {
+		return stream.takeWhile(this::filter);
 	}
-
-	private boolean matches(final Object element) {
+	
+	private boolean filter(final Object element) {
 		final Map<String, Object> input = new HashMap<>();
 		input.put("element", element);
 		final var output = evalScript(input);

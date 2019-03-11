@@ -11,7 +11,7 @@ import name.ulbricht.streams.impl.JavaScriptConfigurationPane;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @Name("JavaScript None Match")
-@Configuration(value = JavaScriptConfigurationPane.class, hint = "\"The current element is provided as 'element', the result must a boolean value stored in 'result'.\"")
+@Configuration(value = JavaScriptConfigurationPane.class, hint = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
 public final class JavaScriptNonMatch extends JavaScriptOperation implements TerminalOperation<Object> {
 
 	public JavaScriptNonMatch() {

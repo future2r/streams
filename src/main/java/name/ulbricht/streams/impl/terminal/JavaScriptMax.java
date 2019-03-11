@@ -11,7 +11,7 @@ import name.ulbricht.streams.impl.JavaScriptConfigurationPane;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @Name("JavaScript Max")
-@Configuration(value = JavaScriptConfigurationPane.class, hint = "\"Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.\"")
+@Configuration(value = JavaScriptConfigurationPane.class, hint = "Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
 public final class JavaScriptMax extends JavaScriptOperation implements TerminalOperation<Object> {
 
 	public JavaScriptMax() {

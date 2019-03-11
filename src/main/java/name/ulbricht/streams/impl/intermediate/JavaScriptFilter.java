@@ -25,10 +25,10 @@ public final class JavaScriptFilter extends JavaScriptOperation implements Inter
 	
 	@Override
 	public Stream<Object> processStream(final Stream<Object> stream) {
-		return stream.filter(this::filter);
+		return stream.filter(this::matches);
 	}
 	
-	private boolean filter(final Object element) {
+	private boolean matches(final Object element) {
 		final Map<String, Object> input = new HashMap<>();
 		input.put("element", element);
 		final var output = evalScript(input);
