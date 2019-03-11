@@ -15,7 +15,7 @@ import name.ulbricht.streams.impl.JavaScriptOperation;
 public final class JavaScriptSorted extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
 
 	public JavaScriptSorted() {
-		super("result = true;");
+		super("result = java.util.Objects.compare(element1, element2, java.util.Comparator.naturalOrder());");
 	}
 
 	@Override
