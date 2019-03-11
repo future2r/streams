@@ -6,6 +6,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.SystemColor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -216,16 +218,21 @@ public final class MainFrame extends JFrame {
 		this.intermediateOperationComboBox.setSelectedIndex(0);
 		this.intermediateOperationComboBox.setRenderer(new StreamOperationClassListCellRenderer());
 
-		final var addIntermediateOperationAction = Actions.action("addIntermediateOperation",
-				e -> addIntermediateOperation());
-
-		final var addIntermediateOperationButton = new JButton(addIntermediateOperationAction);
+		final var addIntermediateOperationButton = new JButton(
+				this.actions.add(Actions.action("addIntermediateOperation", e -> addIntermediateOperation())));
 
 		this.intermediateOperationListModel = new MutableListModel<>();
 		this.intermediateOperationList = new JList<>(this.intermediateOperationListModel);
 		this.intermediateOperationList.setCellRenderer(new StreamOperationListCellRenderer());
 		this.intermediateOperationList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.intermediateOperationList.getSelectionModel().addListSelectionListener(e -> this.actions.validate());
+		this.intermediateOperationList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(final MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2)
+					configureIntermediateOperation();
+			}
+		});
 
 		final var moveIntermediateOperationUpButton = new JButton(
 				this.actions.add(Actions.action("moveIntermediateOperationUp", this::moveIntermediateOperationUp,
