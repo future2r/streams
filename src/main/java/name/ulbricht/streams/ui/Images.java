@@ -34,6 +34,7 @@ public final class Images extends ListResourceBundle {
 	static final String LOG = "log";
 	static final String CONSOLE = "console";
 	static final String STATISTICS = "statistics";
+	static final String INFO = "info";
 
 	public static Icon getSmallIcon(final String key) {
 		return getIcon(key, 16);
@@ -76,7 +77,8 @@ public final class Images extends ListResourceBundle {
 				{ TERMINAL_OPERATION, loadMultiResolutionImage("terminal-%s.png") }, //
 				{ LOG, loadMultiResolutionImage("log-%s.png") }, //
 				{ CONSOLE, loadMultiResolutionImage("console-%s.png") }, //
-				{ STATISTICS, loadMultiResolutionImage("statistics-%s.png") } //
+				{ STATISTICS, loadMultiResolutionImage("statistics-%s.png") }, //
+				{ INFO, loadMultiResolutionImage("info-%s.png") } //
 		};
 	}
 

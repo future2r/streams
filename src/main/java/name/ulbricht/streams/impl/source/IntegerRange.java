@@ -4,13 +4,16 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.api.Output;
 import name.ulbricht.streams.api.StreamSource;
 
 @Name("Integer Range")
 @Output(Integer.class)
-@Configuration(IntegerRangeConfigurationPane.class)
+@Configuration(name = "start", type = ConfigurationType.INTEGER, displayName = "Start")
+@Configuration(name = "end", type = ConfigurationType.INTEGER, displayName = "End")
+@Configuration(name = "closed", type = ConfigurationType.BOOLEAN, displayName = "Range is closed")
 public final class IntegerRange implements StreamSource<Integer> {
 
 	private int start = 0;

@@ -4,40 +4,43 @@ import java.util.Random;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.api.Output;
 import name.ulbricht.streams.api.StreamSource;
 
 @Name("Random Integer Generator")
 @Output(Integer.class)
-@Configuration(RandomIntegerGeneratorConfigurationPane.class)
+@Configuration(name = "number", type = ConfigurationType.INTEGER, displayName = "Number")
+@Configuration(name = "origin", type = ConfigurationType.INTEGER, displayName = "Origin (inclusive)")
+@Configuration(name = "bound", type = ConfigurationType.INTEGER, displayName = "Bound (exclusive)")
 public final class RandomIntegerGenerator implements StreamSource<Integer> {
 
 	private int number = 10;
 	private int origin = 0;
 	private int bound = 100;
 
-	int getNumber() {
+	public int getNumber() {
 		return this.number;
 	}
 
-	void setNumber(final int number) {
+	public void setNumber(final int number) {
 		this.number = number;
 	}
 
-	int getOrigin() {
+	public int getOrigin() {
 		return this.origin;
 	}
 
-	void setOrigin(final int origin) {
+	public void setOrigin(final int origin) {
 		this.origin = origin;
 	}
 
-	int getBound() {
+	public int getBound() {
 		return this.bound;
 	}
 
-	void setBound(final int bound) {
+	public void setBound(final int bound) {
 		this.bound = bound;
 	}
 

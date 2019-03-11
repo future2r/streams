@@ -66,35 +66,24 @@ public interface StreamOperation {
 	}
 
 	static boolean supportsConfiguration(final StreamOperation streamOperation) {
-		return Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass()
-				.getAnnotation(Configuration.class) != null;
+		return getConfigurations(streamOperation).length > 0;
 	}
 
-	@SuppressWarnings("unchecked")
-	static <T extends StreamOperation> ConfigurationPane<T> getConfigurationPane(final T streamOperation)
-			throws StreamOperationException {
-		final var configuration = Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass()
-				.getAnnotation(Configuration.class);
-		if (configuration == null)
-			throw new StreamOperationException(
-					"Configuration not supported by operation " + getDisplayName(streamOperation));
-		try {
-			return (ConfigurationPane<T>) configuration.value().getConstructor((Class[]) null)
-					.newInstance((Object[]) null);
-		} catch (final ReflectiveOperationException ex) {
-			throw new StreamOperationException("Could not create configuration pane from " + configuration.value(), ex);
-		}
-	}
+	static Configuration[] getConfigurations(final StreamOperation streamOperation) {
+		Objects.requireNonNull(streamOperation, "streamOperation must not be null");
+		final var streamOperationClass = streamOperation.getClass();
 
-	static String getConfigurationHint(final StreamOperation streamOperation) throws StreamOperationException {
-		final var configuration = Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass()
-				.getAnnotation(Configuration.class);
-		if (configuration != null) {
-			final var hint = configuration.hint();
-			if (hint != "")
-				return hint;
-		}
-		return null;
+		// single annotation
+		final var configuration = streamOperationClass.getAnnotation(Configuration.class);
+		if (configuration != null)
+			return new Configuration[] { configuration };
+
+		// repeated annotations
+		final var configurations = streamOperationClass.getAnnotation(Configurations.class);
+		if (configurations != null)
+			return configurations.value();
+
+		return new Configuration[0];
 	}
 
 	static <T extends StreamOperation> T createOperation(final Class<T> streamOperationClass)

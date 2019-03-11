@@ -6,13 +6,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Input;
 import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.api.TerminalOperation;
 
 @Name("String Joiner")
 @Input(String.class)
-@Configuration(StringJoinerConfigurationPane.class)
+@Configuration(name = "delimiter", type = ConfigurationType.STRING, displayName = "Delimiter")
+@Configuration(name = "prefix", type = ConfigurationType.STRING, displayName = "Prefix")
+@Configuration(name = "suffix", type = ConfigurationType.STRING, displayName = "Suffix")
 public final class StringJoiner implements TerminalOperation<String> {
 
 	private String delimiter = ",";

@@ -5,24 +5,24 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.api.TerminalOperation;
-import name.ulbricht.streams.impl.JavaScriptConfigurationPane;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @Name("JavaScript NoneMatch")
-@Configuration(value = JavaScriptConfigurationPane.class, hint = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
+@Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript", description = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
 public final class JavaScriptNonMatch extends JavaScriptOperation implements TerminalOperation<Object> {
 
 	public JavaScriptNonMatch() {
 		super("result = true;");
 	}
-	
+
 	@Override
 	public String getSourceCode() {
 		return ".noneMatch( /* please check source code for JavaScript execution */)";
 	}
-	
+
 	@Override
 	public Object terminateStream(final Stream<Object> stream) {
 		return stream.noneMatch(this::matches);

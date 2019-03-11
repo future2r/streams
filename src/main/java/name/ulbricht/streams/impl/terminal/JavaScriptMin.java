@@ -5,19 +5,19 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.api.TerminalOperation;
-import name.ulbricht.streams.impl.JavaScriptConfigurationPane;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @Name("JavaScript Min")
-@Configuration(value = JavaScriptConfigurationPane.class, hint = "Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
+@Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript", description = "Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
 public final class JavaScriptMin extends JavaScriptOperation implements TerminalOperation<Object> {
 
 	public JavaScriptMin() {
 		super("result = java.util.Objects.compare(element1, element2, java.util.Comparator.naturalOrder());");
 	}
-	
+
 	@Override
 	public String getSourceCode() {
 		return ".min( /* please check source code for JavaScript execution */)";

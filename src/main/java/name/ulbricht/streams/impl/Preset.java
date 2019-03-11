@@ -12,7 +12,7 @@ import name.ulbricht.streams.impl.intermediate.JavaScriptMap;
 import name.ulbricht.streams.impl.intermediate.LowerCase;
 import name.ulbricht.streams.impl.intermediate.RegExSplitter;
 import name.ulbricht.streams.impl.intermediate.Sorted;
-import name.ulbricht.streams.impl.intermediate.StringMapper;
+import name.ulbricht.streams.impl.intermediate.ToStringMapper;
 import name.ulbricht.streams.impl.intermediate.SystemOutPeek;
 import name.ulbricht.streams.impl.source.Empty;
 import name.ulbricht.streams.impl.source.FindFiles;
@@ -94,7 +94,7 @@ public enum Preset {
 
 	private static StreamOperationSet createGenerateNumbers() {
 		return new StreamOperationSet(new RandomIntegerGenerator(),
-				List.of(new Distinct(), new Sorted(), new StringMapper()), new TextFileWriter());
+				List.of(new Distinct(), new Sorted(), new ToStringMapper()), new TextFileWriter());
 	}
 
 	private static StreamOperationSet createSystemProperties() {

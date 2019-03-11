@@ -10,29 +10,29 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.api.Output;
 import name.ulbricht.streams.api.StreamSource;
 
 @Name("Text File Reader")
 @Output(String.class)
-@Configuration(TextFileReaderConfigurationPane.class)
+@Configuration(name = "file", type = ConfigurationType.FILE, displayName = "Text File")
 public final class TextFileReader implements StreamSource<String> {
 
 	private Path file = Paths.get(System.getProperty("user.dir"), "input.txt");
 
-	Path getFile() {
+	public Path getFile() {
 		return this.file;
 	}
 
-	void setFile(final Path file) {
+	public void setFile(final Path file) {
 		this.file = file;
 	}
 
 	@Override
 	public String getSourceCode() {
-		return String.format("Files.lines(Paths.get(\"%s\"), StandardCharsets.UTF_8)",
-				quote(this.file.toString()));
+		return String.format("Files.lines(Paths.get(\"%s\"), StandardCharsets.UTF_8)", quote(this.file.toString()));
 	}
 
 	@Override

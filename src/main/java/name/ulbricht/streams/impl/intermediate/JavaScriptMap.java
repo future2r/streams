@@ -5,19 +5,19 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.IntermediateOperation;
 import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.impl.JavaScriptConfigurationPane;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @Name("JavaScript Map")
-@Configuration(value = JavaScriptConfigurationPane.class, hint = "The current element is provided as 'element', the result must stored in 'result'.")
+@Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript", description = "The current element is provided as 'element', the result must stored in 'result'.")
 public final class JavaScriptMap extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
 
 	public JavaScriptMap() {
 		super("result = element.getClass().getSimpleName();");
 	}
-	
+
 	@Override
 	public String getSourceCode() {
 		return ".map( /* please check source code for JavaScript execution */)";

@@ -5,13 +5,13 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.IntermediateOperation;
 import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.impl.JavaScriptConfigurationPane;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @Name("JavaScript Sorted")
-@Configuration(value = JavaScriptConfigurationPane.class, hint = "Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
+@Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript", description = "Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
 public final class JavaScriptSorted extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
 
 	public JavaScriptSorted() {

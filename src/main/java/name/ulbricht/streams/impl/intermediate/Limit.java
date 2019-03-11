@@ -3,18 +3,19 @@ package name.ulbricht.streams.impl.intermediate;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.IntermediateOperation;
 
-@Configuration(LimitConfigurationPane.class)
+@Configuration(name = "limit", type = ConfigurationType.INTEGER, displayName = "Maximum Size")
 public final class Limit implements IntermediateOperation<Object, Object> {
 
 	private int limit = 5;
 
-	int getLimit() {
+	public int getLimit() {
 		return this.limit;
 	}
 
-	void setLimit(final int limit) {
+	public void setLimit(final int limit) {
 		this.limit = limit;
 	}
 

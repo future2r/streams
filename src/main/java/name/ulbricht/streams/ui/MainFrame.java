@@ -432,16 +432,9 @@ public final class MainFrame extends JFrame {
 	}
 
 	private <T extends StreamOperation> boolean showConfigureDialog(final T operation) {
-		try {
-			final var pane = StreamOperation.getConfigurationPane(operation);
-			pane.setOperation(operation);
-
-			if (ConfigurationDialog.showModal(this, pane, StreamOperation.getConfigurationHint(operation))) {
-				streamSetupChanged();
-				return true;
-			}
-		} catch (final StreamOperationException ex) {
-			Alerts.showError(this, ex);
+		if (ConfigurationDialog.showModal(this, operation)) {
+			streamSetupChanged();
+			return true;
 		}
 		return false;
 	}

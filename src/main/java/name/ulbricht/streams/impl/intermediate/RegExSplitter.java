@@ -5,6 +5,7 @@ import static name.ulbricht.streams.api.StreamOperation.quote;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Input;
 import name.ulbricht.streams.api.IntermediateOperation;
 import name.ulbricht.streams.api.Name;
@@ -13,16 +14,16 @@ import name.ulbricht.streams.api.Output;
 @Name("Regular Expression Splitter")
 @Input(String.class)
 @Output(String.class)
-@Configuration(RegExSplitterConfigurationPane.class)
+@Configuration(name = "pattern", type = ConfigurationType.STRING, displayName = "Split Pattern")
 public final class RegExSplitter implements IntermediateOperation<String, String> {
 
 	private String pattern = "\\s";
 
-	String getPattern() {
+	public String getPattern() {
 		return this.pattern;
 	}
 
-	void setPattern(final String pattern) {
+	public void setPattern(final String pattern) {
 		this.pattern = pattern;
 	}
 

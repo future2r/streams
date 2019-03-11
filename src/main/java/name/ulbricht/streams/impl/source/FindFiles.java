@@ -9,22 +9,23 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.api.Output;
 import name.ulbricht.streams.api.StreamSource;
 
 @Name("Find Files")
 @Output(Path.class)
-@Configuration(FindFilesConfigurationPane.class)
+@Configuration(name = "directory", type = ConfigurationType.DIRECTORY, displayName = "Directory")
 public final class FindFiles implements StreamSource<Path> {
 
 	private Path directory = Paths.get(System.getProperty("user.dir"));
 
-	Path getDirectory() {
+	public Path getDirectory() {
 		return this.directory;
 	}
 
-	void setDirectory(final Path directory) {
+	public void setDirectory(final Path directory) {
 		this.directory = directory;
 	}
 

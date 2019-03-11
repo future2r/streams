@@ -5,13 +5,13 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.IntermediateOperation;
 import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.impl.JavaScriptConfigurationPane;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @Name("JavaScript DropWhile")
-@Configuration(value = JavaScriptConfigurationPane.class, hint = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
+@Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript", description = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
 public final class JavaScriptDropWhile extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
 
 	public JavaScriptDropWhile() {
@@ -22,12 +22,12 @@ public final class JavaScriptDropWhile extends JavaScriptOperation implements In
 	public String getSourceCode() {
 		return ".dropWhile( /* please check source code for JavaScript execution */)";
 	}
-	
+
 	@Override
 	public Stream<Object> processStream(final Stream<Object> stream) {
 		return stream.dropWhile(this::matches);
 	}
-	
+
 	private boolean matches(final Object element) {
 		final Map<String, Object> input = new HashMap<>();
 		input.put("element", element);

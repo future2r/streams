@@ -4,40 +4,43 @@ import java.util.Random;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.api.Output;
 import name.ulbricht.streams.api.StreamSource;
 
 @Name("Random Double Generator")
 @Output(Double.class)
-@Configuration(RandomDoubleGeneratorConfigurationPane.class)
+@Configuration(name = "number", type = ConfigurationType.INTEGER, displayName = "Number")
+@Configuration(name = "origin", type = ConfigurationType.DOUBLE, displayName = "Origin (inclusive)")
+@Configuration(name = "bound", type = ConfigurationType.DOUBLE, displayName = "Bound (exclusive)")
 public final class RandomDoubleGenerator implements StreamSource<Double> {
 
 	private int number = 10;
 	private double origin = 0.1;
 	private double bound = 0.5;
 
-	int getNumber() {
+	public int getNumber() {
 		return this.number;
 	}
 
-	void setNumber(final int number) {
+	public void setNumber(final int number) {
 		this.number = number;
 	}
 
-	double getOrigin() {
+	public double getOrigin() {
 		return this.origin;
 	}
 
-	void setOrigin(final double origin) {
+	public void setOrigin(final double origin) {
 		this.origin = origin;
 	}
 
-	double getBound() {
+	public double getBound() {
 		return this.bound;
 	}
 
-	void setBound(final double bound) {
+	public void setBound(final double bound) {
 		this.bound = bound;
 	}
 

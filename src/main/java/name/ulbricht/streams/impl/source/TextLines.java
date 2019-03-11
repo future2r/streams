@@ -4,13 +4,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.api.Output;
 import name.ulbricht.streams.api.StreamSource;
 
 @Name("Text Lines")
 @Output(String.class)
-@Configuration(TextLinesConfigurationPane.class)
+@Configuration(name = "text", type = ConfigurationType.MULTILINE_STRING, displayName = "Text Lines")
 public final class TextLines implements StreamSource<String> {
 
 	private String text = "Hello World!\n" // en

@@ -3,18 +3,19 @@ package name.ulbricht.streams.impl.intermediate;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.IntermediateOperation;
 
-@Configuration(SkipConfigurationPane.class)
+@Configuration(name = "skip", type = ConfigurationType.INTEGER, displayName = "Skip Elements")
 public final class Skip implements IntermediateOperation<Object, Object> {
 
 	private int skip = 5;
 
-	int getSkip() {
+	public int getSkip() {
 		return this.skip;
 	}
 
-	void setSkip(final int skip) {
+	public void setSkip(final int skip) {
 		this.skip = skip;
 	}
 

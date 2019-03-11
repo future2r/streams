@@ -7,9 +7,9 @@ import name.ulbricht.streams.api.IntermediateOperation;
 import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.api.Output;
 
-@Name("String Mapper")
+@Name("ToString Mapper")
 @Output(String.class)
-public final class StringMapper implements IntermediateOperation<Object, String> {
+public final class ToStringMapper implements IntermediateOperation<Object, String> {
 
 	@Override
 	public String getSourceCode() {

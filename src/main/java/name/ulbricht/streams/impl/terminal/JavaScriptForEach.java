@@ -5,13 +5,13 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.api.TerminalOperation;
-import name.ulbricht.streams.impl.JavaScriptConfigurationPane;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @Name("JavaScript ForEach")
-@Configuration(value = JavaScriptConfigurationPane.class, hint = "The current element is provided as 'element'.")
+@Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript", description = "The current element is provided as 'element'.")
 public final class JavaScriptForEach extends JavaScriptOperation implements TerminalOperation<Object> {
 
 	public JavaScriptForEach() {

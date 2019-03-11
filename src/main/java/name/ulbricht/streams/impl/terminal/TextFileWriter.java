@@ -11,22 +11,23 @@ import java.nio.file.StandardOpenOption;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Input;
 import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.api.TerminalOperation;
 
 @Name("Text File Writer")
 @Input(String.class)
-@Configuration(TextFileWriterConfigurationPane.class)
+@Configuration(name = "file", type = ConfigurationType.FILE, displayName = "Current File")
 public final class TextFileWriter implements TerminalOperation<String> {
 
 	private Path file = Paths.get(System.getProperty("user.dir"), "output.txt");
 
-	Path getFile() {
+	public Path getFile() {
 		return this.file;
 	}
 
-	void setFile(Path file) {
+	public void setFile(Path file) {
 		this.file = file;
 	}
 
