@@ -6,8 +6,9 @@ public final class TerminalOperations {
 
 	@SuppressWarnings("unchecked")
 	public static final Class<? extends TerminalOperation<?>>[] IMPLEMENTATIONS = new Class[] { SystemOut.class,
-			Count.class, Min.class, Max.class, ToArray.class, ListCollector.class, StringJoiner.class,
-			StringLengthGrouping.class, TextFileWriter.class };
+			Count.class, Min.class, Max.class, FindFirst.class, FindAny.class, ToArray.class, ListCollector.class,
+			JavaScriptAnyMatch.class, JavaScriptAllMatch.class, StringJoiner.class, StringLengthGrouping.class,
+			TextFileWriter.class };
 
 	private TerminalOperations() {
 		// hidden
