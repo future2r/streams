@@ -3,12 +3,10 @@ package name.ulbricht.streams.impl.terminal;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Input;
-import name.ulbricht.streams.api.Name;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.TerminalOperation;
 
-@Name("String Length Grouping")
-@Input(String.class)
+@Operation(name = "String Length Grouping", input = String.class)
 public final class StringLengthGrouping implements TerminalOperation<String> {
 
 	@Override

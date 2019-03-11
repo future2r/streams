@@ -7,14 +7,10 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.Input;
 import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.api.Output;
+import name.ulbricht.streams.api.Operation;
 
-@Name("Regular Expression Filter")
-@Input(String.class)
-@Output(String.class)
+@Operation(name = "Regular Expression Filter", input = String.class, output = String.class)
 @Configuration(name = "pattern", type = ConfigurationType.STRING, displayName = "Filter Pattern")
 public final class RegExFilter implements IntermediateOperation<String, String> {
 

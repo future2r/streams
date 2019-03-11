@@ -7,10 +7,10 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Name;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@Name("JavaScript Sorted")
+@Operation(name = "JavaScript Sorted")
 @Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript", description = "Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
 public final class JavaScriptSorted extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
 

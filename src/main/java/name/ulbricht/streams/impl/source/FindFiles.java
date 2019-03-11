@@ -10,12 +10,10 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.api.Output;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.StreamSource;
 
-@Name("Find Files")
-@Output(Path.class)
+@Operation(name = "Find Files", output = Path.class)
 @Configuration(name = "directory", type = ConfigurationType.DIRECTORY, displayName = "Directory")
 public final class FindFiles implements StreamSource<Path> {
 

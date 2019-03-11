@@ -2,12 +2,10 @@ package name.ulbricht.streams.impl.intermediate;
 
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Input;
 import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Output;
+import name.ulbricht.streams.api.Operation;
 
-@Input(String.class)
-@Output(String.class)
+@Operation(input = String.class, output = String.class)
 public final class LowerCase implements IntermediateOperation<String, String> {
 
 	@Override

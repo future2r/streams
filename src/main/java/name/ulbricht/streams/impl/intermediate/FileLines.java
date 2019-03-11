@@ -5,14 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Input;
 import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.api.Output;
+import name.ulbricht.streams.api.Operation;
 
-@Name("Read Text File")
-@Input(Path.class)
-@Output(String.class)
+@Operation(name = "Read Text File", input = Path.class, output = String.class)
 public final class FileLines implements IntermediateOperation<Path, String> {
 
 	@Override

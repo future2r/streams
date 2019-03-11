@@ -7,10 +7,10 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Name;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@Name("JavaScript TakeWhile")
+@Operation(name = "JavaScript TakeWhile")
 @Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript", description = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
 public final class JavaScriptTakeWhile extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
 

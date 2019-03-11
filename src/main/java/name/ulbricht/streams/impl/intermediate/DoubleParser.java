@@ -2,14 +2,10 @@ package name.ulbricht.streams.impl.intermediate;
 
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Input;
 import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.api.Output;
+import name.ulbricht.streams.api.Operation;
 
-@Name("Double Parser")
-@Input(String.class)
-@Output(Double.class)
+@Operation(name = "Double Parser", input = String.class, output = Double.class)
 public final class DoubleParser implements IntermediateOperation<String, Double> {
 
 	@Override

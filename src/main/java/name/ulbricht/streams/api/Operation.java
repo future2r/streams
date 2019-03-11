@@ -7,7 +7,11 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Input {
+public @interface Operation {
 
-	Class<?> value();
+	String name() default "";
+
+	Class<?> input() default Object.class;
+
+	Class<?> output() default Object.class;
 }

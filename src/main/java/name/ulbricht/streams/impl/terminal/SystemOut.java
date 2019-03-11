@@ -2,10 +2,10 @@ package name.ulbricht.streams.impl.terminal;
 
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Name;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.TerminalOperation;
 
-@Name("System.out")
+@Operation(name = "System.out")
 public final class SystemOut implements TerminalOperation<Object> {
 
 	@Override

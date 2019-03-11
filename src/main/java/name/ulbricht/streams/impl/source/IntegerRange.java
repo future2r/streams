@@ -5,12 +5,10 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.api.Output;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.StreamSource;
 
-@Name("Integer Range")
-@Output(Integer.class)
+@Operation(name = "Integer Range", output = Integer.class)
 @Configuration(name = "start", type = ConfigurationType.INTEGER, displayName = "Start")
 @Configuration(name = "end", type = ConfigurationType.INTEGER, displayName = "End")
 @Configuration(name = "closed", type = ConfigurationType.BOOLEAN, displayName = "Range is closed")

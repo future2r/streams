@@ -2,14 +2,10 @@ package name.ulbricht.streams.impl.intermediate;
 
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Input;
 import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.api.Output;
+import name.ulbricht.streams.api.Operation;
 
-@Name("Integer Parser")
-@Input(String.class)
-@Output(Integer.class)
+@Operation(name = "Integer Parser", input = String.class, output = Integer.class)
 public final class IntegerParser implements IntermediateOperation<String, Integer> {
 
 	@Override

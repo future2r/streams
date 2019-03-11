@@ -7,10 +7,10 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Name;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@Name("JavaScript FlatMap")
+@Operation(name = "JavaScript FlatMap")
 @Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript", description = "The current element is provided as 'element', the result must a Stream stored in 'result'.")
 public final class JavaScriptFlatMap extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
 

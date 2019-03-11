@@ -4,11 +4,9 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.api.Output;
+import name.ulbricht.streams.api.Operation;
 
-@Name("ToString Mapper")
-@Output(String.class)
+@Operation(name = "ToString Mapper", output=String.class)
 public final class ToStringMapper implements IntermediateOperation<Object, String> {
 
 	@Override

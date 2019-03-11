@@ -4,9 +4,9 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Name;
+import name.ulbricht.streams.api.Operation;
 
-@Name("Non Null Filter")
+@Operation(name = "Non Null Filter")
 public final class NonNullFilter implements IntermediateOperation<Object, Object> {
 
 	@Override

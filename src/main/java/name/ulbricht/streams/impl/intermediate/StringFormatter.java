@@ -7,11 +7,9 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.api.Output;
+import name.ulbricht.streams.api.Operation;
 
-@Name("String Formatter")
-@Output(String.class)
+@Operation(name = "String Formatter", output = String.class)
 @Configuration(name = "format", type = ConfigurationType.STRING, displayName = "Format Pattern")
 public final class StringFormatter implements IntermediateOperation<Object, String> {
 

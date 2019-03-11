@@ -3,10 +3,10 @@ package name.ulbricht.streams.impl.terminal;
 import java.util.Comparator;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Input;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.TerminalOperation;
 
-@Input(Comparable.class)
+@Operation(input = Comparable.class)
 public final class Max<T extends Comparable<T>> implements TerminalOperation<T> {
 
 	@Override

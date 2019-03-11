@@ -3,14 +3,10 @@ package name.ulbricht.streams.impl.intermediate;
 import java.util.Comparator;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Input;
 import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.api.Output;
+import name.ulbricht.streams.api.Operation;
 
-@Name("Sorted Reverse")
-@Input(Comparable.class)
-@Output(Comparable.class)
+@Operation(name = "Sorted Reverse", input = Comparable.class, output = Comparable.class)
 public final class SortedReverse
 		implements IntermediateOperation<Comparable<? super Comparable<?>>, Comparable<? super Comparable<?>>> {
 

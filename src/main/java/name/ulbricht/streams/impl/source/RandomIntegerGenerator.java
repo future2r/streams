@@ -5,12 +5,10 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.api.Output;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.StreamSource;
 
-@Name("Random Integer Generator")
-@Output(Integer.class)
+@Operation(name = "Random Integer Generator", output = Integer.class)
 @Configuration(name = "number", type = ConfigurationType.INTEGER, displayName = "Number")
 @Configuration(name = "origin", type = ConfigurationType.INTEGER, displayName = "Origin (inclusive)")
 @Configuration(name = "bound", type = ConfigurationType.INTEGER, displayName = "Bound (exclusive)")

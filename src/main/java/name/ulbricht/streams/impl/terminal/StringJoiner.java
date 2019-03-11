@@ -7,12 +7,10 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.Input;
-import name.ulbricht.streams.api.Name;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.TerminalOperation;
 
-@Name("String Joiner")
-@Input(String.class)
+@Operation(name = "String Joiner", input = String.class)
 @Configuration(name = "delimiter", type = ConfigurationType.STRING, displayName = "Delimiter")
 @Configuration(name = "prefix", type = ConfigurationType.STRING, displayName = "Prefix")
 @Configuration(name = "suffix", type = ConfigurationType.STRING, displayName = "Suffix")

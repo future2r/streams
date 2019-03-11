@@ -3,10 +3,10 @@ package name.ulbricht.streams.impl.source;
 import java.util.Locale;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Output;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.StreamSource;
 
-@Output(Locale.class)
+@Operation(output = Locale.class)
 public final class Locales implements StreamSource<Locale> {
 
 	@Override

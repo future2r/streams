@@ -11,12 +11,10 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.api.Output;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.StreamSource;
 
-@Name("Text File Reader")
-@Output(String.class)
+@Operation(name = "Text File Reader", output = String.class)
 @Configuration(name = "file", type = ConfigurationType.FILE, displayName = "Text File")
 public final class TextFileReader implements StreamSource<String> {
 

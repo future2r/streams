@@ -6,11 +6,11 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.Name;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.TerminalOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@Name("JavaScript AllMatch")
+@Operation(name = "JavaScript AllMatch")
 @Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript", description = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
 public final class JavaScriptAllMatch extends JavaScriptOperation implements TerminalOperation<Object> {
 

@@ -4,13 +4,11 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.api.Output;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.api.StreamSource;
 
-@Name("Characters")
-@Output(Integer.class)
+@Operation(name = "Characters", output = Integer.class)
 @Configuration(name = "text", type = ConfigurationType.STRING, displayName = "Text")
 public final class Characters implements StreamSource<Integer> {
 

@@ -5,12 +5,10 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.Name;
-import name.ulbricht.streams.api.Output;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.StreamSource;
 
-@Name("Text Lines")
-@Output(String.class)
+@Operation(name = "Text Lines", output = String.class)
 @Configuration(name = "text", type = ConfigurationType.MULTILINE_STRING, displayName = "Text Lines")
 public final class TextLines implements StreamSource<String> {
 

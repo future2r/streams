@@ -7,10 +7,10 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Name;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@Name("JavaScript Map")
+@Operation(name = "JavaScript Map")
 @Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript", description = "The current element is provided as 'element', the result must stored in 'result'.")
 public final class JavaScriptMap extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
 

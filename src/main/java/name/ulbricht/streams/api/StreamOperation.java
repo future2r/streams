@@ -15,10 +15,13 @@ public interface StreamOperation {
 	}
 
 	static <T extends StreamOperation> String getName(final Class<T> streamOperationClass) {
-		final var name = Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
-				.getAnnotation(Name.class);
-		if (name != null)
-			return name.value();
+		final var operation = Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
+				.getAnnotation(Operation.class);
+		if (operation != null) {
+			final var name = operation.name();
+			if (!name.isEmpty())
+				return name;
+		}
 		return streamOperationClass.getSimpleName();
 	}
 
@@ -27,10 +30,10 @@ public interface StreamOperation {
 	}
 
 	static <T extends StreamOperation> Class<?> getInputType(final Class<T> streamOperationClass) {
-		final var input = Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
-				.getAnnotation(Input.class);
-		if (input != null)
-			return input.value();
+		final var operation = Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
+				.getAnnotation(Operation.class);
+		if (operation != null)
+			return operation.input();
 		return Object.class;
 	}
 
@@ -39,10 +42,10 @@ public interface StreamOperation {
 	}
 
 	static <T extends StreamOperation> Class<?> getOutputType(final Class<T> streamOperationClass) {
-		final var output = Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
-				.getAnnotation(Output.class);
-		if (output != null)
-			return output.value();
+		final var operation = Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
+				.getAnnotation(Operation.class);
+		if (operation != null)
+			return operation.output();
 		return Object.class;
 	}
 
