@@ -86,6 +86,17 @@ public interface StreamOperation {
 		}
 	}
 
+	static String getConfigurationHint(final StreamOperation streamOperation) throws StreamOperationException {
+		final var configuration = Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass()
+				.getAnnotation(Configuration.class);
+		if (configuration != null) {
+			final var hint = configuration.hint();
+			if (hint != "")
+				return hint;
+		}
+		return null;
+	}
+
 	static <T extends StreamOperation> T createOperation(final Class<T> streamOperationClass)
 			throws StreamOperationException {
 		try {

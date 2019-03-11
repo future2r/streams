@@ -432,7 +432,8 @@ public final class MainFrame extends JFrame {
 		try {
 			final var pane = StreamOperation.getConfigurationPane(operation);
 			pane.setOperation(operation);
-			if (ConfigurationDialog.showModal(this, pane)) {
+
+			if (ConfigurationDialog.showModal(this, pane, StreamOperation.getConfigurationHint(operation))) {
 				streamSetupChanged();
 				return true;
 			}

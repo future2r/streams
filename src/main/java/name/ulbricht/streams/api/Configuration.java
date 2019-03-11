@@ -10,4 +10,6 @@ import java.lang.annotation.Target;
 public @interface Configuration {
 
 	Class<? extends ConfigurationPane<? extends StreamOperation>> value();
+	
+	String hint() default "";
 }

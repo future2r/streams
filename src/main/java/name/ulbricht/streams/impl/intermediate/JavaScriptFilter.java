@@ -12,7 +12,7 @@ import name.ulbricht.streams.impl.JavaScriptConfigurationPane;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @Name("Java Script Filter")
-@Configuration(JavaScriptConfigurationPane.class)
+@Configuration(value = JavaScriptConfigurationPane.class, hint = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
 public final class JavaScriptFilter extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
 
 	public JavaScriptFilter() {

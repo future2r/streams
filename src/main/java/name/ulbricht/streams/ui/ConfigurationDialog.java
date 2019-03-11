@@ -8,6 +8,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -18,8 +19,8 @@ final class ConfigurationDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	static boolean showModal(final Window owner, final ConfigurationPane<?> configurationPane) {
-		final var dlg = new ConfigurationDialog(owner, configurationPane);
+	static boolean showModal(final Window owner, final ConfigurationPane<?> configurationPane, final String hints) {
+		final var dlg = new ConfigurationDialog(owner, configurationPane, hints);
 		dlg.setModalityType(ModalityType.APPLICATION_MODAL);
 		dlg.setLocationRelativeTo(owner);
 		dlg.setVisible(true);
@@ -30,7 +31,7 @@ final class ConfigurationDialog extends JDialog {
 	private boolean result;
 	private final ConfigurationPane<?> configurationPane;
 
-	ConfigurationDialog(final Window owner, final ConfigurationPane<?> configurationPane) {
+	ConfigurationDialog(final Window owner, final ConfigurationPane<?> configurationPane, final String hint) {
 		super(owner);
 		this.configurationPane = configurationPane;
 
@@ -39,8 +40,12 @@ final class ConfigurationDialog extends JDialog {
 
 		final var contentPane = new JPanel(new BorderLayout(8, 8));
 		contentPane.setBorder(new EmptyBorder(8, 8, 8, 8));
-
 		setContentPane(contentPane);
+
+		if (hint != null) {
+			final var hintLabel = new JLabel(String.format("<html><body style='min-width=150px'>%s</body></html>", hint));
+			contentPane.add(hintLabel, BorderLayout.NORTH);
+		}
 
 		contentPane.add(this.configurationPane.getComponent(), BorderLayout.CENTER);
 
