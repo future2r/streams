@@ -1,4 +1,4 @@
-package name.ulbricht.streams.impl.intermediate;
+package name.ulbricht.streams.impl;
 
 import java.awt.Container;
 import java.awt.GridBagConstraints;

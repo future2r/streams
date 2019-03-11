@@ -1,11 +1,11 @@
-package name.ulbricht.streams.impl.intermediate;
+package name.ulbricht.streams.impl;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-import name.ulbricht.streams.api.IntermediateOperation;
+import name.ulbricht.streams.api.StreamOperation;
 
-public abstract class JavaScriptOperation implements IntermediateOperation<Object, Object> {
+public abstract class JavaScriptOperation implements StreamOperation {
 
 	protected String script;
 

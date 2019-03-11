@@ -6,11 +6,14 @@ import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.IntermediateOperation;
 import name.ulbricht.streams.api.Name;
+import name.ulbricht.streams.impl.JavaScriptConfigurationPane;
+import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @Name("Java Script Mapper")
 @Configuration(JavaScriptConfigurationPane.class)
-public final class JavaScriptMapper extends JavaScriptOperation {
+public final class JavaScriptMapper extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
 
 	public JavaScriptMapper() {
 		this.script = "result = element.getClass().getSimpleName();";
