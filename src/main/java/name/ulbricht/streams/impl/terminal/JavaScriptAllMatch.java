@@ -19,6 +19,11 @@ public final class JavaScriptAllMatch extends JavaScriptOperation implements Ter
 	}
 	
 	@Override
+	public String getSourceCode() {
+		return ".allMatch( /* please check source code for JavaScript execution */)";
+	}
+	
+	@Override
 	public Object terminateStream(final Stream<Object> stream) {
 		return stream.allMatch(this::matches);
 	}

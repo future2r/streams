@@ -17,6 +17,11 @@ public final class JavaScriptMapper extends JavaScriptOperation implements Inter
 	public JavaScriptMapper() {
 		super("result = element.getClass().getSimpleName();");
 	}
+	
+	@Override
+	public String getSourceCode() {
+		return ".map( /* please check source code for JavaScript execution */)";
+	}
 
 	@Override
 	public Stream<Object> processStream(final Stream<Object> stream) {

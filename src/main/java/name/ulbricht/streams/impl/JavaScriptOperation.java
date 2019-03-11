@@ -31,11 +31,6 @@ public abstract class JavaScriptOperation implements StreamOperation {
 		this.script = script;
 	}
 
-	@Override
-	public final String getSourceCode() {
-		return "// please check source code for details";
-	}
-
 	private static final int MAX_PREVIEW_LENGTH = 50;
 
 	@Override
