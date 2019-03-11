@@ -7,13 +7,16 @@ import name.ulbricht.streams.api.StreamOperationSet;
 import name.ulbricht.streams.impl.intermediate.Distinct;
 import name.ulbricht.streams.impl.intermediate.FileLines;
 import name.ulbricht.streams.impl.intermediate.JavaScriptFilter;
+import name.ulbricht.streams.impl.intermediate.JavaScriptFlatMap;
 import name.ulbricht.streams.impl.intermediate.JavaScriptMap;
 import name.ulbricht.streams.impl.intermediate.LowerCase;
 import name.ulbricht.streams.impl.intermediate.RegExSplitter;
 import name.ulbricht.streams.impl.intermediate.Sorted;
 import name.ulbricht.streams.impl.intermediate.StringMapper;
+import name.ulbricht.streams.impl.intermediate.SystemOutPeek;
 import name.ulbricht.streams.impl.source.Empty;
 import name.ulbricht.streams.impl.source.FindFiles;
+import name.ulbricht.streams.impl.source.Modules;
 import name.ulbricht.streams.impl.source.RandomIntegerGenerator;
 import name.ulbricht.streams.impl.source.SystemProperties;
 import name.ulbricht.streams.impl.source.TextFileReader;
@@ -37,7 +40,9 @@ public enum Preset {
 
 	GENERATE_NUMBERS("Generate a file with sorted numbers", Preset::createGenerateNumbers),
 
-	SYSTEM_PROPERTIES("Display Java system properties", Preset::createSystemProperties);
+	SYSTEM_PROPERTIES("Display Java system properties", Preset::createSystemProperties),
+
+	MODULE_PACKAGES("Modules and packages", Preset::createModulesAndPackages);
 
 	private final String displayName;
 	private final Supplier<StreamOperationSet> operationsFactory;
@@ -97,5 +102,12 @@ public enum Preset {
 		propertyReader.setScript("result = element + \":\\t\" + java.lang.System.getProperty(element);");
 
 		return new StreamOperationSet(new SystemProperties(), List.of(new Sorted(), propertyReader), new SystemOut());
+	}
+
+	private static StreamOperationSet createModulesAndPackages() {
+		JavaScriptFlatMap packageExtractor = new JavaScriptFlatMap();
+		packageExtractor.setScript("result = element.getPackages().stream();");
+		
+		return new StreamOperationSet(new Modules(), List.of(new SystemOutPeek(), packageExtractor), new SystemOut());
 	}
 }
