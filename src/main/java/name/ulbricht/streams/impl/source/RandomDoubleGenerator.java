@@ -43,8 +43,8 @@ public final class RandomDoubleGenerator implements StreamSource<Double> {
 
 	@Override
 	public String getSourceCode() {
-		return String.format("new Random().doubles(%s, %s, %s).mapToObj(Double::valueOf)",
-				Integer.toString(this.number), Double.toString(this.origin), Double.toString(this.bound));
+		return String.format("new Random().doubles(%s, %s, %s).boxed()", Integer.toString(this.number),
+				Double.toString(this.origin), Double.toString(this.bound));
 	}
 
 	@Override
@@ -55,6 +55,6 @@ public final class RandomDoubleGenerator implements StreamSource<Double> {
 
 	@Override
 	public Stream<Double> createStream() {
-		return new Random().doubles(this.number, this.origin, this.bound).mapToObj(Double::valueOf);
+		return new Random().doubles(this.number, this.origin, this.bound).boxed();
 	}
 }

@@ -43,7 +43,7 @@ public final class RandomIntegerGenerator implements StreamSource<Integer> {
 
 	@Override
 	public String getSourceCode() {
-		return String.format("new Random().ints(%s, %s, %s).mapToObj(Integer::valueOf)", Integer.toString(this.number),
+		return String.format("new Random().ints(%s, %s, %s).boxed()", Integer.toString(this.number),
 				Integer.toString(this.origin), Integer.toString(this.bound));
 	}
 
@@ -55,6 +55,6 @@ public final class RandomIntegerGenerator implements StreamSource<Integer> {
 
 	@Override
 	public Stream<Integer> createStream() {
-		return new Random().ints(this.number, this.origin, this.bound).mapToObj(Integer::valueOf);
+		return new Random().ints(this.number, this.origin, this.bound).boxed();
 	}
 }

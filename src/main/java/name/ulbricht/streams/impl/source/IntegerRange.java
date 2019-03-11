@@ -43,7 +43,7 @@ public final class IntegerRange implements StreamSource<Integer> {
 
 	@Override
 	public String getSourceCode() {
-		return String.format("IntStream.range%s(%s, %s).mapToObj(Integer::valueOf)", this.closed ? "Closed" : "",
+		return String.format("IntStream.range%s(%s, %s).boxed()", this.closed ? "Closed" : "",
 				Integer.toString(this.start), Integer.toString(this.end));
 	}
 
@@ -60,6 +60,6 @@ public final class IntegerRange implements StreamSource<Integer> {
 			stream = IntStream.rangeClosed(this.start, this.end);
 		else
 			stream = IntStream.range(this.start, this.end);
-		return stream.mapToObj(Integer::valueOf);
+		return stream.boxed();
 	}
 }
