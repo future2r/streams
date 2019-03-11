@@ -10,7 +10,7 @@ import name.ulbricht.streams.api.TerminalOperation;
 import name.ulbricht.streams.impl.JavaScriptConfigurationPane;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@Name("JavaScript None Match")
+@Name("JavaScript NoneMatch")
 @Configuration(value = JavaScriptConfigurationPane.class, hint = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
 public final class JavaScriptNonMatch extends JavaScriptOperation implements TerminalOperation<Object> {
 

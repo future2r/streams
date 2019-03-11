@@ -10,11 +10,11 @@ import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.impl.JavaScriptConfigurationPane;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@Name("Java Script Mapper")
+@Name("JavaScript Map")
 @Configuration(value = JavaScriptConfigurationPane.class, hint = "The current element is provided as 'element', the result must stored in 'result'.")
-public final class JavaScriptMapper extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
+public final class JavaScriptMap extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
 
-	public JavaScriptMapper() {
+	public JavaScriptMap() {
 		super("result = element.getClass().getSimpleName();");
 	}
 	

@@ -146,6 +146,7 @@ public final class MainFrame extends JFrame {
 
 		this.streamSourceComboBoxModel = new MutableComboBoxModel<>(StreamSources.IMPLEMENTATIONS);
 		this.streamSourceComboBox = new JComboBox<>(this.streamSourceComboBoxModel);
+		this.streamSourceComboBox.setMaximumRowCount(15);
 		this.streamSourceComboBox.setSelectedIndex(0);
 		this.streamSourceComboBox.setRenderer(new StreamOperationClassListCellRenderer());
 		this.streamSourceComboBox.addActionListener(e -> streamSourceSelected());
@@ -211,6 +212,7 @@ public final class MainFrame extends JFrame {
 
 		this.intermediateOperationComboBoxModel = new MutableComboBoxModel<>(IntermediateOperations.IMPLEMENTATIONS);
 		this.intermediateOperationComboBox = new JComboBox<>(this.intermediateOperationComboBoxModel);
+		this.intermediateOperationComboBox.setMaximumRowCount(15);
 		this.intermediateOperationComboBox.setSelectedIndex(0);
 		this.intermediateOperationComboBox.setRenderer(new StreamOperationClassListCellRenderer());
 
@@ -374,6 +376,7 @@ public final class MainFrame extends JFrame {
 
 		this.terminalOperationComboBoxModel = new MutableComboBoxModel<>(TerminalOperations.IMPLEMENTATIONS);
 		this.terminalOperationComboBox = new JComboBox<>(this.terminalOperationComboBoxModel);
+		this.terminalOperationComboBox.setMaximumRowCount(15);
 		this.terminalOperationComboBox.setSelectedIndex(0);
 		this.terminalOperationComboBox.setRenderer(new StreamOperationClassListCellRenderer());
 		this.terminalOperationComboBox.addActionListener(e -> terminalOperationSelected());

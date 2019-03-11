@@ -7,7 +7,7 @@ import name.ulbricht.streams.api.StreamOperationSet;
 import name.ulbricht.streams.impl.intermediate.Distinct;
 import name.ulbricht.streams.impl.intermediate.FileLines;
 import name.ulbricht.streams.impl.intermediate.JavaScriptFilter;
-import name.ulbricht.streams.impl.intermediate.JavaScriptMapper;
+import name.ulbricht.streams.impl.intermediate.JavaScriptMap;
 import name.ulbricht.streams.impl.intermediate.LowerCase;
 import name.ulbricht.streams.impl.intermediate.RegExSplitter;
 import name.ulbricht.streams.impl.intermediate.Sorted;
@@ -93,7 +93,7 @@ public enum Preset {
 	}
 
 	private static StreamOperationSet createSystemProperties() {
-		final var propertyReader = new JavaScriptMapper();
+		final var propertyReader = new JavaScriptMap();
 		propertyReader.setScript("result = element + \":\\t\" + java.lang.System.getProperty(element);");
 
 		return new StreamOperationSet(new SystemProperties(), List.of(new Sorted(), propertyReader), new SystemOut());

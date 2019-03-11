@@ -17,7 +17,7 @@ public final class JavaScriptConfigurationPane extends AbstractConfigurationPane
 	@Override
 	protected void createContent(final Container contentPane) {
 		this.scriptTextArea = new JTextArea(15, 75);
-		final var scriptLabel = new JLabel("Java Script:");
+		final var scriptLabel = new JLabel("JavaScript:");
 
 		contentPane.add(scriptLabel, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.WEST,
 				GridBagConstraints.NONE, new Insets(4, 4, 0, 4), 0, 0));

@@ -10,7 +10,7 @@ import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.impl.JavaScriptConfigurationPane;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@Name("JavaScript Take While")
+@Name("JavaScript TakeWhile")
 @Configuration(value = JavaScriptConfigurationPane.class, hint = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
 public final class JavaScriptTakeWhile extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
 

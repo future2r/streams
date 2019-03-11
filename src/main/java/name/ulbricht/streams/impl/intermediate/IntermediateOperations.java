@@ -10,7 +10,8 @@ public final class IntermediateOperations {
 			Skip.class, SystemOutPeek.class, NonNullFilter.class, StringMapper.class, StringFormatter.class,
 			LowerCase.class, UpperCase.class, RegExFilter.class, RegExSplitter.class, IntegerParser.class,
 			IntegerCompareFilter.class, DoubleParser.class, FileLines.class, JavaScriptFilter.class,
-			JavaScriptMapper.class, JavaScriptSorted.class, JavaScriptDropWhile.class, JavaScriptTakeWhile.class };
+			JavaScriptMap.class, JavaScriptFlatMap.class, JavaScriptSorted.class, JavaScriptDropWhile.class,
+			JavaScriptTakeWhile.class };
 
 	private IntermediateOperations() {
 		// hidden

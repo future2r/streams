@@ -10,7 +10,7 @@ import name.ulbricht.streams.api.TerminalOperation;
 import name.ulbricht.streams.impl.JavaScriptConfigurationPane;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@Name("JavaScript Any Match")
+@Name("JavaScript AnyMatch")
 @Configuration(value = JavaScriptConfigurationPane.class, hint = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
 public final class JavaScriptAnyMatch extends JavaScriptOperation implements TerminalOperation<Object> {
 

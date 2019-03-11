@@ -10,7 +10,7 @@ import name.ulbricht.streams.api.Name;
 import name.ulbricht.streams.impl.JavaScriptConfigurationPane;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@Name("JavaScript Drop While")
+@Name("JavaScript DropWhile")
 @Configuration(value = JavaScriptConfigurationPane.class, hint = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
 public final class JavaScriptDropWhile extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
 
