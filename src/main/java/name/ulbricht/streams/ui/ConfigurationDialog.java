@@ -131,8 +131,16 @@ final class ConfigurationDialog extends JDialog {
 		case INTEGER: {
 			final var spinner = new JSpinner(new SpinnerNumberModel(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
 			spinner.setValue(StreamOperation.getConfigurationValue(this.operation, configuration));
-			applyFunctions.add(
-					() -> StreamOperation.setConfigurationValue(this.operation, configuration, spinner.getValue()));
+			applyFunctions.add(() -> StreamOperation.setConfigurationValue(this.operation, configuration,
+					((Number) spinner.getValue()).intValue()));
+
+			return addComponent(panel, row, label, spinner);
+		}
+		case LONG: {
+			final var spinner = new JSpinner(new SpinnerNumberModel(0L, Long.MIN_VALUE, Long.MAX_VALUE, 1L));
+			spinner.setValue(StreamOperation.getConfigurationValue(this.operation, configuration));
+			applyFunctions.add(() -> StreamOperation.setConfigurationValue(this.operation, configuration,
+					((Number) spinner.getValue()).longValue()));
 
 			return addComponent(panel, row, label, spinner);
 		}
@@ -140,8 +148,8 @@ final class ConfigurationDialog extends JDialog {
 			final var spinner = new JSpinner(
 					new SpinnerNumberModel(0.0, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1.0));
 			spinner.setValue(StreamOperation.getConfigurationValue(this.operation, configuration));
-			applyFunctions.add(
-					() -> StreamOperation.setConfigurationValue(this.operation, configuration, spinner.getValue()));
+			applyFunctions.add(() -> StreamOperation.setConfigurationValue(this.operation, configuration,
+					((Number) spinner.getValue()).doubleValue()));
 
 			return addComponent(panel, row, label, spinner);
 		}
@@ -199,7 +207,8 @@ final class ConfigurationDialog extends JDialog {
 		return row + 1;
 	}
 
-	private int addScrollableComponent(final JPanel panel, final int row, final JLabel label, final JComponent component) {
+	private int addScrollableComponent(final JPanel panel, final int row, final JLabel label,
+			final JComponent component) {
 		panel.add(label, new GridBagConstraints(0, row, 2, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE,
 				new Insets(4, 4, 0, 4), 0, 0));
 		panel.add(new JScrollPane(component), new GridBagConstraints(0, row + 1, 2, 1, 1, 1, GridBagConstraints.WEST,

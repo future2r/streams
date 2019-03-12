@@ -9,20 +9,20 @@ import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.StreamSource;
 
 @Operation(name = "Random Integer Generator", output = Integer.class)
-@Configuration(name = "number", type = ConfigurationType.INTEGER, displayName = "Number")
+@Configuration(name = "number", type = ConfigurationType.LONG, displayName = "Number")
 @Configuration(name = "origin", type = ConfigurationType.INTEGER, displayName = "Origin (inclusive)")
 @Configuration(name = "bound", type = ConfigurationType.INTEGER, displayName = "Bound (exclusive)")
 public final class RandomIntegerGenerator implements StreamSource<Integer> {
 
-	private int number = 10;
+	private long number = 10;
 	private int origin = 0;
 	private int bound = 100;
 
-	public int getNumber() {
+	public long getNumber() {
 		return this.number;
 	}
 
-	public void setNumber(final int number) {
+	public void setNumber(final long number) {
 		this.number = number;
 	}
 
@@ -44,13 +44,13 @@ public final class RandomIntegerGenerator implements StreamSource<Integer> {
 
 	@Override
 	public String getSourceCode() {
-		return String.format("new Random().ints(%s, %s, %s).boxed()", Integer.toString(this.number),
+		return String.format("new Random().ints(%s, %s, %s).boxed()", Long.toString(this.number),
 				Integer.toString(this.origin), Integer.toString(this.bound));
 	}
 
 	@Override
 	public String getConfigurationText() {
-		return String.format("number=%s, origin=%s, bound=%s", Integer.toString(this.number),
+		return String.format("number=%s, origin=%s, bound=%s", Long.toString(this.number),
 				Integer.toString(this.origin), Integer.toString(this.bound));
 	}
 

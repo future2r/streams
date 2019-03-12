@@ -9,20 +9,20 @@ import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.StreamSource;
 
 @Operation(name = "Random Double Generator", output = Double.class)
-@Configuration(name = "number", type = ConfigurationType.INTEGER, displayName = "Number")
+@Configuration(name = "number", type = ConfigurationType.LONG, displayName = "Number")
 @Configuration(name = "origin", type = ConfigurationType.DOUBLE, displayName = "Origin (inclusive)")
 @Configuration(name = "bound", type = ConfigurationType.DOUBLE, displayName = "Bound (exclusive)")
 public final class RandomDoubleGenerator implements StreamSource<Double> {
 
-	private int number = 10;
+	private long number = 10;
 	private double origin = 0.1;
 	private double bound = 0.5;
 
-	public int getNumber() {
+	public long getNumber() {
 		return this.number;
 	}
 
-	public void setNumber(final int number) {
+	public void setNumber(final long number) {
 		this.number = number;
 	}
 
@@ -44,14 +44,14 @@ public final class RandomDoubleGenerator implements StreamSource<Double> {
 
 	@Override
 	public String getSourceCode() {
-		return String.format("new Random().doubles(%s, %s, %s).boxed()", Integer.toString(this.number),
+		return String.format("new Random().doubles(%s, %s, %s).boxed()", Long.toString(this.number),
 				Double.toString(this.origin), Double.toString(this.bound));
 	}
 
 	@Override
 	public String getConfigurationText() {
-		return String.format("number=%s, origin=%s, bound=%s", Integer.toString(this.number),
-				Double.toString(this.origin), Double.toString(this.bound));
+		return String.format("number=%s, origin=%s, bound=%s", Long.toString(this.number), Double.toString(this.origin),
+				Double.toString(this.bound));
 	}
 
 	@Override

@@ -6,27 +6,27 @@ import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.IntermediateOperation;
 
-@Configuration(name = "limit", type = ConfigurationType.INTEGER, displayName = "Maximum Size")
+@Configuration(name = "limit", type = ConfigurationType.LONG, displayName = "Maximum Size")
 public final class Limit implements IntermediateOperation<Object, Object> {
 
-	private int limit = 5;
+	private long limit = 5;
 
-	public int getLimit() {
+	public long getLimit() {
 		return this.limit;
 	}
 
-	public void setLimit(final int limit) {
+	public void setLimit(final long limit) {
 		this.limit = limit;
 	}
 
 	@Override
 	public String getSourceCode() {
-		return String.format(".limit(%s)", Integer.toString(this.limit));
+		return String.format(".limit(%s)", Long.toString(this.limit));
 	}
 
 	@Override
 	public String getConfigurationText() {
-		return String.format("limit=%s", Integer.toString(this.limit));
+		return String.format("limit=%s", Long.toString(this.limit));
 	}
 
 	@Override
