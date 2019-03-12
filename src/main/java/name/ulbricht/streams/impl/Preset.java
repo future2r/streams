@@ -89,7 +89,10 @@ public enum Preset {
 	}
 
 	private static StreamOperationSet createCountLines() {
-		return new StreamOperationSet(new FindFiles(), List.of(new FileLines()), new Count());
+		final var fileFilter = new JavaScriptFilter();
+		fileFilter.setScript("result = element.getFileName().toString().endsWith(\".java\")");
+		
+		return new StreamOperationSet(new FindFiles(), List.of(fileFilter, new FileLines()), new Count());
 	}
 
 	private static StreamOperationSet createGenerateNumbers() {
@@ -107,7 +110,7 @@ public enum Preset {
 	private static StreamOperationSet createModulesAndPackages() {
 		JavaScriptFlatMap packageExtractor = new JavaScriptFlatMap();
 		packageExtractor.setScript("result = element.getPackages().stream();");
-		
+
 		return new StreamOperationSet(new Modules(), List.of(new SystemOutPeek(), packageExtractor), new SystemOut());
 	}
 }
