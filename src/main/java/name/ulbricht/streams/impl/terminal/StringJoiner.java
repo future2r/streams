@@ -1,6 +1,6 @@
 package name.ulbricht.streams.impl.terminal;
 
-import static name.ulbricht.streams.api.StreamOperation.quote;
+import static name.ulbricht.streams.impl.StringUtils.quote;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

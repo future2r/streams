@@ -9,8 +9,8 @@ import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.TerminalOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@Operation(name = "JavaScript ForEach")
-@Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript", description = "The current element is provided as 'element'.")
+@Operation(name = "JavaScript ForEach", description = "The current element is provided as 'element'.")
+@Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript")
 public final class JavaScriptForEach extends JavaScriptOperation implements TerminalOperation<Object> {
 
 	public JavaScriptForEach() {

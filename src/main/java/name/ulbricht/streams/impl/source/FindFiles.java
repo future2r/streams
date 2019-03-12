@@ -1,6 +1,6 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.api.StreamOperation.quote;
+import static name.ulbricht.streams.impl.StringUtils.quote;
 
 import java.io.IOException;
 import java.nio.file.Files;

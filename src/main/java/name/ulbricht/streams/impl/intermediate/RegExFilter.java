@@ -1,6 +1,6 @@
 package name.ulbricht.streams.impl.intermediate;
 
-import static name.ulbricht.streams.api.StreamOperation.quote;
+import static name.ulbricht.streams.impl.StringUtils.quote;
 
 import java.util.regex.Pattern;
 import java.util.stream.Stream;

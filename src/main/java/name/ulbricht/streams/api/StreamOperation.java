@@ -53,6 +53,20 @@ public interface StreamOperation {
 		throw new IllegalArgumentException("Cannot handle " + streamOperationClass);
 	}
 
+	static <T extends StreamOperation> String getDescription(final T streamOperation) {
+		return getDescription(Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass());
+	}
+
+	static <T extends StreamOperation> String getDescription(final Class<T> streamOperationClass) {
+		final var operation = Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
+				.getAnnotation(Operation.class);
+
+		final var description = operation != null ? operation.description() : "";
+		if (!description.isEmpty())
+			return description;
+		return null;
+	}
+
 	static boolean supportsConfiguration(final StreamOperation streamOperation) {
 		return getConfigurations(streamOperation).length > 0;
 	}
@@ -109,10 +123,6 @@ public interface StreamOperation {
 		} catch (final IntrospectionException | NoSuchElementException ex) {
 			throw new StreamOperationException("Could not find property " + configuration.name(), ex);
 		}
-	}
-
-	static String quote(final String s) {
-		return s.replace("\\", "\\\\");
 	}
 
 	@SuppressWarnings("unchecked")

@@ -47,9 +47,8 @@ import name.ulbricht.streams.api.StreamOperationSet;
 import name.ulbricht.streams.api.TerminalOperation;
 import name.ulbricht.streams.impl.Preset;
 
+@SuppressWarnings("serial")
 public final class MainFrame extends JFrame {
-
-	private static final long serialVersionUID = 1L;
 
 	private static final Logger log = Logger.getLogger("name.ulbricht.streams");
 
@@ -116,13 +115,13 @@ public final class MainFrame extends JFrame {
 	private void presetSelected(final Preset preset) {
 		final var operations = preset.operations();
 
-		final var source = operations.getSourceOperation();
+		final var source = operations.getSource();
 		this.sourceOperationComboBox.setSelectedItem(source.getClass());
 		setSourceOperation(source);
 
-		this.intermediateOperationListModel.replaceAllElements(operations.getIntermediatOperations());
+		this.intermediateOperationListModel.replaceAllElements(operations.getIntermediats());
 
-		final var terminalOperation = operations.getTerminalOperation();
+		final var terminalOperation = operations.getTerminal();
 		this.terminalOperationComboBox.setSelectedItem(terminalOperation.getClass());
 		setTerminalOperation(terminalOperation);
 

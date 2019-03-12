@@ -14,19 +14,17 @@ public final class SourceCodeBuilder {
 	public String getSourceCode() {
 		final var sourceCode = new StringBuilder();
 
-		sourceCode
-				.append(String.format("// %s%n", StreamOperation.getDisplayName(this.operations.getSourceOperation())));
-		sourceCode.append(this.operations.getSourceOperation().getSourceCode().lines()
-				.collect(Collectors.joining("\n", "", "\n")));
+		sourceCode.append(String.format("// %s%n", StreamOperation.getDisplayName(this.operations.getSource())));
+		sourceCode.append(
+				this.operations.getSource().getSourceCode().lines().collect(Collectors.joining("\n", "", "\n")));
 
-		sourceCode.append(this.operations.getIntermediatOperations().stream()
+		sourceCode.append(this.operations.getIntermediats().stream()
 				.map(op -> String.format("%n// %s%n%s%n", StreamOperation.getDisplayName(op), op.getSourceCode()))
 				.flatMap(String::lines).collect(Collectors.joining("\n", "", "\n")));
 
+		sourceCode.append(String.format("%n// %s%n", StreamOperation.getDisplayName(this.operations.getTerminal())));
 		sourceCode.append(
-				String.format("%n// %s%n", StreamOperation.getDisplayName(this.operations.getTerminalOperation())));
-		sourceCode.append(this.operations.getTerminalOperation().getSourceCode().lines()
-				.collect(Collectors.joining("\n", "", ";")));
+				this.operations.getTerminal().getSourceCode().lines().collect(Collectors.joining("\n", "", ";")));
 
 		return sourceCode.toString();
 	}

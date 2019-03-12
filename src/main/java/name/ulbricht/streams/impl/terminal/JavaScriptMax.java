@@ -9,8 +9,8 @@ import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.TerminalOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@Operation(name = "JavaScript Max")
-@Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript", description = "Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
+@Operation(name = "JavaScript Max", description = "Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
+@Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript")
 public final class JavaScriptMax extends JavaScriptOperation implements TerminalOperation<Object> {
 
 	public JavaScriptMax() {

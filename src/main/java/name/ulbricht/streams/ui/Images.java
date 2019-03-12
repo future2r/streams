@@ -77,8 +77,7 @@ public final class Images extends ListResourceBundle {
 				{ TERMINAL_OPERATION, loadMultiResolutionImage("terminal-%s.png") }, //
 				{ LOG, loadMultiResolutionImage("log-%s.png") }, //
 				{ CONSOLE, loadMultiResolutionImage("console-%s.png") }, //
-				{ STATISTICS, loadMultiResolutionImage("statistics-%s.png") }, //
-				{ INFO, loadMultiResolutionImage("info-%s.png") } //
+				{ STATISTICS, loadMultiResolutionImage("statistics-%s.png") }
 		};
 	}
 

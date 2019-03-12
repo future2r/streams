@@ -1,12 +1,14 @@
 package name.ulbricht.streams.ui;
 
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Window;
-import java.awt.event.WindowAdapter;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -26,15 +29,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
+@SuppressWarnings("serial")
 final class ConfigurationDialog extends JDialog {
-
-	private static final long serialVersionUID = 1L;
 
 	static boolean showModal(final Window owner, final StreamOperation operation) {
 		final var dlg = new ConfigurationDialog(owner, operation);
@@ -61,6 +64,14 @@ final class ConfigurationDialog extends JDialog {
 		contentPane.setBorder(new EmptyBorder(8, 8, 8, 8));
 		setContentPane(contentPane);
 
+		final var description = StreamOperation.getDescription(operation);
+		if (description != null) {
+			final var descriptionLabel = new JLabel(
+					String.format("<html><p style='width: auto'>%s</p></html>", description));
+			descriptionLabel.setBorder(new EmptyBorder(4, 4, 4, 4));
+			contentPane.add(descriptionLabel, BorderLayout.NORTH);
+		}
+
 		final var configurationPanel = new JPanel(new GridBagLayout());
 		configurationPanel.setOpaque(false);
 
@@ -78,39 +89,38 @@ final class ConfigurationDialog extends JDialog {
 		final var buttonPanel = new JPanel(new GridLayout(1, 0, 4, 4));
 		bottomPanel.add(buttonPanel, BorderLayout.EAST);
 
-		final var okButton = new JButton("OK");
+		final var okButton = new JButton(Messages.getString("ConfigurationDialog.okButton"));
 		okButton.addActionListener(e -> apply());
 		getRootPane().setDefaultButton(okButton);
 		buttonPanel.add(okButton);
 
-		final var cancelButton = new JButton("Cancel");
+		final var cancelButton = new JButton(Messages.getString("ConfigurationDialog.cancelButton"));
 		cancelButton.addActionListener(e -> cancel());
 		buttonPanel.add(cancelButton);
 
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosed(WindowEvent e) {
-				ConfigurationDialog.this.result = false;
-			}
-		});
+		getRootPane().setDefaultButton(okButton);
+		registerKeyStrokeEvent("WindowClosing", KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+				new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 
 		pack();
 	}
 
-	private int addConfiguration(final int row, final JPanel panel, final Configuration configuration) {
+	private void registerKeyStrokeEvent(final String key, final KeyStroke keyStroke, final AWTEvent event) {
+		final var actionKey = "name.ulbricht.streams.ui.dispatch:" + key;
+		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, actionKey);
+		getRootPane().getActionMap().put(actionKey, new AbstractAction() {
+			public void actionPerformed(final ActionEvent e) {
+				ConfigurationDialog.this.dispatchEvent(event);
+			}
+		});
+	}
 
+	private int addConfiguration(final int row, final JPanel panel, final Configuration configuration) {
 		var displayName = configuration.displayName();
 		if (displayName.isEmpty())
 			displayName = configuration.name();
 
 		final var label = new JLabel(displayName + ':');
-
-		final var description = configuration.description();
-		if (!description.isEmpty()) {
-			label.setToolTipText(String.format("<html><p width='300'>%s</p></html>", description));
-			label.setIcon(Images.getSmallIcon(Images.INFO));
-			label.setHorizontalTextPosition(JLabel.LEFT);
-		}
 
 		switch (configuration.type()) {
 		case STRING: {
@@ -166,7 +176,7 @@ final class ConfigurationDialog extends JDialog {
 		case DIRECTORY: {
 			final var textField = new JTextField(30);
 			textField.setEditable(false);
-			final var button = new JButton("Browse...");
+			final var button = new JButton(Messages.getString("ConfigurationDialog.browse"));
 			button.addActionListener(e -> browseDirectory(textField));
 			textField.setText(
 					Objects.toString(StreamOperation.getConfigurationValue(this.operation, configuration), ""));

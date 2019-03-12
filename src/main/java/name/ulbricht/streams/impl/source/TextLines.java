@@ -1,5 +1,7 @@
 package name.ulbricht.streams.impl.source;
 
+import static name.ulbricht.streams.impl.StringUtils.omit;
+
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,12 +34,9 @@ public final class TextLines implements SourceOperation<String> {
 		return this.text.lines().map(l -> "\"" + l + "\\n\"").collect(Collectors.joining("\n + ", "", ".lines()"));
 	}
 
-	private static final int MAX_PREVIEW_LENGTH = 50;
-
 	@Override
 	public String getConfigurationText() {
-		return "text=" + this.text.substring(0, Math.min(MAX_PREVIEW_LENGTH, this.text.length()))
-				+ (this.text.length() > MAX_PREVIEW_LENGTH ? "..." : "");
+		return omit("text=" + this.text, 50);
 	}
 
 	@Override

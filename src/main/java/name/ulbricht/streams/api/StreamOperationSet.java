@@ -7,28 +7,26 @@ import java.util.Objects;
 
 public final class StreamOperationSet {
 
-	private final SourceOperation<?> sourceOperation;
-	private final List<IntermediateOperation<?, ?>> intermediatOperations;
-	private final TerminalOperation<?> terminalOperation;
+	private final SourceOperation<?> source;
+	private final List<IntermediateOperation<?, ?>> intermediats;
+	private final TerminalOperation<?> terminal;
 
-	public StreamOperationSet(final SourceOperation<?> sourceOperation,
-			final List<IntermediateOperation<?, ?>> intermediatOperations,
-			final TerminalOperation<?> terminalOperation) {
-		this.sourceOperation = Objects.requireNonNull(sourceOperation, "sourceOperation must not be null");
-		this.intermediatOperations = new ArrayList<>(
-				Objects.requireNonNull(intermediatOperations, "intermediatOperations must not be null"));
-		this.terminalOperation = Objects.requireNonNull(terminalOperation, "terminalOperation must not be null");
+	public StreamOperationSet(final SourceOperation<?> source, final List<IntermediateOperation<?, ?>> intermediats,
+			final TerminalOperation<?> terminal) {
+		this.source = Objects.requireNonNull(source, "source must not be null");
+		this.intermediats = new ArrayList<>(Objects.requireNonNull(intermediats, "intermediat must not be null"));
+		this.terminal = Objects.requireNonNull(terminal, "terminal must not be null");
 	}
 
-	public SourceOperation<?> getSourceOperation() {
-		return this.sourceOperation;
+	public SourceOperation<?> getSource() {
+		return this.source;
 	}
 
-	public List<IntermediateOperation<?, ?>> getIntermediatOperations() {
-		return Collections.unmodifiableList(this.intermediatOperations);
+	public List<IntermediateOperation<?, ?>> getIntermediats() {
+		return Collections.unmodifiableList(this.intermediats);
 	}
 
-	public TerminalOperation<?> getTerminalOperation() {
-		return this.terminalOperation;
+	public TerminalOperation<?> getTerminal() {
+		return this.terminal;
 	}
 }

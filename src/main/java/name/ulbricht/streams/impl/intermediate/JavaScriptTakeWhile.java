@@ -9,8 +9,8 @@ import name.ulbricht.streams.api.IntermediateOperation;
 import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@Operation(name = "JavaScript TakeWhile")
-@Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript", description = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
+@Operation(name = "JavaScript TakeWhile", description = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
+@Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript")
 public final class JavaScriptTakeWhile extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
 
 	public JavaScriptTakeWhile() {

@@ -15,7 +15,5 @@ public @interface Configuration {
 
 	ConfigurationType type();
 
-	String displayName() default "";
-
-	String description() default "";
+	String displayName() default "";	
 }

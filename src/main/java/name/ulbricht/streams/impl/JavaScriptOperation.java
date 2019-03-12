@@ -1,5 +1,7 @@
 package name.ulbricht.streams.impl;
 
+import static name.ulbricht.streams.impl.StringUtils.omit;
+
 import java.util.Map;
 import java.util.Objects;
 
@@ -9,17 +11,17 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.StreamOperationException;
 
 public abstract class JavaScriptOperation implements StreamOperation {
 
+	private final static ScriptEngineManager engineManager = new ScriptEngineManager();
+
 	private String script;
-	private final ScriptEngineManager engineManager;
-	private final ScriptEngine engine;
+	private ScriptEngine engine;
 
 	public JavaScriptOperation(final String script) {
 		this.script = Objects.requireNonNull(script, "script must not be null");
-		this.engineManager = new ScriptEngineManager();
-		this.engine = this.engineManager.getEngineByMimeType("text/javascript");
 	}
 
 	public final String getScript() {
@@ -30,16 +32,18 @@ public abstract class JavaScriptOperation implements StreamOperation {
 		this.script = script;
 	}
 
-	private static final int MAX_PREVIEW_LENGTH = 50;
-
 	@Override
 	public final String getConfigurationText() {
-		return "script=" + this.script.substring(0, Math.min(MAX_PREVIEW_LENGTH, this.script.length()))
-				+ (this.script.length() > MAX_PREVIEW_LENGTH ? "..." : "");
+		return omit(this.script, 50);
 	}
 
 	@SuppressWarnings("unchecked")
 	protected <T> T evalScript(final Map<String, Object> input) {
+		synchronized (engineManager) {
+			if (this.engine == null)
+				engine = engineManager.getEngineByMimeType("text/javascript");
+		}
+
 		final var bindings = this.engine.createBindings();
 		bindings.putAll(input);
 		this.engine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
@@ -48,7 +52,7 @@ public abstract class JavaScriptOperation implements StreamOperation {
 			this.engine.eval(this.script);
 			return (T) this.engine.getBindings(ScriptContext.ENGINE_SCOPE).get("result");
 		} catch (final ScriptException ex) {
-			throw new RuntimeException(ex.getMessage(), ex);
+			throw new StreamOperationException(ex.getMessage(), ex);
 		}
 	}
 }
