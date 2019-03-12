@@ -1,6 +1,5 @@
 package name.ulbricht.streams.impl.intermediate;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -25,19 +24,6 @@ public final class JavaScriptFlatMap extends JavaScriptOperation implements Inte
 
 	@Override
 	public Stream<Object> processStream(final Stream<Object> stream) {
-		return stream.flatMap(this::flatMap);
-	}
-
-	@SuppressWarnings("unchecked")
-	private Stream<Object> flatMap(final Object element) {
-		final Map<String, Object> input = new HashMap<>();
-		input.put("element", element);
-		final var output = evalScript(input);
-
-		final var result = output.get("result");
-		if (result instanceof Stream)
-			return ((Stream<Object>) result);
-		else
-			throw new RuntimeException("Variable 'result' of type Stream not found.");
+		return stream.flatMap(e -> evalScript(Map.of("element", e)));
 	}
 }

@@ -1,6 +1,5 @@
 package name.ulbricht.streams.impl.intermediate;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -25,18 +24,6 @@ public final class JavaScriptDropWhile extends JavaScriptOperation implements In
 
 	@Override
 	public Stream<Object> processStream(final Stream<Object> stream) {
-		return stream.dropWhile(this::matches);
-	}
-
-	private boolean matches(final Object element) {
-		final Map<String, Object> input = new HashMap<>();
-		input.put("element", element);
-		final var output = evalScript(input);
-
-		final var result = output.get("result");
-		if (result instanceof Boolean)
-			return ((Boolean) result).booleanValue();
-		else
-			throw new RuntimeException("Variable 'result' of type boolean not found.");
+		return stream.dropWhile(e -> evalScript(Map.of("element", e)));
 	}
 }

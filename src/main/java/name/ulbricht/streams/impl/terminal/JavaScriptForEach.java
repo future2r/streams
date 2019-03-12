@@ -1,6 +1,5 @@
 package name.ulbricht.streams.impl.terminal;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -25,13 +24,7 @@ public final class JavaScriptForEach extends JavaScriptOperation implements Term
 
 	@Override
 	public Object terminateStream(final Stream<Object> stream) {
-		stream.forEach(this::consume);
+		stream.forEach(e->evalScript(Map.of("element", e)));
 		return null;
-	}
-
-	private void consume(final Object element) {
-		final Map<String, Object> input = new HashMap<>();
-		input.put("element", element);
-		evalScript(input);
 	}
 }

@@ -1,6 +1,5 @@
 package name.ulbricht.streams.impl;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -39,14 +38,15 @@ public abstract class JavaScriptOperation implements StreamOperation {
 				+ (this.script.length() > MAX_PREVIEW_LENGTH ? "..." : "");
 	}
 
-	protected Map<String, Object> evalScript(final Map<String, Object> input) {
+	@SuppressWarnings("unchecked")
+	protected <T> T evalScript(final Map<String, Object> input) {
 		final var bindings = this.engine.createBindings();
 		bindings.putAll(input);
 		this.engine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
 
 		try {
 			this.engine.eval(this.script);
-			return new HashMap<>(this.engine.getBindings(ScriptContext.ENGINE_SCOPE));
+			return (T) this.engine.getBindings(ScriptContext.ENGINE_SCOPE).get("result");
 		} catch (final ScriptException ex) {
 			throw new RuntimeException(ex.getMessage(), ex);
 		}

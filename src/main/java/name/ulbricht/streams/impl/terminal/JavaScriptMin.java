@@ -1,6 +1,5 @@
 package name.ulbricht.streams.impl.terminal;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -29,15 +28,6 @@ public final class JavaScriptMin extends JavaScriptOperation implements Terminal
 	}
 
 	private int compare(final Object element1, final Object element2) {
-		final Map<String, Object> input = new HashMap<>();
-		input.put("element1", element1);
-		input.put("element2", element2);
-		final var output = evalScript(input);
-
-		final var result = output.get("result");
-		if (result instanceof Integer)
-			return ((Integer) result).intValue();
-		else
-			throw new RuntimeException("Variable 'result' of type int not found.");
+		return evalScript(Map.of("element1", element1, "element2", element2));
 	}
 }
