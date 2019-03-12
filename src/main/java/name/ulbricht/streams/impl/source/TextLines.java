@@ -6,11 +6,11 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Operation;
-import name.ulbricht.streams.api.StreamSource;
+import name.ulbricht.streams.api.SourceOperation;
 
 @Operation(name = "Text Lines", output = String.class)
 @Configuration(name = "text", type = ConfigurationType.MULTILINE_STRING, displayName = "Text Lines")
-public final class TextLines implements StreamSource<String> {
+public final class TextLines implements SourceOperation<String> {
 
 	private String text = "Hello World!\n" // en
 			+ "Hallo Welt!\n" // de

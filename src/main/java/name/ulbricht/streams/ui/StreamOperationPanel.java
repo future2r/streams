@@ -13,8 +13,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 import name.ulbricht.streams.api.IntermediateOperation;
+import name.ulbricht.streams.api.SourceOperation;
 import name.ulbricht.streams.api.StreamOperation;
-import name.ulbricht.streams.api.StreamSource;
 import name.ulbricht.streams.api.TerminalOperation;
 
 final class StreamOperationPanel extends JPanel {
@@ -64,8 +64,8 @@ final class StreamOperationPanel extends JPanel {
 		this.nameLabel.setText(streamOperation != null ? StreamOperation.getDisplayName(streamOperation) : " ");
 
 		final Icon icon;
-		if (streamOperation instanceof StreamSource)
-			icon = Images.getSmallIcon(Images.STREAM_SOURCE);
+		if (streamOperation instanceof SourceOperation)
+			icon = Images.getSmallIcon(Images.SOURCE_OPERATION);
 		else if (streamOperation instanceof IntermediateOperation)
 			icon = Images.getSmallIcon(Images.INTERMEDIATE_OPERATION);
 		else if (streamOperation instanceof TerminalOperation)

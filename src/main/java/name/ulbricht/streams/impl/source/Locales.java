@@ -4,10 +4,10 @@ import java.util.Locale;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Operation;
-import name.ulbricht.streams.api.StreamSource;
+import name.ulbricht.streams.api.SourceOperation;
 
 @Operation(output = Locale.class)
-public final class Locales implements StreamSource<Locale> {
+public final class Locales implements SourceOperation<Locale> {
 
 	@Override
 	public String getSourceCode() {

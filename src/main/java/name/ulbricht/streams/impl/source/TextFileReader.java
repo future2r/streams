@@ -13,12 +13,12 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Operation;
-import name.ulbricht.streams.api.StreamSource;
+import name.ulbricht.streams.api.SourceOperation;
 
 @Operation(name = "Text File Reader", output = String.class)
 @Configuration(name = "file", type = ConfigurationType.FILE, displayName = "Text File")
 @Configuration(name = "encoding", type = ConfigurationType.ENCODING, displayName = "Encoding")
-public final class TextFileReader implements StreamSource<String> {
+public final class TextFileReader implements SourceOperation<String> {
 
 	private Path file = Paths.get(System.getProperty("user.dir"), "input.txt");
 	private Charset encoding = StandardCharsets.UTF_8;

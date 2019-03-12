@@ -6,13 +6,13 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Operation;
-import name.ulbricht.streams.api.StreamSource;
+import name.ulbricht.streams.api.SourceOperation;
 
 @Operation(name = "Integer Range", output = Integer.class)
 @Configuration(name = "start", type = ConfigurationType.INTEGER, displayName = "Start")
 @Configuration(name = "end", type = ConfigurationType.INTEGER, displayName = "End")
 @Configuration(name = "closed", type = ConfigurationType.BOOLEAN, displayName = "Range is closed")
-public final class IntegerRange implements StreamSource<Integer> {
+public final class IntegerRange implements SourceOperation<Integer> {
 
 	private int start = 0;
 	private int end = 100;

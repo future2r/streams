@@ -38,16 +38,13 @@ import javax.swing.border.TitledBorder;
 
 import name.ulbricht.streams.api.IntermediateOperation;
 import name.ulbricht.streams.api.SourceCodeBuilder;
+import name.ulbricht.streams.api.SourceOperation;
 import name.ulbricht.streams.api.StreamExecutor;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.api.StreamOperationException;
 import name.ulbricht.streams.api.StreamOperationSet;
-import name.ulbricht.streams.api.StreamSource;
 import name.ulbricht.streams.api.TerminalOperation;
 import name.ulbricht.streams.impl.Preset;
-import name.ulbricht.streams.impl.intermediate.IntermediateOperations;
-import name.ulbricht.streams.impl.source.StreamSources;
-import name.ulbricht.streams.impl.terminal.TerminalOperations;
 
 public final class MainFrame extends JFrame {
 
@@ -87,6 +84,8 @@ public final class MainFrame extends JFrame {
 
 		setContentPane(contentPane);
 		pack();
+
+		SwingUtilities.invokeLater(() -> presetSelected(Preset.DEFAULT));
 	}
 
 	@Override
@@ -116,9 +115,15 @@ public final class MainFrame extends JFrame {
 	private void presetSelected(final Preset preset) {
 		final var operations = preset.operations();
 
-		setStreamSource(operations.getStreamSource());
+		final var source = operations.getSourceOperation();
+		this.sourceOperationComboBox.setSelectedItem(source.getClass());
+		setSourceOperation(source);
+
 		this.intermediateOperationListModel.replaceAllElements(operations.getIntermediatOperations());
-		setTerminalOperation(operations.getTerminalOperation());
+
+		final var terminalOperation = operations.getTerminalOperation();
+		this.terminalOperationComboBox.setSelectedItem(terminalOperation.getClass());
+		setTerminalOperation(terminalOperation);
 
 		this.actions.validate();
 	}
@@ -137,67 +142,65 @@ public final class MainFrame extends JFrame {
 		return panel;
 	}
 
-	private MutableComboBoxModel<Class<? extends StreamSource<?>>> streamSourceComboBoxModel;
-	private JComboBox<Class<? extends StreamSource<?>>> streamSourceComboBox;
-	private StreamOperationPanel streamSourcePanel;
+	private MutableComboBoxModel<Class<? extends SourceOperation<?>>> sourceOperationComboBoxModel;
+	private JComboBox<Class<? extends SourceOperation<?>>> sourceOperationComboBox;
+	private StreamOperationPanel sourceOperationPanel;
 
 	private JPanel createSourcePanel() {
 		final var panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
 		panel.setBorder(new TitledBorder(Messages.getString("sourcePanel.title")));
 
-		this.streamSourceComboBoxModel = new MutableComboBoxModel<>(StreamSources.IMPLEMENTATIONS);
-		this.streamSourceComboBox = new JComboBox<>(this.streamSourceComboBoxModel);
-		this.streamSourceComboBox.setMaximumRowCount(15);
-		this.streamSourceComboBox.setSelectedIndex(0);
-		this.streamSourceComboBox.setRenderer(new StreamOperationClassListCellRenderer());
-		this.streamSourceComboBox.addActionListener(e -> streamSourceSelected());
+		this.sourceOperationComboBoxModel = new MutableComboBoxModel<>(StreamOperation.findSourceOperations());
+		this.sourceOperationComboBox = new JComboBox<>(this.sourceOperationComboBoxModel);
+		this.sourceOperationComboBox.setMaximumRowCount(15);
+		this.sourceOperationComboBox.setSelectedIndex(0);
+		this.sourceOperationComboBox.setRenderer(new StreamOperationClassListCellRenderer());
+		this.sourceOperationComboBox.addActionListener(e -> sourceOperationSelected());
 
-		this.streamSourcePanel = new StreamOperationPanel();
+		this.sourceOperationPanel = new StreamOperationPanel();
 
-		final var configureStreamSourceButton = new JButton(this.actions.add(Actions.action("configureStreamSource",
-				this::configureStreamSource, () -> this.currentStreamSource != null
-						&& StreamOperation.supportsConfiguration(this.currentStreamSource))));
+		final var configureButton = new JButton(this.actions.add(Actions.action("configureSourceOperation",
+				this::configureSourceOperation, () -> this.currentSourceOperation != null
+						&& StreamOperation.supportsConfiguration(this.currentSourceOperation))));
 
-		panel.add(this.streamSourceComboBox, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.WEST,
+		panel.add(this.sourceOperationComboBox, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.WEST,
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
-		panel.add(configureStreamSourceButton, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.CENTER,
+		panel.add(configureButton, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.CENTER,
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
-		panel.add(this.streamSourcePanel, new GridBagConstraints(0, 1, 2, 1, 1, 0, GridBagConstraints.NORTH,
+		panel.add(this.sourceOperationPanel, new GridBagConstraints(0, 1, 2, 1, 1, 0, GridBagConstraints.NORTH,
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
-
-		SwingUtilities.invokeLater(this::streamSourceSelected);
 
 		return panel;
 	}
 
-	private StreamSource<?> currentStreamSource;
+	private SourceOperation<?> currentSourceOperation;
 
-	private void streamSourceSelected() {
+	private void sourceOperationSelected() {
 		@SuppressWarnings("unchecked")
-		final var selectedStreamSourceClass = (Class<? extends StreamSource<?>>) this.streamSourceComboBox
+		final var selectedSourceOperationClass = (Class<? extends SourceOperation<?>>) this.sourceOperationComboBox
 				.getSelectedItem();
 
-		if (selectedStreamSourceClass != null) {
+		if (selectedSourceOperationClass != null) {
 			try {
-				setStreamSource(StreamOperation.createOperation(selectedStreamSourceClass));
+				setSourceOperation(StreamOperation.createOperation(selectedSourceOperationClass));
 			} catch (final StreamOperationException ex) {
 				Alerts.showError(this, ex);
 			}
 		}
 	}
 
-	private void setStreamSource(final StreamSource<?> streamSource) {
-		this.currentStreamSource = streamSource;
-		this.streamSourcePanel.updateContent(this.currentStreamSource);
+	private void setSourceOperation(final SourceOperation<?> sourceOperation) {
+		this.currentSourceOperation = sourceOperation;
+		this.sourceOperationPanel.updateContent(this.currentSourceOperation);
 		streamSetupChanged();
 		this.actions.validate();
 	}
 
-	private void configureStreamSource() {
-		if (this.currentStreamSource != null) {
-			if (showConfigureDialog(this.currentStreamSource)) {
-				this.streamSourcePanel.updateContent(this.currentStreamSource);
+	private void configureSourceOperation() {
+		if (this.currentSourceOperation != null) {
+			if (showConfigureDialog(this.currentSourceOperation)) {
+				this.sourceOperationPanel.updateContent(this.currentSourceOperation);
 			}
 		}
 	}
@@ -212,13 +215,14 @@ public final class MainFrame extends JFrame {
 		panel.setOpaque(false);
 		panel.setBorder(new TitledBorder(Messages.getString("intermediatePanel.title")));
 
-		this.intermediateOperationComboBoxModel = new MutableComboBoxModel<>(IntermediateOperations.IMPLEMENTATIONS);
+		this.intermediateOperationComboBoxModel = new MutableComboBoxModel<>(
+				StreamOperation.findIntermediateOperations());
 		this.intermediateOperationComboBox = new JComboBox<>(this.intermediateOperationComboBoxModel);
 		this.intermediateOperationComboBox.setMaximumRowCount(15);
 		this.intermediateOperationComboBox.setSelectedIndex(0);
 		this.intermediateOperationComboBox.setRenderer(new StreamOperationClassListCellRenderer());
 
-		final var addIntermediateOperationButton = new JButton(
+		final var addButton = new JButton(
 				this.actions.add(Actions.action("addIntermediateOperation", e -> addIntermediateOperation())));
 
 		this.intermediateOperationListModel = new MutableListModel<>();
@@ -234,42 +238,35 @@ public final class MainFrame extends JFrame {
 			}
 		});
 
-		final var moveIntermediateOperationUpButton = new JButton(
-				this.actions.add(Actions.action("moveIntermediateOperationUp", this::moveIntermediateOperationUp,
-						this::canMoveIntermediateOperationUp)));
-		final var moveIntermediateOperationDownButton = new JButton(
-				this.actions.add(Actions.action("moveIntermediateOperationDown", this::moveIntermediateOperationDown,
-						this::canMoveIntermediateOperationDown)));
-		final var removeIntermediateOperationButton = new JButton(
-				this.actions.add(Actions.action("removeIntermediateOperation", this::removeIntermediateOperation,
-						this::isIntermediateOperationSelected)));
-		final var removeAllIntermediateOperationsButton = new JButton(
-				this.actions.add(Actions.action("removeAllIntermediateOperations",
-						this::removeAllIntermediateOperations, this::existIntermediateOperations)));
-		final var configureIntermediateOperationButton = new JButton(
-				this.actions.add(Actions.action("configureIntermediateOperation", this::configureIntermediateOperation,
-						this::isIntermediateOperationConfigurable)));
+		final var moveUpButton = new JButton(this.actions.add(Actions.action("moveIntermediateOperationUp",
+				this::moveIntermediateOperationUp, this::canMoveIntermediateOperationUp)));
+		final var moveDownButton = new JButton(this.actions.add(Actions.action("moveIntermediateOperationDown",
+				this::moveIntermediateOperationDown, this::canMoveIntermediateOperationDown)));
+		final var removeButton = new JButton(this.actions.add(Actions.action("removeIntermediateOperation",
+				this::removeIntermediateOperation, this::isIntermediateOperationSelected)));
+		final var removeAllButton = new JButton(this.actions.add(Actions.action("removeAllIntermediateOperations",
+				this::removeAllIntermediateOperations, this::existIntermediateOperations)));
+		final var configureButton = new JButton(this.actions.add(Actions.action("configureIntermediateOperation",
+				this::configureIntermediateOperation, this::isIntermediateOperationConfigurable)));
 
 		panel.add(this.intermediateOperationComboBox, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.WEST,
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
-		panel.add(addIntermediateOperationButton, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.CENTER,
+		panel.add(addButton, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.CENTER,
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
 		panel.add(new JScrollPane(this.intermediateOperationList), new GridBagConstraints(0, 1, 1, 10, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(4, 4, 4, 4), 0, 0));
 
 		var buttonRow = 1;
-		panel.add(moveIntermediateOperationUpButton, new GridBagConstraints(1, buttonRow++, 1, 1, 0, 0,
-				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
-		panel.add(moveIntermediateOperationDownButton, new GridBagConstraints(1, buttonRow++, 1, 1, 0, 0,
-				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
-		panel.add(removeIntermediateOperationButton, new GridBagConstraints(1, buttonRow++, 1, 1, 0, 0,
-				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
-		panel.add(removeAllIntermediateOperationsButton, new GridBagConstraints(1, buttonRow++, 1, 1, 0, 0,
-				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
-		panel.add(configureIntermediateOperationButton, new GridBagConstraints(1, buttonRow++, 1, 1, 0, 0,
-				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
-
-		SwingUtilities.invokeLater(() -> this.actions.validate());
+		panel.add(moveUpButton, new GridBagConstraints(1, buttonRow++, 1, 1, 0, 0, GridBagConstraints.CENTER,
+				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
+		panel.add(moveDownButton, new GridBagConstraints(1, buttonRow++, 1, 1, 0, 0, GridBagConstraints.CENTER,
+				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
+		panel.add(removeButton, new GridBagConstraints(1, buttonRow++, 1, 1, 0, 0, GridBagConstraints.CENTER,
+				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
+		panel.add(removeAllButton, new GridBagConstraints(1, buttonRow++, 1, 1, 0, 0, GridBagConstraints.CENTER,
+				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
+		panel.add(configureButton, new GridBagConstraints(1, buttonRow++, 1, 1, 0, 0, GridBagConstraints.CENTER,
+				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
 
 		return panel;
 	}
@@ -381,7 +378,7 @@ public final class MainFrame extends JFrame {
 		panel.setOpaque(false);
 		panel.setBorder(new TitledBorder(Messages.getString("terminalPanel.title")));
 
-		this.terminalOperationComboBoxModel = new MutableComboBoxModel<>(TerminalOperations.IMPLEMENTATIONS);
+		this.terminalOperationComboBoxModel = new MutableComboBoxModel<>(StreamOperation.findTerminalOperations());
 		this.terminalOperationComboBox = new JComboBox<>(this.terminalOperationComboBoxModel);
 		this.terminalOperationComboBox.setMaximumRowCount(15);
 		this.terminalOperationComboBox.setSelectedIndex(0);
@@ -401,8 +398,6 @@ public final class MainFrame extends JFrame {
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
 		panel.add(this.terminalOperationPanel, new GridBagConstraints(0, 1, 2, 1, 1, 0, GridBagConstraints.NORTH,
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
-
-		SwingUtilities.invokeLater(this::terminalOperationSelected);
 
 		return panel;
 	}
@@ -475,8 +470,8 @@ public final class MainFrame extends JFrame {
 	}
 
 	private void updateSourceCode() {
-		if (this.currentStreamSource != null && this.currentTerminalOperation != null) {
-			final var operations = new StreamOperationSet(this.currentStreamSource,
+		if (this.currentSourceOperation != null && this.currentTerminalOperation != null) {
+			final var operations = new StreamOperationSet(this.currentSourceOperation,
 					this.intermediateOperationListModel.getAllElements(), this.currentTerminalOperation);
 			SourceCodeBuilder builder = new SourceCodeBuilder(operations);
 			this.codeTextArea.setText(builder.getSourceCode());
@@ -536,7 +531,7 @@ public final class MainFrame extends JFrame {
 			this.sysOutTextArea.setText("");
 			this.statisticsTableModel.removeAll();
 
-			final var operations = new StreamOperationSet(this.currentStreamSource,
+			final var operations = new StreamOperationSet(this.currentSourceOperation,
 					this.intermediateOperationListModel.getAllElements(), this.currentTerminalOperation);
 			final var executor = new StreamExecutor(operations);
 

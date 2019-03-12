@@ -11,11 +11,11 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Operation;
-import name.ulbricht.streams.api.StreamSource;
+import name.ulbricht.streams.api.SourceOperation;
 
 @Operation(name = "Find Files", output = Path.class)
 @Configuration(name = "directory", type = ConfigurationType.DIRECTORY, displayName = "Directory")
-public final class FindFiles implements StreamSource<Path> {
+public final class FindFiles implements SourceOperation<Path> {
 
 	private Path directory = Paths.get(System.getProperty("user.dir"));
 

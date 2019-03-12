@@ -3,8 +3,11 @@ package name.ulbricht.streams.api;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.IOException;
+import java.util.Comparator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface StreamOperation {
@@ -37,10 +40,10 @@ public interface StreamOperation {
 		if (name.isEmpty())
 			name = streamOperationClass.getSimpleName();
 
-		final var input = operation != null ? operation.input() : Object.class;
-		final var output = operation != null ? operation.output() : Object.class;
+		final var input = operation != null ? operation.input().getSimpleName() : Object.class.getSimpleName();
+		final var output = operation != null ? operation.output().getSimpleName() : Object.class.getSimpleName();
 
-		if (StreamSource.class.isAssignableFrom(streamOperationClass)) {
+		if (SourceOperation.class.isAssignableFrom(streamOperationClass)) {
 			return String.format("%s (%s)", name, output);
 		} else if (IntermediateOperation.class.isAssignableFrom(streamOperationClass)) {
 			return String.format("%s (%s -> %s)", name, input, output);
@@ -110,5 +113,49 @@ public interface StreamOperation {
 
 	static String quote(final String s) {
 		return s.replace("\\", "\\\\");
+	}
+
+	@SuppressWarnings("unchecked")
+	static Class<? extends SourceOperation<?>>[] findSourceOperations() {
+		return (Class<? extends SourceOperation<?>>[]) findOperations(SourceOperation.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	static Class<? extends IntermediateOperation<?, ?>>[] findIntermediateOperations() {
+		return (Class<? extends IntermediateOperation<?, ?>>[]) findOperations(IntermediateOperation.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	static Class<? extends TerminalOperation<?>>[] findTerminalOperations() {
+		return (Class<? extends TerminalOperation<?>>[]) findOperations(TerminalOperation.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	static <T> Class<? extends T>[] findOperations(final Class<T> operationInterface) {
+		final var module = ModuleLayer.boot().configuration().modules().stream()
+				.filter(m -> m.name().equals("name.ulbricht.streams")).findFirst().get();
+
+		try (final var moduleReader = module.reference().open()) {
+			return (Class<T>[]) moduleReader.list() //
+					.filter(s -> s.startsWith("name/ulbricht/streams/impl/") && s.endsWith(".class")) //
+					.map(s -> s.substring(0, s.length() - 6).replace('/', '.')) //
+					.map(StreamOperation::loadClass) //
+					.filter(Optional::isPresent) //
+					.map(Optional::get) //
+					.filter(operationInterface::isAssignableFrom) //
+					.sorted(Comparator
+							.comparing(c -> StreamOperation.getDisplayName((Class<? extends StreamOperation>) c))) //
+					.toArray(Class<?>[]::new);
+		} catch (final IOException ex) {
+			throw new StreamOperationException(ex);
+		}
+	}
+
+	private static Optional<Class<?>> loadClass(final String className) {
+		try {
+			return Optional.of(Class.forName(className));
+		} catch (ClassNotFoundException e) {
+			return Optional.empty();
+		}
 	}
 }

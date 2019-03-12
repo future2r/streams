@@ -5,12 +5,12 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Operation;
+import name.ulbricht.streams.api.SourceOperation;
 import name.ulbricht.streams.api.StreamOperation;
-import name.ulbricht.streams.api.StreamSource;
 
 @Operation(name = "Characters", output = Integer.class)
 @Configuration(name = "text", type = ConfigurationType.STRING, displayName = "Text")
-public final class Characters implements StreamSource<Integer> {
+public final class Characters implements SourceOperation<Integer> {
 
 	private String text = "Hello World!";
 

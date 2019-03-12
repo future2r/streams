@@ -7,21 +7,21 @@ import java.util.Objects;
 
 public final class StreamOperationSet {
 
-	private final StreamSource<?> streamSource;
+	private final SourceOperation<?> sourceOperation;
 	private final List<IntermediateOperation<?, ?>> intermediatOperations;
 	private final TerminalOperation<?> terminalOperation;
 
-	public StreamOperationSet(final StreamSource<?> streamSource,
+	public StreamOperationSet(final SourceOperation<?> sourceOperation,
 			final List<IntermediateOperation<?, ?>> intermediatOperations,
 			final TerminalOperation<?> terminalOperation) {
-		this.streamSource = Objects.requireNonNull(streamSource, "streamSource must not be null");
+		this.sourceOperation = Objects.requireNonNull(sourceOperation, "sourceOperation must not be null");
 		this.intermediatOperations = new ArrayList<>(
 				Objects.requireNonNull(intermediatOperations, "intermediatOperations must not be null"));
 		this.terminalOperation = Objects.requireNonNull(terminalOperation, "terminalOperation must not be null");
 	}
 
-	public StreamSource<?> getStreamSource() {
-		return this.streamSource;
+	public SourceOperation<?> getSourceOperation() {
+		return this.sourceOperation;
 	}
 
 	public List<IntermediateOperation<?, ?>> getIntermediatOperations() {

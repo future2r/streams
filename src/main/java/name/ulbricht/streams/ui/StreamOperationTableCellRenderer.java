@@ -9,8 +9,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
 import name.ulbricht.streams.api.IntermediateOperation;
+import name.ulbricht.streams.api.SourceOperation;
 import name.ulbricht.streams.api.StreamExecutor;
-import name.ulbricht.streams.api.StreamSource;
 import name.ulbricht.streams.api.TerminalOperation;
 
 public class StreamOperationTableCellRenderer implements TableCellRenderer {
@@ -31,8 +31,8 @@ public class StreamOperationTableCellRenderer implements TableCellRenderer {
 			final var label = (JLabel) component;
 			Icon icon = null;
 			if (operation != null) {
-				if (operation instanceof StreamSource)
-					icon = Images.getSmallIcon(Images.STREAM_SOURCE);
+				if (operation instanceof SourceOperation)
+					icon = Images.getSmallIcon(Images.SOURCE_OPERATION);
 				else if (operation instanceof IntermediateOperation)
 					icon = Images.getSmallIcon(Images.INTERMEDIATE_OPERATION);
 				else if (operation instanceof TerminalOperation)

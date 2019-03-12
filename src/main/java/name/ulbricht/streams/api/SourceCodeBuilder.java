@@ -14,9 +14,10 @@ public final class SourceCodeBuilder {
 	public String getSourceCode() {
 		final var sourceCode = new StringBuilder();
 
-		sourceCode.append(String.format("// %s%n", StreamOperation.getDisplayName(this.operations.getStreamSource())));
-		sourceCode.append(
-				this.operations.getStreamSource().getSourceCode().lines().collect(Collectors.joining("\n", "", "\n")));
+		sourceCode
+				.append(String.format("// %s%n", StreamOperation.getDisplayName(this.operations.getSourceOperation())));
+		sourceCode.append(this.operations.getSourceOperation().getSourceCode().lines()
+				.collect(Collectors.joining("\n", "", "\n")));
 
 		sourceCode.append(this.operations.getIntermediatOperations().stream()
 				.map(op -> String.format("%n// %s%n%s%n", StreamOperation.getDisplayName(op), op.getSourceCode()))

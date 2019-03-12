@@ -28,7 +28,7 @@ public final class Images extends ListResourceBundle {
 	static final String SETUP = "setup";
 	static final String CODE = "code";
 	static final String EXECUTION = "execution";
-	static final String STREAM_SOURCE = "StreamSource";
+	static final String SOURCE_OPERATION = "SourceOperation";
 	static final String INTERMEDIATE_OPERATION = "IntermediateOperation";
 	static final String TERMINAL_OPERATION = "TerminalOperation";
 	static final String LOG = "log";
@@ -72,7 +72,7 @@ public final class Images extends ListResourceBundle {
 				{ SETUP, loadMultiResolutionImage("setup-%s.png") }, //
 				{ CODE, loadMultiResolutionImage("code-%s.png") }, //
 				{ EXECUTION, loadMultiResolutionImage("execution-%s.png") }, //
-				{ STREAM_SOURCE, loadMultiResolutionImage("source-%s.png") }, //
+				{ SOURCE_OPERATION, loadMultiResolutionImage("source-%s.png") }, //
 				{ INTERMEDIATE_OPERATION, loadMultiResolutionImage("intermediate-%s.png") }, //
 				{ TERMINAL_OPERATION, loadMultiResolutionImage("terminal-%s.png") }, //
 				{ LOG, loadMultiResolutionImage("log-%s.png") }, //

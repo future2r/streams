@@ -6,13 +6,13 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.Operation;
-import name.ulbricht.streams.api.StreamSource;
+import name.ulbricht.streams.api.SourceOperation;
 
 @Operation(name = "Random Double Generator", output = Double.class)
 @Configuration(name = "number", type = ConfigurationType.LONG, displayName = "Number")
 @Configuration(name = "origin", type = ConfigurationType.DOUBLE, displayName = "Origin (inclusive)")
 @Configuration(name = "bound", type = ConfigurationType.DOUBLE, displayName = "Bound (exclusive)")
-public final class RandomDoubleGenerator implements StreamSource<Double> {
+public final class RandomDoubleGenerator implements SourceOperation<Double> {
 
 	private long number = 10;
 	private double origin = 0.1;

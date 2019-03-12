@@ -53,8 +53,9 @@ public final class StreamExecutor {
 	public Object execute() {
 		this.executionLoggers.clear();
 
-		Stream stream = this.operations.getStreamSource().createStream();
-		stream = addExecutionLogger(stream, this.operations.getStreamSource());
+		final var source = this.operations.getSourceOperation();
+		Stream stream = source.createStream();
+		stream = addExecutionLogger(stream, source);
 
 		for (final var intermediatOperation : this.operations.getIntermediatOperations()) {
 			stream = intermediatOperation.processStream(stream);

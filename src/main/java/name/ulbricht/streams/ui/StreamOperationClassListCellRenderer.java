@@ -9,8 +9,8 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 import name.ulbricht.streams.api.IntermediateOperation;
+import name.ulbricht.streams.api.SourceOperation;
 import name.ulbricht.streams.api.StreamOperation;
-import name.ulbricht.streams.api.StreamSource;
 import name.ulbricht.streams.api.TerminalOperation;
 
 final class StreamOperationClassListCellRenderer implements ListCellRenderer<Class<? extends StreamOperation>> {
@@ -29,8 +29,8 @@ final class StreamOperationClassListCellRenderer implements ListCellRenderer<Cla
 			final var label = (JLabel) component;
 			Icon icon = null;
 			if (value != null) {
-				if (StreamSource.class.isAssignableFrom(value))
-					icon = Images.getSmallIcon(Images.STREAM_SOURCE);
+				if (SourceOperation.class.isAssignableFrom(value))
+					icon = Images.getSmallIcon(Images.SOURCE_OPERATION);
 				else if (IntermediateOperation.class.isAssignableFrom(value))
 					icon = Images.getSmallIcon(Images.INTERMEDIATE_OPERATION);
 				else if (TerminalOperation.class.isAssignableFrom(value))

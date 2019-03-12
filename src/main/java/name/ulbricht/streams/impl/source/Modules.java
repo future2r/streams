@@ -3,10 +3,10 @@ package name.ulbricht.streams.impl.source;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Operation;
-import name.ulbricht.streams.api.StreamSource;
+import name.ulbricht.streams.api.SourceOperation;
 
 @Operation(output = Module.class)
-public final class Modules implements StreamSource<Module> {
+public final class Modules implements SourceOperation<Module> {
 
 	@Override
 	public String getSourceCode() {
