@@ -8,6 +8,7 @@ import java.awt.Insets;
 import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.lang.module.ModuleDescriptor;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -387,14 +388,13 @@ public final class MainFrame extends JFrame {
 
 		this.terminalOperationPanel = new StreamOperationPanel();
 
-		final var configureTerminalOperationButton = new JButton(
-				this.actions.add(Actions.action("configureTerminalOperation", this::configureTerminalOperation,
-						() -> this.currentTerminalOperation != null
-								&& StreamOperation.supportsConfiguration(this.currentTerminalOperation))));
+		final var configureButton = new JButton(this.actions.add(Actions.action("configureTerminalOperation",
+				this::configureTerminalOperation, () -> this.currentTerminalOperation != null
+						&& StreamOperation.supportsConfiguration(this.currentTerminalOperation))));
 
 		panel.add(this.terminalOperationComboBox, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.WEST,
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
-		panel.add(configureTerminalOperationButton, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.CENTER,
+		panel.add(configureButton, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.CENTER,
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
 		panel.add(this.terminalOperationPanel, new GridBagConstraints(0, 1, 2, 1, 1, 0, GridBagConstraints.NORTH,
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
@@ -582,9 +582,10 @@ public final class MainFrame extends JFrame {
 		tabbedPane.setIconAt(tabIndex, Images.getSmallIcon(iconResource));
 	}
 
-	void showAbout() {
+	private void showAbout() {
 		final var applicationName = Messages.getString("MainFrame.title");
-		final var version = "1.0";
+		final var version = ModuleLayer.boot().findModule("name.ulbricht.streams").map(Module::getDescriptor)
+				.flatMap(ModuleDescriptor::version).map(ModuleDescriptor.Version::toString).orElse("?");
 		final var jvmName = System.getProperty("java.vm.name");
 		final var javaVersion = System.getProperty("java.vm.version");
 
