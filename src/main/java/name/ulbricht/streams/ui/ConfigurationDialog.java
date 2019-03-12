@@ -8,6 +8,7 @@ import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Objects;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -184,6 +186,16 @@ final class ConfigurationDialog extends JDialog {
 					Paths.get(textField.getText())));
 
 			return addComponent(panel, row, label, textField, button);
+		}
+		case ENCODING: {
+			final var comboBox = new JComboBox<String>(Charset.availableCharsets().keySet().toArray(new String[0]));
+			final Charset charset = StreamOperation.getConfigurationValue(this.operation, configuration);
+			if (charset != null)
+				comboBox.setSelectedItem(charset.name());
+			applyFunctions.add(() -> StreamOperation.setConfigurationValue(this.operation, configuration,
+					Charset.forName((String) comboBox.getSelectedItem())));
+
+			return addComponent(panel, row, label, comboBox);
 		}
 		default:
 			throw new IllegalArgumentException(configuration.type().name());
