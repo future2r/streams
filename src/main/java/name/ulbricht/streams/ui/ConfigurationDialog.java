@@ -8,15 +8,10 @@ import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -122,8 +117,9 @@ final class ConfigurationDialog extends JDialog {
 			final var textField = new JTextField(30);
 			panel.add(textField, new GridBagConstraints(1, row, 1, 1, 1, 0, GridBagConstraints.WEST,
 					GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
-			textField.setText(getValue(configuration));
-			applyFunctions.add(() -> setValue(configuration, textField.getText()));
+			textField.setText(StreamOperation.getConfigurationValue(this.operation, configuration));
+			applyFunctions.add(
+					() -> StreamOperation.setConfigurationValue(this.operation, configuration, textField.getText()));
 
 			return row + 1;
 		}
@@ -134,8 +130,9 @@ final class ConfigurationDialog extends JDialog {
 			final var textArea = new JTextArea(10, 50);
 			panel.add(new JScrollPane(textArea), new GridBagConstraints(0, row + 1, 2, 1, 1, 1, GridBagConstraints.WEST,
 					GridBagConstraints.BOTH, new Insets(4, 4, 4, 4), 0, 0));
-			textArea.setText(getValue(configuration));
-			applyFunctions.add(() -> setValue(configuration, textArea.getText()));
+			textArea.setText(StreamOperation.getConfigurationValue(this.operation, configuration));
+			applyFunctions.add(
+					() -> StreamOperation.setConfigurationValue(this.operation, configuration, textArea.getText()));
 
 			return row + 2;
 		}
@@ -146,8 +143,9 @@ final class ConfigurationDialog extends JDialog {
 			final var spinner = new JSpinner(new SpinnerNumberModel(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
 			panel.add(spinner, new GridBagConstraints(1, row, 1, 1, 1, 0, GridBagConstraints.WEST,
 					GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
-			spinner.setValue(getValue(configuration));
-			applyFunctions.add(() -> setValue(configuration, spinner.getValue()));
+			spinner.setValue(StreamOperation.getConfigurationValue(this.operation, configuration));
+			applyFunctions.add(
+					() -> StreamOperation.setConfigurationValue(this.operation, configuration, spinner.getValue()));
 
 			return row + 1;
 		}
@@ -159,8 +157,9 @@ final class ConfigurationDialog extends JDialog {
 					new SpinnerNumberModel(0.0, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1.0));
 			panel.add(spinner, new GridBagConstraints(1, row, 1, 1, 1, 0, GridBagConstraints.WEST,
 					GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
-			spinner.setValue(getValue(configuration));
-			applyFunctions.add(() -> setValue(configuration, spinner.getValue()));
+			spinner.setValue(StreamOperation.getConfigurationValue(this.operation, configuration));
+			applyFunctions.add(
+					() -> StreamOperation.setConfigurationValue(this.operation, configuration, spinner.getValue()));
 
 			return row + 1;
 		}
@@ -171,8 +170,9 @@ final class ConfigurationDialog extends JDialog {
 			final var checkBox = new JCheckBox();
 			panel.add(checkBox, new GridBagConstraints(1, row, 1, 1, 0, 0, GridBagConstraints.WEST,
 					GridBagConstraints.NONE, new Insets(4, 4, 4, 4), 0, 0));
-			checkBox.setSelected(getValue(configuration));
-			applyFunctions.add(() -> setValue(configuration, checkBox.isSelected()));
+			checkBox.setSelected(StreamOperation.getConfigurationValue(this.operation, configuration));
+			applyFunctions.add(
+					() -> StreamOperation.setConfigurationValue(this.operation, configuration, checkBox.isSelected()));
 
 			return row + 1;
 		}
@@ -189,8 +189,10 @@ final class ConfigurationDialog extends JDialog {
 			browseButton.addActionListener(e -> browseDirectory(textField));
 			panel.add(browseButton, new GridBagConstraints(2, row, 1, 1, 0, 0, GridBagConstraints.CENTER,
 					GridBagConstraints.NONE, new Insets(4, 4, 4, 4), 0, 0));
-			textField.setText(Objects.toString(getValue(configuration), ""));
-			applyFunctions.add(() -> setValue(configuration, Paths.get(textField.getText())));
+			textField.setText(
+					Objects.toString(StreamOperation.getConfigurationValue(this.operation, configuration), ""));
+			applyFunctions.add(() -> StreamOperation.setConfigurationValue(this.operation, configuration,
+					Paths.get(textField.getText())));
 
 			return row + 1;
 		}
@@ -207,39 +209,15 @@ final class ConfigurationDialog extends JDialog {
 			browseButton.addActionListener(e -> browseFile(textField));
 			panel.add(browseButton, new GridBagConstraints(2, row, 1, 1, 0, 0, GridBagConstraints.CENTER,
 					GridBagConstraints.NONE, new Insets(4, 4, 4, 4), 0, 0));
-			textField.setText(Objects.toString(getValue(configuration), ""));
-			applyFunctions.add(() -> setValue(configuration, Paths.get(textField.getText())));
+			textField.setText(
+					Objects.toString(StreamOperation.getConfigurationValue(this.operation, configuration), ""));
+			applyFunctions.add(() -> StreamOperation.setConfigurationValue(this.operation, configuration,
+					Paths.get(textField.getText())));
 
 			return row + 1;
 		}
 		default:
 			throw new IllegalArgumentException(configuration.type().name());
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private <T> T getValue(final Configuration configuration) {
-		try {
-			return (T) getPropertyDescriptor(configuration).getReadMethod().invoke(this.operation, (Object[]) null);
-		} catch (final ReflectiveOperationException ex) {
-			throw new RuntimeException("Could not read value for property " + configuration.name(), ex);
-		}
-	}
-
-	private void setValue(final Configuration configuration, final Object value) {
-		try {
-			getPropertyDescriptor(configuration).getWriteMethod().invoke(this.operation, value);
-		} catch (final ReflectiveOperationException ex) {
-			throw new RuntimeException("Could not write value for property " + configuration.name(), ex);
-		}
-	}
-
-	private PropertyDescriptor getPropertyDescriptor(final Configuration configuration) {
-		try {
-			return Stream.of(Introspector.getBeanInfo(this.operation.getClass()).getPropertyDescriptors())
-					.filter(pd -> configuration.name().equals(pd.getName())).findFirst().get();
-		} catch (final IntrospectionException | NoSuchElementException ex) {
-			throw new RuntimeException("Could not find property " + configuration.name(), ex);
 		}
 	}
 
@@ -252,7 +230,6 @@ final class ConfigurationDialog extends JDialog {
 			fileChooser.setCurrentDirectory(currentDirectory.toFile());
 		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-		// TODO translate this
 		if (fileChooser.showDialog(this.getContentPane(),
 				Messages.getString("ConfigurationDialog.selectDirectory")) == JFileChooser.APPROVE_OPTION) {
 			final var selectedDirectory = fileChooser.getSelectedFile();
@@ -270,7 +247,6 @@ final class ConfigurationDialog extends JDialog {
 		if (currentDirectory != null)
 			fileChooser.setCurrentDirectory(currentDirectory.toFile());
 
-		// TODO translate this
 		if (fileChooser.showDialog(this.getContentPane(),
 				Messages.getString("ConfigurationDialog.selectFile")) == JFileChooser.APPROVE_OPTION) {
 			final var selectedFile = fileChooser.getSelectedFile();
@@ -285,9 +261,7 @@ final class ConfigurationDialog extends JDialog {
 	}
 
 	private void apply() {
-		for (final var applyFunction : applyFunctions) {
-			applyFunction.run();
-		}
+		this.applyFunctions.forEach(Runnable::run);
 		this.result = true;
 		dispose();
 	}

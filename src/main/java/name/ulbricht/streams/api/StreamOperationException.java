@@ -1,6 +1,6 @@
 package name.ulbricht.streams.api;
 
-public class StreamOperationException extends Exception {
+public class StreamOperationException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

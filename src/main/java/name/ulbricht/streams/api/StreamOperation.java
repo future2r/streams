@@ -1,6 +1,11 @@
 package name.ulbricht.streams.api;
 
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public interface StreamOperation {
 
@@ -10,43 +15,14 @@ public interface StreamOperation {
 		return null;
 	}
 
-	static <T extends StreamOperation> String getName(final T streamOperation) {
-		return getName(Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass());
-	}
-
-	static <T extends StreamOperation> String getName(final Class<T> streamOperationClass) {
-		final var operation = Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
-				.getAnnotation(Operation.class);
-		if (operation != null) {
-			final var name = operation.name();
-			if (!name.isEmpty())
-				return name;
+	static <T extends StreamOperation> T createOperation(final Class<T> streamOperationClass)
+			throws StreamOperationException {
+		try {
+			return Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
+					.getConstructor((Class[]) null).newInstance((Object[]) null);
+		} catch (final ReflectiveOperationException ex) {
+			throw new StreamOperationException("Could not create operation from " + streamOperationClass, ex);
 		}
-		return streamOperationClass.getSimpleName();
-	}
-
-	static <T extends StreamOperation> Class<?> getInputType(final T streamOperation) {
-		return getInputType(Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass());
-	}
-
-	static <T extends StreamOperation> Class<?> getInputType(final Class<T> streamOperationClass) {
-		final var operation = Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
-				.getAnnotation(Operation.class);
-		if (operation != null)
-			return operation.input();
-		return Object.class;
-	}
-
-	static <T extends StreamOperation> Class<?> getOutputType(final T streamOperation) {
-		return getOutputType(Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass());
-	}
-
-	static <T extends StreamOperation> Class<?> getOutputType(final Class<T> streamOperationClass) {
-		final var operation = Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
-				.getAnnotation(Operation.class);
-		if (operation != null)
-			return operation.output();
-		return Object.class;
 	}
 
 	static <T extends StreamOperation> String getDisplayName(final T streamOperation) {
@@ -54,16 +30,22 @@ public interface StreamOperation {
 	}
 
 	static <T extends StreamOperation> String getDisplayName(final Class<T> streamOperationClass) {
-		final var name = StreamOperation
-				.getName(Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null"));
+		final var operation = Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
+				.getAnnotation(Operation.class);
+
+		var name = operation != null ? operation.name() : "";
+		if (name.isEmpty())
+			name = streamOperationClass.getSimpleName();
+
+		final var input = operation != null ? operation.input() : Object.class;
+		final var output = operation != null ? operation.output() : Object.class;
+
 		if (StreamSource.class.isAssignableFrom(streamOperationClass)) {
-			return String.format("%s (%s)", name, StreamOperation.getOutputType(streamOperationClass).getSimpleName());
+			return String.format("%s (%s)", name, output);
 		} else if (IntermediateOperation.class.isAssignableFrom(streamOperationClass)) {
-			return String.format("%s (%s -> %s)", name,
-					StreamOperation.getInputType(streamOperationClass).getSimpleName(),
-					StreamOperation.getOutputType(streamOperationClass).getSimpleName());
+			return String.format("%s (%s -> %s)", name, input, output);
 		} else if (TerminalOperation.class.isAssignableFrom(streamOperationClass)) {
-			return String.format("%s (%s)", name, StreamOperation.getInputType(streamOperationClass).getSimpleName());
+			return String.format("%s (%s)", name, input);
 		}
 		throw new IllegalArgumentException("Cannot handle " + streamOperationClass);
 	}
@@ -89,13 +71,40 @@ public interface StreamOperation {
 		return new Configuration[0];
 	}
 
-	static <T extends StreamOperation> T createOperation(final Class<T> streamOperationClass)
+	@SuppressWarnings("unchecked")
+	static <T> T getConfigurationValue(final StreamOperation streamOperation, final Configuration configuration)
 			throws StreamOperationException {
 		try {
-			return Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
-					.getConstructor((Class[]) null).newInstance((Object[]) null);
+			return (T) getPropertyDescriptor(
+					Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass(),
+					configuration).getReadMethod().invoke(streamOperation, (Object[]) null);
 		} catch (final ReflectiveOperationException ex) {
-			throw new StreamOperationException("Could not create operation from " + streamOperationClass, ex);
+			throw new StreamOperationException("Could not read value for property " + configuration.name(), ex);
+		}
+	}
+
+	static void setConfigurationValue(final StreamOperation streamOperation, final Configuration configuration,
+			final Object value) throws StreamOperationException {
+		try {
+			getPropertyDescriptor(
+					Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass(),
+					configuration).getWriteMethod().invoke(streamOperation, value);
+		} catch (final ReflectiveOperationException ex) {
+			throw new StreamOperationException("Could not write value for property " + configuration.name(), ex);
+		}
+	}
+
+	private static PropertyDescriptor getPropertyDescriptor(final Class<? extends StreamOperation> streamOperationClass,
+			final Configuration configuration) throws StreamOperationException {
+		try {
+			return Stream
+					.of(Introspector.getBeanInfo(
+							Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null"))
+							.getPropertyDescriptors()) //
+					.filter(pd -> configuration.name().equals(pd.getName())) //
+					.findFirst().get();
+		} catch (final IntrospectionException | NoSuchElementException ex) {
+			throw new StreamOperationException("Could not find property " + configuration.name(), ex);
 		}
 	}
 
