@@ -23,7 +23,7 @@ public final class JavaScriptNonMatch extends JavaScriptOperation implements Ter
 	}
 
 	@Override
-	public Object terminateStream(final Stream<Object> stream) {
+	public Object apply(final Stream<Object> stream) {
 		return stream.noneMatch(e -> evalScript(Map.of("element", e)));
 	}
 }

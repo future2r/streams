@@ -15,7 +15,7 @@ public final class Sorted
 	}
 
 	@Override
-	public Stream<Comparable<? super Comparable<?>>> processStream(
+	public Stream<Comparable<? super Comparable<?>>> apply(
 			final Stream<Comparable<? super Comparable<?>>> stream) {
 		return stream.sorted();
 	}

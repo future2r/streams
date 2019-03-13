@@ -40,7 +40,7 @@ public final class FileLines implements IntermediateOperation<Path, String> {
 	}
 
 	@Override
-	public Stream<String> processStream(final Stream<Path> stream) {
+	public Stream<String> apply(final Stream<Path> stream) {
 		return stream.flatMap(f -> {
 			try {
 				return Files.lines(f, this.encoding);

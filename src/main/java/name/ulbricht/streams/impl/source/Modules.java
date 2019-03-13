@@ -14,7 +14,7 @@ public final class Modules implements SourceOperation<Module> {
 	}
 
 	@Override
-	public Stream<Module> createStream() {
+	public Stream<Module> get() {
 		return ModuleLayer.boot().modules().stream();
 	}
 }

@@ -51,7 +51,7 @@ public final class StringJoiner implements TerminalOperation<String> {
 	}
 
 	@Override
-	public Object terminateStream(final Stream<String> stream) {
+	public Object apply(final Stream<String> stream) {
 		return stream.collect(Collectors.joining(this.delimiter, this.prefix, this.suffix));
 	}
 }

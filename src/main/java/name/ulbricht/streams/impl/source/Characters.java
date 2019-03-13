@@ -29,7 +29,7 @@ public final class Characters implements SourceOperation<Integer> {
 	}
 
 	@Override
-	public Stream<Integer> createStream() {
+	public Stream<Integer> get() {
 		return this.text.chars().boxed();
 	}
 }

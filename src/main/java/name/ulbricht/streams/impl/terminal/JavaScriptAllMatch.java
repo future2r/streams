@@ -23,7 +23,7 @@ public final class JavaScriptAllMatch extends JavaScriptOperation implements Ter
 	}
 
 	@Override
-	public Object terminateStream(final Stream<Object> stream) {
+	public Object apply(final Stream<Object> stream) {
 		return stream.allMatch(e -> evalScript(Map.of("element", e)));
 	}
 }

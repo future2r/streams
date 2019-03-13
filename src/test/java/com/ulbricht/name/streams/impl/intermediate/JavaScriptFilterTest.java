@@ -15,7 +15,7 @@ public class JavaScriptFilterTest {
 		JavaScriptFilter filter = new JavaScriptFilter();
 
 		Stream<Object> stream = Stream.of("Hello", "World");
-		stream = filter.processStream(stream);
+		stream = filter.apply(stream);
 		assertEquals(2, stream.count());
 	}
 
@@ -25,7 +25,7 @@ public class JavaScriptFilterTest {
 		filter.setScript("result = element.startsWith(\"H\");");
 
 		Stream<Object> stream = Stream.of("Hello", "World");
-		stream = filter.processStream(stream);
+		stream = filter.apply(stream);
 		assertEquals(1, stream.count());
 	}
 }

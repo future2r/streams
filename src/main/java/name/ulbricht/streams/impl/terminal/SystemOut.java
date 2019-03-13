@@ -14,7 +14,7 @@ public final class SystemOut implements TerminalOperation<Object> {
 	}
 
 	@Override
-	public Object terminateStream(final Stream<Object> stream) {
+	public Object apply(final Stream<Object> stream) {
 		stream.forEach(System.out::println);
 		return null;
 	}

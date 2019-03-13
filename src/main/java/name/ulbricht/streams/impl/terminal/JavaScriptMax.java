@@ -23,7 +23,7 @@ public final class JavaScriptMax extends JavaScriptOperation implements Terminal
 	}
 
 	@Override
-	public Object terminateStream(final Stream<Object> stream) {
+	public Object apply(final Stream<Object> stream) {
 		return stream.max(this::compare);
 	}
 

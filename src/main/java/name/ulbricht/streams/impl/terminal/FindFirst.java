@@ -13,7 +13,7 @@ public final class FindFirst implements TerminalOperation<Object> {
 	}
 
 	@Override
-	public Optional<Object> terminateStream(final Stream<Object> stream) {
+	public Optional<Object> apply(final Stream<Object> stream) {
 		return stream.findFirst();
 	}
 }

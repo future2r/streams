@@ -54,15 +54,15 @@ public final class StreamExecutor {
 		this.executionLoggers.clear();
 
 		final var source = this.operations.getSource();
-		Stream stream = source.createStream();
+		Stream stream = source.get();
 		stream = addExecutionLogger(stream, source);
 
 		for (final var intermediatOperation : this.operations.getIntermediats()) {
-			stream = intermediatOperation.processStream(stream);
+			stream = intermediatOperation.apply(stream);
 			stream = addExecutionLogger(stream, intermediatOperation);
 		}
 
-		return this.operations.getTerminal().terminateStream(stream);
+		return this.operations.getTerminal().apply(stream);
 	}
 
 	private Stream<?> addExecutionLogger(final Stream<?> stream, final StreamOperation operation) {

@@ -14,7 +14,7 @@ public final class SystemProperties implements SourceOperation<Object> {
 	}
 
 	@Override
-	public Stream<Object> createStream() {
+	public Stream<Object> get() {
 		return System.getProperties().keySet().stream();
 	}
 }

@@ -15,7 +15,7 @@ public final class Max<T extends Comparable<T>> implements TerminalOperation<T> 
 	}
 
 	@Override
-	public Object terminateStream(final Stream<T> stream) {
+	public Object apply(final Stream<T> stream) {
 		return stream.max(Comparator.naturalOrder());
 	}
 }

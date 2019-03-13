@@ -23,7 +23,7 @@ public final class JavaScriptTakeWhile extends JavaScriptOperation implements In
 	}
 
 	@Override
-	public Stream<Object> processStream(final Stream<Object> stream) {
+	public Stream<Object> apply(final Stream<Object> stream) {
 		return stream.takeWhile(e -> evalScript(Map.of("element", e)));
 	}
 }

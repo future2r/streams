@@ -23,7 +23,7 @@ public final class JavaScriptFlatMap extends JavaScriptOperation implements Inte
 	}
 
 	@Override
-	public Stream<Object> processStream(final Stream<Object> stream) {
+	public Stream<Object> apply(final Stream<Object> stream) {
 		return stream.flatMap(e -> evalScript(Map.of("element", e)));
 	}
 }

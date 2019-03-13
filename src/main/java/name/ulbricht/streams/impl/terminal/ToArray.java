@@ -12,7 +12,7 @@ public final class ToArray implements TerminalOperation<Object> {
 	}
 
 	@Override
-	public Object terminateStream(final Stream<Object> stream) {
+	public Object apply(final Stream<Object> stream) {
 		return stream.toArray();
 	}
 }

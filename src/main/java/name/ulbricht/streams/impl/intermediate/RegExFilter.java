@@ -30,7 +30,7 @@ public final class RegExFilter implements IntermediateOperation<String, String> 
 	}
 
 	@Override
-	public Stream<String> processStream(final Stream<String> stream) {
+	public Stream<String> apply(final Stream<String> stream) {
 		return stream.filter(s -> Pattern.matches(this.pattern, s));
 	}
 }

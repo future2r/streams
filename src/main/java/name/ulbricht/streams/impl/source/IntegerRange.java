@@ -49,7 +49,7 @@ public final class IntegerRange implements SourceOperation<Integer> {
 	}
 
 	@Override
-	public Stream<Integer> createStream() {
+	public Stream<Integer> get() {
 		final IntStream stream;
 		if (this.closed)
 			stream = IntStream.rangeClosed(this.start, this.end);

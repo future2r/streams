@@ -34,7 +34,7 @@ public final class FindFiles implements SourceOperation<Path> {
 	}
 
 	@Override
-	public Stream<Path> createStream() {
+	public Stream<Path> get() {
 		try {
 			return Files.find(this.directory, Integer.MAX_VALUE, (p, a) -> a.isRegularFile());
 		} catch (final IOException ex) {

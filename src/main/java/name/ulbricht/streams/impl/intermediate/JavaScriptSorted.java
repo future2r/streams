@@ -23,7 +23,7 @@ public final class JavaScriptSorted extends JavaScriptOperation implements Inter
 	}
 
 	@Override
-	public Stream<Object> processStream(final Stream<Object> stream) {
+	public Stream<Object> apply(final Stream<Object> stream) {
 		return stream.sorted(this::compare);
 	}
 

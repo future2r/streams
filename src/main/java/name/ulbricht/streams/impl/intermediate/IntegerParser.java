@@ -14,7 +14,7 @@ public final class IntegerParser implements IntermediateOperation<String, Intege
 	}
 
 	@Override
-	public Stream<Integer> processStream(final Stream<String> stream) {
+	public Stream<Integer> apply(final Stream<String> stream) {
 		return stream.map(Integer::parseInt);
 	}
 }

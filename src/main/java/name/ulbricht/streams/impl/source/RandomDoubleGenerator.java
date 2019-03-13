@@ -49,7 +49,7 @@ public final class RandomDoubleGenerator implements SourceOperation<Double> {
 	}
 
 	@Override
-	public Stream<Double> createStream() {
+	public Stream<Double> get() {
 		return new Random().doubles(this.number, this.origin, this.bound).boxed();
 	}
 }

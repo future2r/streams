@@ -14,7 +14,7 @@ public final class LowerCase implements IntermediateOperation<String, String> {
 	}
 
 	@Override
-	public Stream<String> processStream(final Stream<String> stream) {
+	public Stream<String> apply(final Stream<String> stream) {
 		return stream.map(String::toLowerCase);
 	}
 }

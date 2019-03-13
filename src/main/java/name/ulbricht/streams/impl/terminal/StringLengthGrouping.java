@@ -15,7 +15,7 @@ public final class StringLengthGrouping implements TerminalOperation<String> {
 	}
 
 	@Override
-	public Object terminateStream(final Stream<String> stream) {
+	public Object apply(final Stream<String> stream) {
 		return stream.collect(Collectors.groupingBy(String::length));
 	}
 }

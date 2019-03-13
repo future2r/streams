@@ -14,7 +14,7 @@ public final class DoubleParser implements IntermediateOperation<String, Double>
 	}
 
 	@Override
-	public Stream<Double> processStream(final Stream<String> stream) {
+	public Stream<Double> apply(final Stream<String> stream) {
 		return stream.map(Double::parseDouble);
 	}
 }

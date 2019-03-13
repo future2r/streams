@@ -12,7 +12,7 @@ public final class Sequential implements IntermediateOperation<Object, Object> {
 	}
 
 	@Override
-	public Stream<Object> processStream(final Stream<Object> stream) {
+	public Stream<Object> apply(final Stream<Object> stream) {
 		return stream.sequential();
 	}
 }

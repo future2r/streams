@@ -15,7 +15,7 @@ public final class Locales implements SourceOperation<Locale> {
 	}
 
 	@Override
-	public Stream<Locale> createStream() {
+	public Stream<Locale> get() {
 		return Stream.of(Locale.getAvailableLocales());
 	}
 }

@@ -52,7 +52,7 @@ public final class TextFileWriter implements TerminalOperation<String> {
 	}
 
 	@Override
-	public Object terminateStream(final Stream<String> stream) {
+	public Object apply(final Stream<String> stream) {
 		stream.map(s -> s + '\n').forEach(s -> {
 			try {
 				Files.writeString(this.file, s, this.encoding, StandardOpenOption.CREATE, StandardOpenOption.APPEND);

@@ -23,7 +23,7 @@ public final class JavaScriptMap extends JavaScriptOperation implements Intermed
 	}
 
 	@Override
-	public Stream<Object> processStream(final Stream<Object> stream) {
+	public Stream<Object> apply(final Stream<Object> stream) {
 		return stream.map(e -> evalScript(Map.of("element", e)));
 	}
 }

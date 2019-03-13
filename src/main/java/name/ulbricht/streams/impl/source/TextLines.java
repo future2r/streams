@@ -33,7 +33,7 @@ public final class TextLines implements SourceOperation<String> {
 	}
 
 	@Override
-	public Stream<String> createStream() {
+	public Stream<String> get() {
 		return this.text.lines();
 	}
 }

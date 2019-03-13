@@ -23,7 +23,7 @@ public final class JavaScriptDropWhile extends JavaScriptOperation implements In
 	}
 
 	@Override
-	public Stream<Object> processStream(final Stream<Object> stream) {
+	public Stream<Object> apply(final Stream<Object> stream) {
 		return stream.dropWhile(e -> evalScript(Map.of("element", e)));
 	}
 }

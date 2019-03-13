@@ -29,7 +29,7 @@ public final class StringFormatter implements IntermediateOperation<Object, Stri
 	}
 
 	@Override
-	public Stream<String> processStream(final Stream<Object> stream) {
+	public Stream<String> apply(final Stream<Object> stream) {
 		return stream.map(e -> String.format(this.format, e));
 	}
 }

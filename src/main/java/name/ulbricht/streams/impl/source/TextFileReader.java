@@ -46,7 +46,7 @@ public final class TextFileReader implements SourceOperation<String> {
 	}
 
 	@Override
-	public Stream<String> createStream() {
+	public Stream<String> get() {
 		try {
 			return Files.lines(this.file, this.encoding);
 		} catch (final IOException ex) {

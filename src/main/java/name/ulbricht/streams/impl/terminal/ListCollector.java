@@ -15,7 +15,7 @@ public final class ListCollector implements TerminalOperation<Object> {
 	}
 
 	@Override
-	public Object terminateStream(final Stream<Object> stream) {
+	public Object apply(final Stream<Object> stream) {
 		return stream.collect(Collectors.toList());
 	}
 }

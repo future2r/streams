@@ -15,7 +15,7 @@ public final class ToStringMapper implements IntermediateOperation<Object, Strin
 	}
 
 	@Override
-	public Stream<String> processStream(final Stream<Object> stream) {
+	public Stream<String> apply(final Stream<Object> stream) {
 		return stream.map(Objects::toString);
 	}
 }

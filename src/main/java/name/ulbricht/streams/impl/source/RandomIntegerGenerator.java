@@ -49,7 +49,7 @@ public final class RandomIntegerGenerator implements SourceOperation<Integer> {
 	}
 
 	@Override
-	public Stream<Integer> createStream() {
+	public Stream<Integer> get() {
 		return new Random().ints(this.number, this.origin, this.bound).boxed();
 	}
 }

@@ -12,7 +12,7 @@ public final class Empty implements SourceOperation<Object> {
 	}
 
 	@Override
-	public Stream<Object> createStream() {
+	public Stream<Object> get() {
 		return Stream.empty();
 	}
 }

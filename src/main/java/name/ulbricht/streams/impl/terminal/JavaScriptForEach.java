@@ -23,7 +23,7 @@ public final class JavaScriptForEach extends JavaScriptOperation implements Term
 	}
 
 	@Override
-	public Object terminateStream(final Stream<Object> stream) {
+	public Object apply(final Stream<Object> stream) {
 		stream.forEach(e->evalScript(Map.of("element", e)));
 		return null;
 	}
