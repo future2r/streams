@@ -29,11 +29,6 @@ public final class RegExSplitter implements IntermediateOperation<String, String
 	}
 
 	@Override
-	public String getConfigurationText() {
-		return String.format("pattern='%s'", this.pattern);
-	}
-
-	@Override
 	public Stream<String> processStream(final Stream<String> stream) {
 		return stream.flatMap(s -> Stream.of(s.split(this.pattern)));
 	}

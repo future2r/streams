@@ -1,6 +1,5 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.impl.StringUtils.omit;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
 import java.util.stream.Stream;
@@ -27,11 +26,6 @@ public final class Characters implements SourceOperation<Integer> {
 	@Override
 	public String getSourceCode() {
 		return String.format("\"%s\".chars().boxed()", quote(this.text));
-	}
-
-	@Override
-	public String getConfigurationText() {
-		return omit("text=" + this.text, 50);
 	}
 
 	@Override

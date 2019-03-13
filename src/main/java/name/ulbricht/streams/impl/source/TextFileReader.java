@@ -46,11 +46,6 @@ public final class TextFileReader implements SourceOperation<String> {
 	}
 
 	@Override
-	public String getConfigurationText() {
-		return this.file.toString();
-	}
-
-	@Override
 	public Stream<String> createStream() {
 		try {
 			return Files.lines(this.file, this.encoding);

@@ -49,12 +49,6 @@ public final class IntegerRange implements SourceOperation<Integer> {
 	}
 
 	@Override
-	public String getConfigurationText() {
-		return String.format("start=%s, end=%s, closed=%s", Integer.toString(this.start), Integer.toString(this.end),
-				Boolean.toString(this.closed));
-	}
-
-	@Override
 	public Stream<Integer> createStream() {
 		final IntStream stream;
 		if (this.closed)

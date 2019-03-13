@@ -30,11 +30,6 @@ public final class RegExFilter implements IntermediateOperation<String, String> 
 	}
 
 	@Override
-	public String getConfigurationText() {
-		return String.format("pattern='%s'", this.pattern);
-	}
-
-	@Override
 	public Stream<String> processStream(final Stream<String> stream) {
 		return stream.filter(s -> Pattern.matches(this.pattern, s));
 	}

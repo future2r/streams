@@ -25,11 +25,6 @@ public final class Skip implements IntermediateOperation<Object, Object> {
 	}
 
 	@Override
-	public String getConfigurationText() {
-		return String.format("skip=%s", Long.toString(this.skip));
-	}
-
-	@Override
 	public Stream<Object> processStream(final Stream<Object> stream) {
 		return stream.skip(this.skip);
 	}

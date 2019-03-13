@@ -51,11 +51,6 @@ public final class StringJoiner implements TerminalOperation<String> {
 	}
 
 	@Override
-	public String getConfigurationText() {
-		return String.format("delimiter='%s', prefix='%s', suffix='%s'", this.delimiter, this.prefix, this.suffix);
-	}
-
-	@Override
 	public Object terminateStream(final Stream<String> stream) {
 		return stream.collect(Collectors.joining(this.delimiter, this.prefix, this.suffix));
 	}

@@ -3,6 +3,8 @@ package name.ulbricht.streams.ui;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
@@ -74,6 +76,24 @@ final class StreamOperationPanel extends JPanel {
 			icon = null;
 		this.nameLabel.setIcon(icon);
 
-		this.configTextField.setText(streamOperation != null ? streamOperation.getConfigurationText() : " ");
+		this.configTextField
+				.setText(streamOperation != null ? omit(createConfigurationText(streamOperation), 100) : " ");
+	}
+
+	private static String createConfigurationText(final StreamOperation streamOperation) {
+		final var configurations = StreamOperation.getConfigurations(streamOperation);
+		if (configurations.length > 0) {
+			return Stream.of(configurations)
+					.map(c -> String.format("%s=%s", c.displayName(),
+							StreamOperation.getConfigurationValue(streamOperation, c)))
+					.collect(Collectors.joining(", ", "", ""));
+		}
+		return "";
+	}
+
+	private static String omit(final String s, final int maxLength) {
+		if (s.length() > maxLength)
+			return s.substring(0, maxLength) + "…";
+		return s;
 	}
 }

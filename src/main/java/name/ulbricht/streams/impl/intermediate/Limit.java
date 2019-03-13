@@ -25,11 +25,6 @@ public final class Limit implements IntermediateOperation<Object, Object> {
 	}
 
 	@Override
-	public String getConfigurationText() {
-		return String.format("limit=%s", Long.toString(this.limit));
-	}
-
-	@Override
 	public Stream<Object> processStream(final Stream<Object> stream) {
 		return stream.limit(this.limit);
 	}

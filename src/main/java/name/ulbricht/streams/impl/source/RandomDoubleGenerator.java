@@ -49,12 +49,6 @@ public final class RandomDoubleGenerator implements SourceOperation<Double> {
 	}
 
 	@Override
-	public String getConfigurationText() {
-		return String.format("number=%s, origin=%s, bound=%s", Long.toString(this.number), Double.toString(this.origin),
-				Double.toString(this.bound));
-	}
-
-	@Override
 	public Stream<Double> createStream() {
 		return new Random().doubles(this.number, this.origin, this.bound).boxed();
 	}

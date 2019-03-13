@@ -34,11 +34,6 @@ public final class FindFiles implements SourceOperation<Path> {
 	}
 
 	@Override
-	public String getConfigurationText() {
-		return this.directory.toString();
-	}
-
-	@Override
 	public Stream<Path> createStream() {
 		try {
 			return Files.find(this.directory, Integer.MAX_VALUE, (p, a) -> a.isRegularFile());

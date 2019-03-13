@@ -52,11 +52,6 @@ public final class TextFileWriter implements TerminalOperation<String> {
 	}
 
 	@Override
-	public String getConfigurationText() {
-		return this.file.toString();
-	}
-
-	@Override
 	public Object terminateStream(final Stream<String> stream) {
 		stream.map(s -> s + '\n').forEach(s -> {
 			try {

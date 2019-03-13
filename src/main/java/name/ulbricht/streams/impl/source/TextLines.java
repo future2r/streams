@@ -1,7 +1,5 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.impl.StringUtils.omit;
-
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,11 +30,6 @@ public final class TextLines implements SourceOperation<String> {
 	@Override
 	public String getSourceCode() {
 		return this.text.lines().map(l -> "\"" + l + "\\n\"").collect(Collectors.joining("\n + ", "", ".lines()"));
-	}
-
-	@Override
-	public String getConfigurationText() {
-		return omit("text=" + this.text, 50);
 	}
 
 	@Override

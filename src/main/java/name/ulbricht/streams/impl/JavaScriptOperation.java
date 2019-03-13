@@ -1,7 +1,5 @@
 package name.ulbricht.streams.impl;
 
-import static name.ulbricht.streams.impl.StringUtils.omit;
-
 import java.util.Map;
 import java.util.Objects;
 
@@ -30,11 +28,6 @@ public abstract class JavaScriptOperation implements StreamOperation {
 
 	public final void setScript(String script) {
 		this.script = script;
-	}
-
-	@Override
-	public final String getConfigurationText() {
-		return omit(this.script, 50);
 	}
 
 	@SuppressWarnings("unchecked")

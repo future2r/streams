@@ -49,12 +49,6 @@ public final class RandomIntegerGenerator implements SourceOperation<Integer> {
 	}
 
 	@Override
-	public String getConfigurationText() {
-		return String.format("number=%s, origin=%s, bound=%s", Long.toString(this.number),
-				Integer.toString(this.origin), Integer.toString(this.bound));
-	}
-
-	@Override
 	public Stream<Integer> createStream() {
 		return new Random().ints(this.number, this.origin, this.bound).boxed();
 	}

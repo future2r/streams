@@ -14,10 +14,6 @@ public interface StreamOperation {
 
 	String getSourceCode();
 
-	default String getConfigurationText() {
-		return null;
-	}
-
 	static <T extends StreamOperation> T createOperation(final Class<T> streamOperationClass)
 			throws StreamOperationException {
 		try {

@@ -29,11 +29,6 @@ public final class StringFormatter implements IntermediateOperation<Object, Stri
 	}
 
 	@Override
-	public String getConfigurationText() {
-		return String.format("format='%s'", this.format);
-	}
-
-	@Override
 	public Stream<String> processStream(final Stream<Object> stream) {
 		return stream.map(e -> String.format(this.format, e));
 	}
