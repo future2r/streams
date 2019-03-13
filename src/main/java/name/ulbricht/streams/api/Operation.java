@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Operation {
 
-	String name() default "";
+	String name();
 
 	Class<?> input() default Object.class;
 

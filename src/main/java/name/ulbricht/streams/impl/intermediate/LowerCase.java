@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.IntermediateOperation;
 import name.ulbricht.streams.api.Operation;
 
-@Operation(input = String.class, output = String.class)
+@Operation(name = "LowerCase", input = String.class, output = String.class)
 public final class LowerCase implements IntermediateOperation<String, String> {
 
 	@Override

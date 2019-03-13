@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.TerminalOperation;
 
-@Operation(input = Comparable.class)
+@Operation(name = "Maximum", input = Comparable.class)
 public final class Max<T extends Comparable<T>> implements TerminalOperation<T> {
 
 	@Override

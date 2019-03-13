@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.IntermediateOperation;
 import name.ulbricht.streams.api.Operation;
 
-@Operation(input = Comparable.class, output = Comparable.class)
+@Operation(name = "Sorted", input = Comparable.class, output = Comparable.class)
 public final class Sorted
 		implements IntermediateOperation<Comparable<? super Comparable<?>>, Comparable<? super Comparable<?>>> {
 
@@ -15,8 +15,7 @@ public final class Sorted
 	}
 
 	@Override
-	public Stream<Comparable<? super Comparable<?>>> apply(
-			final Stream<Comparable<? super Comparable<?>>> stream) {
+	public Stream<Comparable<? super Comparable<?>>> apply(final Stream<Comparable<? super Comparable<?>>> stream) {
 		return stream.sorted();
 	}
 }
