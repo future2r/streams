@@ -27,19 +27,18 @@ public enum StreamOperationType {
 
 		switch (this) {
 		case SOURCE:
-			checkImplements(candidateClass, this, Supplier.class);
+			checkImplements(candidateClass, Supplier.class);
 			break;
 		case INTERMEDIATE:
 		case TERMINAL:
-			checkImplements(candidateClass, this, Function.class);
+			checkImplements(candidateClass, Function.class);
 			break;
 		}
 	}
 
-	private void checkImplements(final Class<?> candidateClass, final StreamOperationType type,
-			final Class<?> requiredInterface) {
+	private void checkImplements(final Class<?> candidateClass, final Class<?> requiredInterface) {
 		if (!requiredInterface.isAssignableFrom(candidateClass))
-			throw new StreamOperationException(String.format("Operation of type %s must implement %s", type.name(),
+			throw new StreamOperationException(String.format("Operation of type %s must implement %s", name(),
 					requiredInterface.getSimpleName()));
 	}
 }
