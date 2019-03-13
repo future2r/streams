@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
@@ -15,12 +17,12 @@ public final class StreamExecutor {
 	public static class ExecutionLogger implements Consumer<Object> {
 
 		private long elementsProvided;
-		private final StreamOperation operation;
+		private final Object operation;
 		private final String operationName;
 
-		private ExecutionLogger(final StreamOperation operation) {
+		private ExecutionLogger(final Object operation) {
 			this.operation = operation;
-			this.operationName = StreamOperation.getDisplayName(this.operation);
+			this.operationName = StreamOperations.getDisplayName(this.operation.getClass());
 		}
 
 		@Override
@@ -29,7 +31,7 @@ public final class StreamExecutor {
 			log.info(() -> String.format("%s: %s", this.operationName, element));
 		}
 
-		public StreamOperation getOperation() {
+		public Object getOperation() {
 			return this.operation;
 		}
 
@@ -54,18 +56,19 @@ public final class StreamExecutor {
 		this.executionLoggers.clear();
 
 		final var source = this.operations.getSource();
-		Stream stream = source.get();
+		Stream stream = ((Supplier<Stream>) source).get();
 		stream = addExecutionLogger(stream, source);
 
 		for (final var intermediatOperation : this.operations.getIntermediats()) {
-			stream = intermediatOperation.apply(stream);
+			stream = ((Function<Stream, Stream>) intermediatOperation).apply(stream);
 			stream = addExecutionLogger(stream, intermediatOperation);
 		}
 
-		return this.operations.getTerminal().apply(stream);
+		final var terminal = this.operations.getTerminal();
+		return ((Function<Stream, Object>) terminal).apply(stream);
 	}
 
-	private Stream<?> addExecutionLogger(final Stream<?> stream, final StreamOperation operation) {
+	private Stream<?> addExecutionLogger(final Stream<?> stream, final Object operation) {
 		final var executionLogger = new ExecutionLogger(operation);
 		this.executionLoggers.add(executionLogger);
 		return stream.peek(executionLogger);

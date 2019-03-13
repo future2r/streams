@@ -8,10 +8,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
-import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.SourceOperation;
 import name.ulbricht.streams.api.StreamExecutor;
-import name.ulbricht.streams.api.TerminalOperation;
+import name.ulbricht.streams.api.StreamOperation;
 
 public class StreamOperationTableCellRenderer implements TableCellRenderer {
 
@@ -31,12 +29,17 @@ public class StreamOperationTableCellRenderer implements TableCellRenderer {
 			final var label = (JLabel) component;
 			Icon icon = null;
 			if (operation != null) {
-				if (operation instanceof SourceOperation)
+				switch (operation.getClass().getAnnotation(StreamOperation.class).type()) {
+				case SOURCE:
 					icon = Images.getSmallIcon(Images.SOURCE_OPERATION);
-				else if (operation instanceof IntermediateOperation)
+					break;
+				case INTERMEDIATE:
 					icon = Images.getSmallIcon(Images.INTERMEDIATE_OPERATION);
-				else if (operation instanceof TerminalOperation)
+					break;
+				case TERMINAL:
 					icon = Images.getSmallIcon(Images.TERMINAL_OPERATION);
+					break;
+				}
 			}
 			label.setIcon(icon);
 		}

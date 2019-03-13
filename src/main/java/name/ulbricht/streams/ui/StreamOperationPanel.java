@@ -14,10 +14,8 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
-import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.SourceOperation;
 import name.ulbricht.streams.api.StreamOperation;
-import name.ulbricht.streams.api.TerminalOperation;
+import name.ulbricht.streams.api.StreamOperations;
 
 final class StreamOperationPanel extends JPanel {
 
@@ -62,30 +60,40 @@ final class StreamOperationPanel extends JPanel {
 			this.configTextField.setForeground(fg);
 	}
 
-	void updateContent(final StreamOperation streamOperation) {
-		this.nameLabel.setText(streamOperation != null ? StreamOperation.getDisplayName(streamOperation) : " ");
+	void updateContent(final Object streamOperation) {
+		this.nameLabel
+				.setText(streamOperation != null ? StreamOperations.getDisplayName(streamOperation.getClass()) : " ");
 
-		final Icon icon;
-		if (streamOperation instanceof SourceOperation)
-			icon = Images.getSmallIcon(Images.SOURCE_OPERATION);
-		else if (streamOperation instanceof IntermediateOperation)
-			icon = Images.getSmallIcon(Images.INTERMEDIATE_OPERATION);
-		else if (streamOperation instanceof TerminalOperation)
-			icon = Images.getSmallIcon(Images.TERMINAL_OPERATION);
-		else
-			icon = null;
-		this.nameLabel.setIcon(icon);
+		if (streamOperation != null) {
+			final Icon icon;
+
+			switch (streamOperation.getClass().getAnnotation(StreamOperation.class).type()) {
+			case SOURCE:
+				icon = Images.getSmallIcon(Images.SOURCE_OPERATION);
+				break;
+			case INTERMEDIATE:
+				icon = Images.getSmallIcon(Images.INTERMEDIATE_OPERATION);
+				break;
+			case TERMINAL:
+				icon = Images.getSmallIcon(Images.TERMINAL_OPERATION);
+				break;
+			default:
+				icon = null;
+			}
+
+			this.nameLabel.setIcon(icon);
+		}
 
 		this.configTextField
 				.setText(streamOperation != null ? omit(createConfigurationText(streamOperation), 100) : " ");
 	}
 
-	private static String createConfigurationText(final StreamOperation streamOperation) {
-		final var configurations = StreamOperation.getConfigurations(streamOperation);
+	private static String createConfigurationText(final Object streamOperation) {
+		final var configurations = StreamOperations.getConfigurations(streamOperation);
 		if (configurations.length > 0) {
 			return Stream.of(configurations)
 					.map(c -> String.format("%s=%s", c.displayName(),
-							StreamOperation.getConfigurationValue(streamOperation, c)))
+							StreamOperations.getConfigurationValue(streamOperation, c)))
 					.collect(Collectors.joining(", ", "", ""));
 		}
 		return "";

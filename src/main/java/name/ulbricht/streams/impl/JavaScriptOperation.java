@@ -8,10 +8,9 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.api.StreamOperationException;
 
-public abstract class JavaScriptOperation implements StreamOperation {
+public abstract class JavaScriptOperation {
 
 	private final static ScriptEngineManager engineManager = new ScriptEngineManager();
 

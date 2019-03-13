@@ -1,151 +1,21 @@
 package name.ulbricht.streams.api;
 
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.io.IOException;
-import java.util.Comparator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Stream;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public interface StreamOperation {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface StreamOperation {
 
-	String getSourceCode();
+	String name();
 
-	static <T extends StreamOperation> T createOperation(final Class<T> streamOperationClass)
-			throws StreamOperationException {
-		try {
-			return Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
-					.getConstructor((Class[]) null).newInstance((Object[]) null);
-		} catch (final ReflectiveOperationException ex) {
-			throw new StreamOperationException("Could not create operation from " + streamOperationClass, ex);
-		}
-	}
+	StreamOperationType type();
 
-	static <T extends StreamOperation> String getDisplayName(final T streamOperation) {
-		return getDisplayName(Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass());
-	}
+	Class<?> input() default Object.class;
 
-	static <T extends StreamOperation> String getDisplayName(final Class<T> streamOperationClass) {
-		final var operation = Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
-				.getAnnotation(Operation.class);
+	Class<?> output() default Object.class;
 
-		final var name = operation.name();
-		final var input = operation.input().getSimpleName();
-		final var output = operation.output().getSimpleName();
-
-		if (SourceOperation.class.isAssignableFrom(streamOperationClass)) {
-			return String.format("%s (%s)", name, output);
-		} else if (IntermediateOperation.class.isAssignableFrom(streamOperationClass)) {
-			return String.format("%s (%s -> %s)", name, input, output);
-		} else if (TerminalOperation.class.isAssignableFrom(streamOperationClass)) {
-			return String.format("%s (%s)", name, input);
-		}
-		throw new IllegalArgumentException("Cannot handle " + streamOperationClass);
-	}
-
-	static boolean supportsConfiguration(final StreamOperation streamOperation) {
-		return getConfigurations(streamOperation).length > 0;
-	}
-
-	static Configuration[] getConfigurations(final StreamOperation streamOperation) {
-		Objects.requireNonNull(streamOperation, "streamOperation must not be null");
-		final var streamOperationClass = streamOperation.getClass();
-
-		// single annotation
-		final var configuration = streamOperationClass.getAnnotation(Configuration.class);
-		if (configuration != null)
-			return new Configuration[] { configuration };
-
-		// repeated annotations
-		final var configurations = streamOperationClass.getAnnotation(Configurations.class);
-		if (configurations != null)
-			return configurations.value();
-
-		return new Configuration[0];
-	}
-
-	@SuppressWarnings("unchecked")
-	static <T> T getConfigurationValue(final StreamOperation streamOperation, final Configuration configuration)
-			throws StreamOperationException {
-		try {
-			return (T) getPropertyDescriptor(
-					Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass(),
-					configuration).getReadMethod().invoke(streamOperation, (Object[]) null);
-		} catch (final ReflectiveOperationException ex) {
-			throw new StreamOperationException("Could not read value for property " + configuration.name(), ex);
-		}
-	}
-
-	static void setConfigurationValue(final StreamOperation streamOperation, final Configuration configuration,
-			final Object value) throws StreamOperationException {
-		try {
-			getPropertyDescriptor(
-					Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass(),
-					configuration).getWriteMethod().invoke(streamOperation, value);
-		} catch (final ReflectiveOperationException ex) {
-			throw new StreamOperationException("Could not write value for property " + configuration.name(), ex);
-		}
-	}
-
-	private static PropertyDescriptor getPropertyDescriptor(final Class<? extends StreamOperation> streamOperationClass,
-			final Configuration configuration) throws StreamOperationException {
-		try {
-			return Stream
-					.of(Introspector.getBeanInfo(
-							Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null"))
-							.getPropertyDescriptors()) //
-					.filter(pd -> configuration.name().equals(pd.getName())) //
-					.findFirst().get();
-		} catch (final IntrospectionException | NoSuchElementException ex) {
-			throw new StreamOperationException("Could not find property " + configuration.name(), ex);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	static Class<? extends SourceOperation<?>>[] findSourceOperations() {
-		return (Class<? extends SourceOperation<?>>[]) findOperations(SourceOperation.class);
-	}
-
-	@SuppressWarnings("unchecked")
-	static Class<? extends IntermediateOperation<?, ?>>[] findIntermediateOperations() {
-		return (Class<? extends IntermediateOperation<?, ?>>[]) findOperations(IntermediateOperation.class);
-	}
-
-	@SuppressWarnings("unchecked")
-	static Class<? extends TerminalOperation<?>>[] findTerminalOperations() {
-		return (Class<? extends TerminalOperation<?>>[]) findOperations(TerminalOperation.class);
-	}
-
-	@SuppressWarnings("unchecked")
-	static <T> Class<? extends T>[] findOperations(final Class<T> operationInterface) {
-		final var module = ModuleLayer.boot().configuration().modules().stream()
-				.filter(m -> m.name().equals("name.ulbricht.streams")).findFirst().get();
-
-		try (final var moduleReader = module.reference().open()) {
-			return (Class<T>[]) moduleReader.list() //
-					.filter(s -> s.startsWith("name/ulbricht/streams/impl/") && s.endsWith(".class")) //
-					.map(s -> s.substring(0, s.length() - 6).replace('/', '.')) //
-					.map(StreamOperation::loadClass) //
-					.filter(Optional::isPresent) //
-					.map(Optional::get) //
-					.filter(c -> StreamOperation.class.isAssignableFrom(c)) //
-					.filter(c -> c.getAnnotation(Operation.class) != null) //
-					.sorted(Comparator
-							.comparing(c -> StreamOperation.getDisplayName((Class<? extends StreamOperation>) c))) //
-					.toArray(Class<?>[]::new);
-		} catch (final IOException ex) {
-			throw new StreamOperationException(ex);
-		}
-	}
-
-	private static Optional<Class<?>> loadClass(final String className) {
-		try {
-			return Optional.of(Class.forName(className));
-		} catch (ClassNotFoundException e) {
-			return Optional.empty();
-		}
-	}
+	String description() default "";
 }

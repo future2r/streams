@@ -1,17 +1,18 @@
 package name.ulbricht.streams.impl.intermediate;
 
+import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Operation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "String Formatter", output = String.class)
+@StreamOperation(name = "String Formatter", type = INTERMEDIATE, output = String.class)
 @Configuration(name = "format", type = ConfigurationType.STRING, displayName = "Format Pattern")
-public final class StringFormatter implements IntermediateOperation<Object, String> {
+public final class StringFormatter implements Function<Stream<Object>, Stream<String>> {
 
 	private String format = "%s";
 
@@ -24,12 +25,12 @@ public final class StringFormatter implements IntermediateOperation<Object, Stri
 	}
 
 	@Override
-	public String getSourceCode() {
-		return String.format(".map(e -> String.format(\"%s\", e))", quote(this.format));
+	public Stream<String> apply(final Stream<Object> stream) {
+		return stream.map(e -> String.format(this.format, e));
 	}
 
 	@Override
-	public Stream<String> apply(final Stream<Object> stream) {
-		return stream.map(e -> String.format(this.format, e));
+	public String toString() {
+		return String.format(".map(e -> String.format(\"%s\", e))", quote(this.format));
 	}
 }

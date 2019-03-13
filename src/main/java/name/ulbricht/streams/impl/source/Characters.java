@@ -1,17 +1,18 @@
 package name.ulbricht.streams.impl.source;
 
+import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.Operation;
-import name.ulbricht.streams.api.SourceOperation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "Characters", output = Integer.class)
+@StreamOperation(name = "Characters", type = SOURCE, output = Integer.class)
 @Configuration(name = "text", type = ConfigurationType.STRING, displayName = "Text")
-public final class Characters implements SourceOperation<Integer> {
+public final class Characters implements Supplier<Stream<Integer>> {
 
 	private String text = "Hello World!";
 
@@ -24,12 +25,12 @@ public final class Characters implements SourceOperation<Integer> {
 	}
 
 	@Override
-	public String getSourceCode() {
-		return String.format("\"%s\".chars().boxed()", quote(this.text));
+	public Stream<Integer> get() {
+		return this.text.chars().boxed();
 	}
 
 	@Override
-	public Stream<Integer> get() {
-		return this.text.chars().boxed();
+	public String toString() {
+		return String.format("\"%s\".chars().boxed()", quote(this.text));
 	}
 }

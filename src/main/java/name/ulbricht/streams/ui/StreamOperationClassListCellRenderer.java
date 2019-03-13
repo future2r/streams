@@ -8,20 +8,18 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.SourceOperation;
 import name.ulbricht.streams.api.StreamOperation;
-import name.ulbricht.streams.api.TerminalOperation;
+import name.ulbricht.streams.api.StreamOperations;
 
-final class StreamOperationClassListCellRenderer implements ListCellRenderer<Class<? extends StreamOperation>> {
+final class StreamOperationClassListCellRenderer implements ListCellRenderer<Class<?>> {
 
 	private final ListCellRenderer<Object> delegate = new DefaultListCellRenderer();
 
 	@Override
-	public Component getListCellRendererComponent(final JList<? extends Class<? extends StreamOperation>> list,
-			final Class<? extends StreamOperation> value, final int index, final boolean isSelected,
-			final boolean cellHasFocus) {
-		final var text = value != null ? StreamOperation.getDisplayName(value) : " ";
+	public Component getListCellRendererComponent(final JList<? extends Class<?>> list, final Class<?> value,
+			final int index, final boolean isSelected, final boolean cellHasFocus) {
+
+		final var text = value != null ? StreamOperations.getDisplayName(value) : " ";
 
 		final var component = delegate.getListCellRendererComponent(list, text, index, isSelected, cellHasFocus);
 
@@ -29,12 +27,17 @@ final class StreamOperationClassListCellRenderer implements ListCellRenderer<Cla
 			final var label = (JLabel) component;
 			Icon icon = null;
 			if (value != null) {
-				if (SourceOperation.class.isAssignableFrom(value))
+				switch (value.getAnnotation(StreamOperation.class).type()) {
+				case SOURCE:
 					icon = Images.getSmallIcon(Images.SOURCE_OPERATION);
-				else if (IntermediateOperation.class.isAssignableFrom(value))
+					break;
+				case INTERMEDIATE:
 					icon = Images.getSmallIcon(Images.INTERMEDIATE_OPERATION);
-				else if (TerminalOperation.class.isAssignableFrom(value))
+					break;
+				case TERMINAL:
 					icon = Images.getSmallIcon(Images.TERMINAL_OPERATION);
+					break;
+				}
 			}
 			label.setIcon(icon);
 		}

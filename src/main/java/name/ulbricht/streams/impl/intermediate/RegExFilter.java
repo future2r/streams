@@ -1,18 +1,19 @@
 package name.ulbricht.streams.impl.intermediate;
 
+import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Operation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "Regular Expression Filter", input = String.class, output = String.class)
+@StreamOperation(name = "Regular Expression Filter", type = INTERMEDIATE, input = String.class, output = String.class)
 @Configuration(name = "pattern", type = ConfigurationType.STRING, displayName = "Filter Pattern")
-public final class RegExFilter implements IntermediateOperation<String, String> {
+public final class RegExFilter implements Function<Stream<String>, Stream<String>> {
 
 	private String pattern = ".*";
 
@@ -25,12 +26,12 @@ public final class RegExFilter implements IntermediateOperation<String, String> 
 	}
 
 	@Override
-	public String getSourceCode() {
-		return String.format(".filter(s -> Pattern.matches(\"%s\", s))", quote(this.pattern));
+	public Stream<String> apply(final Stream<String> stream) {
+		return stream.filter(s -> Pattern.matches(this.pattern, s));
 	}
 
 	@Override
-	public Stream<String> apply(final Stream<String> stream) {
-		return stream.filter(s -> Pattern.matches(this.pattern, s));
+	public String toString() {
+		return String.format(".filter(s -> Pattern.matches(\"%s\", s))", quote(this.pattern));
 	}
 }

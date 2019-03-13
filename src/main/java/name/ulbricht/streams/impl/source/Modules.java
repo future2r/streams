@@ -1,20 +1,22 @@
 package name.ulbricht.streams.impl.source;
 
+import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
+
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Operation;
-import name.ulbricht.streams.api.SourceOperation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "Modules List", output = Module.class)
-public final class Modules implements SourceOperation<Module> {
-
-	@Override
-	public String getSourceCode() {
-		return "ModuleLayer.boot().modules().stream()";
-	}
+@StreamOperation(name = "Modules List", type = SOURCE, output = Module.class)
+public final class Modules implements Supplier<Stream<Module>> {
 
 	@Override
 	public Stream<Module> get() {
 		return ModuleLayer.boot().modules().stream();
+	}
+
+	@Override
+	public String toString() {
+		return "ModuleLayer.boot().modules().stream()";
 	}
 }

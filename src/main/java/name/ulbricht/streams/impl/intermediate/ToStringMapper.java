@@ -1,21 +1,23 @@
 package name.ulbricht.streams.impl.intermediate;
 
+import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
+
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Operation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "ToString Mapper", output = String.class)
-public final class ToStringMapper implements IntermediateOperation<Object, String> {
-
-	@Override
-	public String getSourceCode() {
-		return ".map(Objects::toString)";
-	}
+@StreamOperation(name = "ToString Mapper", type = INTERMEDIATE, output = String.class)
+public final class ToStringMapper implements Function<Stream<Object>, Stream<String>> {
 
 	@Override
 	public Stream<String> apply(final Stream<Object> stream) {
 		return stream.map(Objects::toString);
+	}
+
+	@Override
+	public String toString() {
+		return ".map(Objects::toString)";
 	}
 }

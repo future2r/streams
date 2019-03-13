@@ -1,20 +1,22 @@
 package name.ulbricht.streams.impl.intermediate;
 
+import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
+
+import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Operation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "Parallel")
-public final class Parallel implements IntermediateOperation<Object, Object> {
-
-	@Override
-	public String getSourceCode() {
-		return ".parallel()";
-	}
+@StreamOperation(name = "Parallel", type = INTERMEDIATE)
+public final class Parallel implements Function<Stream<Object>, Stream<Object>> {
 
 	@Override
 	public Stream<Object> apply(final Stream<Object> stream) {
 		return stream.parallel();
+	}
+
+	@Override
+	public String toString() {
+		return ".parallel()";
 	}
 }

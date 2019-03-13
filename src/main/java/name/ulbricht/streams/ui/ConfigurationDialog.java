@@ -34,13 +34,13 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 
 import name.ulbricht.streams.api.Configuration;
-import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.StreamOperations;
 
 @SuppressWarnings("serial")
 final class ConfigurationDialog extends JDialog {
 
-	static boolean showModal(final Window owner, final StreamOperation operation) {
+	static boolean showModal(final Window owner, final Object operation) {
 		final var dlg = new ConfigurationDialog(owner, operation);
 		dlg.setModalityType(ModalityType.APPLICATION_MODAL);
 		dlg.setLocationRelativeTo(owner);
@@ -50,22 +50,22 @@ final class ConfigurationDialog extends JDialog {
 	}
 
 	private boolean result;
-	private final StreamOperation operation;
+	private final Object operation;
 	private final List<Runnable> applyFunctions = new ArrayList<>();
 
-	ConfigurationDialog(final Window owner, final StreamOperation operation) {
+	ConfigurationDialog(final Window owner, final Object operation) {
 		super(owner);
 		this.operation = operation;
 
 		setTitle(String.format(Messages.getString("ConfigurationDialog.titlePattern"),
-				StreamOperation.getDisplayName(this.operation)));
+				StreamOperations.getDisplayName(this.operation.getClass())));
 
 		final var contentPane = new JPanel(new BorderLayout(8, 8));
 		contentPane.setOpaque(false);
 		contentPane.setBorder(new EmptyBorder(8, 8, 8, 8));
 		setContentPane(contentPane);
 
-		final var description = this.operation.getClass().getAnnotation(Operation.class).description();
+		final var description = this.operation.getClass().getAnnotation(StreamOperation.class).description();
 		if (!description.isEmpty()) {
 			final var descriptionLabel = new JLabel(
 					String.format("<html><p style='width: auto'>%s</p></html>", description));
@@ -76,7 +76,7 @@ final class ConfigurationDialog extends JDialog {
 		final var configurationPanel = new JPanel(new GridBagLayout());
 		configurationPanel.setOpaque(false);
 
-		final var configurations = StreamOperation.getConfigurations(this.operation);
+		final var configurations = StreamOperations.getConfigurations(this.operation);
 		var row = 0;
 		for (final var config : configurations) {
 			row = addConfiguration(row, configurationPanel, config);
@@ -126,33 +126,33 @@ final class ConfigurationDialog extends JDialog {
 		switch (configuration.type()) {
 		case STRING: {
 			final var textField = new JTextField(30);
-			textField.setText(StreamOperation.getConfigurationValue(this.operation, configuration));
+			textField.setText(StreamOperations.getConfigurationValue(this.operation, configuration));
 			applyFunctions.add(
-					() -> StreamOperation.setConfigurationValue(this.operation, configuration, textField.getText()));
+					() -> StreamOperations.setConfigurationValue(this.operation, configuration, textField.getText()));
 
 			return addComponent(panel, row, label, textField);
 		}
 		case MULTILINE_STRING: {
 			final var textArea = new JTextArea(10, 50);
-			textArea.setText(StreamOperation.getConfigurationValue(this.operation, configuration));
+			textArea.setText(StreamOperations.getConfigurationValue(this.operation, configuration));
 			textArea.setCaretPosition(0);
 			applyFunctions.add(
-					() -> StreamOperation.setConfigurationValue(this.operation, configuration, textArea.getText()));
+					() -> StreamOperations.setConfigurationValue(this.operation, configuration, textArea.getText()));
 
 			return addScrollableComponent(panel, row, label, textArea);
 		}
 		case INTEGER: {
 			final var spinner = new JSpinner(new SpinnerNumberModel(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
-			spinner.setValue(StreamOperation.getConfigurationValue(this.operation, configuration));
-			applyFunctions.add(() -> StreamOperation.setConfigurationValue(this.operation, configuration,
+			spinner.setValue(StreamOperations.getConfigurationValue(this.operation, configuration));
+			applyFunctions.add(() -> StreamOperations.setConfigurationValue(this.operation, configuration,
 					((Number) spinner.getValue()).intValue()));
 
 			return addComponent(panel, row, label, spinner);
 		}
 		case LONG: {
 			final var spinner = new JSpinner(new SpinnerNumberModel(0L, Long.MIN_VALUE, Long.MAX_VALUE, 1L));
-			spinner.setValue(StreamOperation.getConfigurationValue(this.operation, configuration));
-			applyFunctions.add(() -> StreamOperation.setConfigurationValue(this.operation, configuration,
+			spinner.setValue(StreamOperations.getConfigurationValue(this.operation, configuration));
+			applyFunctions.add(() -> StreamOperations.setConfigurationValue(this.operation, configuration,
 					((Number) spinner.getValue()).longValue()));
 
 			return addComponent(panel, row, label, spinner);
@@ -160,17 +160,17 @@ final class ConfigurationDialog extends JDialog {
 		case DOUBLE: {
 			final var spinner = new JSpinner(
 					new SpinnerNumberModel(0.0, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1.0));
-			spinner.setValue(StreamOperation.getConfigurationValue(this.operation, configuration));
-			applyFunctions.add(() -> StreamOperation.setConfigurationValue(this.operation, configuration,
+			spinner.setValue(StreamOperations.getConfigurationValue(this.operation, configuration));
+			applyFunctions.add(() -> StreamOperations.setConfigurationValue(this.operation, configuration,
 					((Number) spinner.getValue()).doubleValue()));
 
 			return addComponent(panel, row, label, spinner);
 		}
 		case BOOLEAN: {
 			final var checkBox = new JCheckBox();
-			checkBox.setSelected(StreamOperation.getConfigurationValue(this.operation, configuration));
+			checkBox.setSelected(StreamOperations.getConfigurationValue(this.operation, configuration));
 			applyFunctions.add(
-					() -> StreamOperation.setConfigurationValue(this.operation, configuration, checkBox.isSelected()));
+					() -> StreamOperations.setConfigurationValue(this.operation, configuration, checkBox.isSelected()));
 
 			return addComponent(panel, row, label, checkBox);
 		}
@@ -180,8 +180,8 @@ final class ConfigurationDialog extends JDialog {
 			final var button = new JButton(Messages.getString("ConfigurationDialog.browse"));
 			button.addActionListener(e -> browseDirectory(textField));
 			textField.setText(
-					Objects.toString(StreamOperation.getConfigurationValue(this.operation, configuration), ""));
-			applyFunctions.add(() -> StreamOperation.setConfigurationValue(this.operation, configuration,
+					Objects.toString(StreamOperations.getConfigurationValue(this.operation, configuration), ""));
+			applyFunctions.add(() -> StreamOperations.setConfigurationValue(this.operation, configuration,
 					Paths.get(textField.getText())));
 
 			return addComponent(panel, row, label, textField, button);
@@ -192,18 +192,18 @@ final class ConfigurationDialog extends JDialog {
 			final var button = new JButton(Messages.getString("ConfigurationDialog.browse"));
 			button.addActionListener(e -> browseFile(textField));
 			textField.setText(
-					Objects.toString(StreamOperation.getConfigurationValue(this.operation, configuration), ""));
-			applyFunctions.add(() -> StreamOperation.setConfigurationValue(this.operation, configuration,
+					Objects.toString(StreamOperations.getConfigurationValue(this.operation, configuration), ""));
+			applyFunctions.add(() -> StreamOperations.setConfigurationValue(this.operation, configuration,
 					Paths.get(textField.getText())));
 
 			return addComponent(panel, row, label, textField, button);
 		}
 		case ENCODING: {
 			final var comboBox = new JComboBox<String>(Charset.availableCharsets().keySet().toArray(new String[0]));
-			final Charset charset = StreamOperation.getConfigurationValue(this.operation, configuration);
+			final Charset charset = StreamOperations.getConfigurationValue(this.operation, configuration);
 			if (charset != null)
 				comboBox.setSelectedItem(charset.name());
-			applyFunctions.add(() -> StreamOperation.setConfigurationValue(this.operation, configuration,
+			applyFunctions.add(() -> StreamOperations.setConfigurationValue(this.operation, configuration,
 					Charset.forName((String) comboBox.getSelectedItem())));
 
 			return addComponent(panel, row, label, comboBox);

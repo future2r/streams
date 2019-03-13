@@ -1,21 +1,23 @@
 package name.ulbricht.streams.impl.intermediate;
 
+import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
+
+import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Operation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "Sorted", input = Comparable.class, output = Comparable.class)
+@StreamOperation(name = "Sorted", type = INTERMEDIATE, input = Comparable.class, output = Comparable.class)
 public final class Sorted
-		implements IntermediateOperation<Comparable<? super Comparable<?>>, Comparable<? super Comparable<?>>> {
-
-	@Override
-	public String getSourceCode() {
-		return ".sorted()";
-	}
+		implements Function<Stream<Comparable<? super Comparable<?>>>, Stream<Comparable<? super Comparable<?>>>> {
 
 	@Override
 	public Stream<Comparable<? super Comparable<?>>> apply(final Stream<Comparable<? super Comparable<?>>> stream) {
 		return stream.sorted();
+	}
+
+	@Override
+	public String toString() {
+		return ".sorted()";
 	}
 }

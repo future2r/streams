@@ -6,15 +6,13 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.UIManager;
 
-import name.ulbricht.streams.api.StreamOperation;
-
-final class StreamOperationListCellRenderer implements ListCellRenderer<StreamOperation> {
+final class StreamOperationListCellRenderer implements ListCellRenderer<Object> {
 
 	private final StreamOperationPanel panel = new StreamOperationPanel();
 
 	@Override
-	public Component getListCellRendererComponent(final JList<? extends StreamOperation> list,
-			final StreamOperation value, final int index, final boolean isSelected, final boolean cellHasFocus) {
+	public Component getListCellRendererComponent(final JList<? extends Object> list, final Object value,
+			final int index, final boolean isSelected, final boolean cellHasFocus) {
 		this.panel.updateContent(value);
 
 		this.panel.setBackground(isSelected ? UIManager.getColor("List.selectionBackground")

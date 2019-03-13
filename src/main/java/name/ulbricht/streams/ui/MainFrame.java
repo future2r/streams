@@ -37,14 +37,12 @@ import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-import name.ulbricht.streams.api.IntermediateOperation;
 import name.ulbricht.streams.api.SourceCodeBuilder;
-import name.ulbricht.streams.api.SourceOperation;
 import name.ulbricht.streams.api.StreamExecutor;
-import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.api.StreamOperationException;
 import name.ulbricht.streams.api.StreamOperationSet;
-import name.ulbricht.streams.api.TerminalOperation;
+import name.ulbricht.streams.api.StreamOperationType;
+import name.ulbricht.streams.api.StreamOperations;
 import name.ulbricht.streams.impl.Preset;
 
 @SuppressWarnings("serial")
@@ -142,8 +140,8 @@ public final class MainFrame extends JFrame {
 		return panel;
 	}
 
-	private MutableComboBoxModel<Class<? extends SourceOperation<?>>> sourceOperationComboBoxModel;
-	private JComboBox<Class<? extends SourceOperation<?>>> sourceOperationComboBox;
+	private MutableComboBoxModel<Class<?>> sourceOperationComboBoxModel;
+	private JComboBox<Class<?>> sourceOperationComboBox;
 	private StreamOperationPanel sourceOperationPanel;
 
 	private JPanel createSourcePanel() {
@@ -151,10 +149,12 @@ public final class MainFrame extends JFrame {
 		panel.setOpaque(false);
 		panel.setBorder(new TitledBorder(Messages.getString("sourcePanel.title")));
 
-		this.sourceOperationComboBoxModel = new MutableComboBoxModel<>(StreamOperation.findSourceOperations());
+		this.sourceOperationComboBoxModel = new MutableComboBoxModel<>(
+				StreamOperations.findOperations(StreamOperationType.SOURCE));
 		this.sourceOperationComboBox = new JComboBox<>(this.sourceOperationComboBoxModel);
 		this.sourceOperationComboBox.setMaximumRowCount(15);
-		this.sourceOperationComboBox.setSelectedIndex(0);
+		if (this.sourceOperationComboBoxModel.getSize() > 0)
+			this.sourceOperationComboBox.setSelectedIndex(0);
 		this.sourceOperationComboBox.setRenderer(new StreamOperationClassListCellRenderer());
 		this.sourceOperationComboBox.addActionListener(e -> sourceOperationSelected());
 
@@ -162,7 +162,7 @@ public final class MainFrame extends JFrame {
 
 		final var configureButton = new JButton(this.actions.add(Actions.action("configureSourceOperation",
 				this::configureSourceOperation, () -> this.currentSourceOperation != null
-						&& StreamOperation.supportsConfiguration(this.currentSourceOperation))));
+						&& StreamOperations.supportsConfiguration(this.currentSourceOperation))));
 
 		panel.add(this.sourceOperationComboBox, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.WEST,
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
@@ -174,23 +174,21 @@ public final class MainFrame extends JFrame {
 		return panel;
 	}
 
-	private SourceOperation<?> currentSourceOperation;
+	private Object currentSourceOperation;
 
 	private void sourceOperationSelected() {
-		@SuppressWarnings("unchecked")
-		final var selectedSourceOperationClass = (Class<? extends SourceOperation<?>>) this.sourceOperationComboBox
-				.getSelectedItem();
+		final var selectedSourceOperationClass = (Class<?>) this.sourceOperationComboBox.getSelectedItem();
 
 		if (selectedSourceOperationClass != null) {
 			try {
-				setSourceOperation(StreamOperation.createOperation(selectedSourceOperationClass));
+				setSourceOperation(StreamOperations.createOperation(selectedSourceOperationClass));
 			} catch (final StreamOperationException ex) {
 				Alerts.showError(this, ex);
 			}
 		}
 	}
 
-	private void setSourceOperation(final SourceOperation<?> sourceOperation) {
+	private void setSourceOperation(final Object sourceOperation) {
 		this.currentSourceOperation = sourceOperation;
 		this.sourceOperationPanel.updateContent(this.currentSourceOperation);
 		streamSetupChanged();
@@ -205,10 +203,10 @@ public final class MainFrame extends JFrame {
 		}
 	}
 
-	private MutableComboBoxModel<Class<? extends IntermediateOperation<?, ?>>> intermediateOperationComboBoxModel;
-	private JComboBox<Class<? extends IntermediateOperation<?, ?>>> intermediateOperationComboBox;
-	private MutableListModel<IntermediateOperation<?, ?>> intermediateOperationListModel;
-	private JList<IntermediateOperation<?, ?>> intermediateOperationList;
+	private MutableComboBoxModel<Class<?>> intermediateOperationComboBoxModel;
+	private JComboBox<Class<?>> intermediateOperationComboBox;
+	private MutableListModel<Object> intermediateOperationListModel;
+	private JList<Object> intermediateOperationList;
 
 	private JPanel createIntermediatePanel() {
 		final var panel = new JPanel(new GridBagLayout());
@@ -216,10 +214,11 @@ public final class MainFrame extends JFrame {
 		panel.setBorder(new TitledBorder(Messages.getString("intermediatePanel.title")));
 
 		this.intermediateOperationComboBoxModel = new MutableComboBoxModel<>(
-				StreamOperation.findIntermediateOperations());
+				StreamOperations.findOperations(StreamOperationType.INTERMEDIATE));
 		this.intermediateOperationComboBox = new JComboBox<>(this.intermediateOperationComboBoxModel);
 		this.intermediateOperationComboBox.setMaximumRowCount(15);
-		this.intermediateOperationComboBox.setSelectedIndex(0);
+		if (this.intermediateOperationComboBoxModel.getSize() > 0)
+			this.intermediateOperationComboBox.setSelectedIndex(0);
 		this.intermediateOperationComboBox.setRenderer(new StreamOperationClassListCellRenderer());
 
 		final var addButton = new JButton(
@@ -272,13 +271,11 @@ public final class MainFrame extends JFrame {
 	}
 
 	private void addIntermediateOperation() {
-		@SuppressWarnings("unchecked")
-		final var selectedOperationClass = (Class<? extends IntermediateOperation<?, ?>>) this.intermediateOperationComboBox
-				.getSelectedItem();
+		final var selectedOperationClass = (Class<?>) this.intermediateOperationComboBox.getSelectedItem();
 
 		if (selectedOperationClass != null) {
 			try {
-				final var operation = StreamOperation.createOperation(selectedOperationClass);
+				final var operation = StreamOperations.createOperation(selectedOperationClass);
 
 				final var selectedIndex = this.intermediateOperationList.getSelectedIndex();
 				if (selectedIndex >= 0) {
@@ -336,14 +333,14 @@ public final class MainFrame extends JFrame {
 
 	private void configureIntermediateOperation() {
 		final var intermediateOperation = this.intermediateOperationList.getSelectedValue();
-		if (intermediateOperation != null) {
+		if (intermediateOperation != null && StreamOperations.supportsConfiguration(intermediateOperation)) {
 			if (showConfigureDialog(intermediateOperation)) {
 				this.intermediateOperationListModel.updateElement(intermediateOperation);
 			}
 		}
 	}
 
-	private Optional<IntermediateOperation<?, ?>> getSelectedIntermediateOperation() {
+	private Optional<Object> getSelectedIntermediateOperation() {
 		return Optional.ofNullable(this.intermediateOperationList.getSelectedValue());
 	}
 
@@ -366,22 +363,25 @@ public final class MainFrame extends JFrame {
 	}
 
 	private boolean isIntermediateOperationConfigurable() {
-		return getSelectedIntermediateOperation().map(StreamOperation::supportsConfiguration).orElse(Boolean.FALSE);
+		return getSelectedIntermediateOperation().map(StreamOperations::supportsConfiguration).orElse(Boolean.FALSE);
 	}
 
-	private MutableComboBoxModel<Class<? extends TerminalOperation<?>>> terminalOperationComboBoxModel;
-	private JComboBox<Class<? extends TerminalOperation<?>>> terminalOperationComboBox;
+	private MutableComboBoxModel<Class<?>> terminalOperationComboBoxModel;
+	private JComboBox<Class<?>> terminalOperationComboBox;
 	private StreamOperationPanel terminalOperationPanel;
+	private Object currentTerminalOperation;
 
 	private JPanel createTerminalPanel() {
 		final var panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
 		panel.setBorder(new TitledBorder(Messages.getString("terminalPanel.title")));
 
-		this.terminalOperationComboBoxModel = new MutableComboBoxModel<>(StreamOperation.findTerminalOperations());
+		this.terminalOperationComboBoxModel = new MutableComboBoxModel<>(
+				StreamOperations.findOperations(StreamOperationType.TERMINAL));
 		this.terminalOperationComboBox = new JComboBox<>(this.terminalOperationComboBoxModel);
 		this.terminalOperationComboBox.setMaximumRowCount(15);
-		this.terminalOperationComboBox.setSelectedIndex(0);
+		if (this.terminalOperationComboBoxModel.getSize() > 0)
+			this.terminalOperationComboBox.setSelectedIndex(0);
 		this.terminalOperationComboBox.setRenderer(new StreamOperationClassListCellRenderer());
 		this.terminalOperationComboBox.addActionListener(e -> terminalOperationSelected());
 
@@ -389,7 +389,7 @@ public final class MainFrame extends JFrame {
 
 		final var configureButton = new JButton(this.actions.add(Actions.action("configureTerminalOperation",
 				this::configureTerminalOperation, () -> this.currentTerminalOperation != null
-						&& StreamOperation.supportsConfiguration(this.currentTerminalOperation))));
+						&& StreamOperations.supportsConfiguration(this.currentTerminalOperation))));
 
 		panel.add(this.terminalOperationComboBox, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.WEST,
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
@@ -401,23 +401,19 @@ public final class MainFrame extends JFrame {
 		return panel;
 	}
 
-	private TerminalOperation<?> currentTerminalOperation;
-
 	private void terminalOperationSelected() {
-		@SuppressWarnings("unchecked")
-		final var selectedTerminalOperation = (Class<? extends TerminalOperation<?>>) this.terminalOperationComboBox
-				.getSelectedItem();
+		final var selectedTerminalOperation = (Class<?>) this.terminalOperationComboBox.getSelectedItem();
 
 		if (selectedTerminalOperation != null) {
 			try {
-				setTerminalOperation(StreamOperation.createOperation(selectedTerminalOperation));
+				setTerminalOperation(StreamOperations.createOperation(selectedTerminalOperation));
 			} catch (final StreamOperationException ex) {
 				Alerts.showError(this, ex);
 			}
 		}
 	}
 
-	private void setTerminalOperation(final TerminalOperation<?> terminalOperation) {
+	private void setTerminalOperation(final Object terminalOperation) {
 		this.currentTerminalOperation = terminalOperation;
 		this.terminalOperationPanel.updateContent(this.currentTerminalOperation);
 		streamSetupChanged();
@@ -432,7 +428,7 @@ public final class MainFrame extends JFrame {
 		}
 	}
 
-	private <T extends StreamOperation> boolean showConfigureDialog(final T operation) {
+	private boolean showConfigureDialog(final Object operation) {
 		if (ConfigurationDialog.showModal(this, operation)) {
 			streamSetupChanged();
 			return true;

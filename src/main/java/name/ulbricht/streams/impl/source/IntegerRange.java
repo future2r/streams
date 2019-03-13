@@ -1,18 +1,20 @@
 package name.ulbricht.streams.impl.source;
 
+import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
+
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.Operation;
-import name.ulbricht.streams.api.SourceOperation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "Integer Range", output = Integer.class)
+@StreamOperation(name = "Integer Range", type = SOURCE, output = Integer.class)
 @Configuration(name = "start", type = ConfigurationType.INTEGER, displayName = "Start")
 @Configuration(name = "end", type = ConfigurationType.INTEGER, displayName = "End")
 @Configuration(name = "closed", type = ConfigurationType.BOOLEAN, displayName = "Range is closed")
-public final class IntegerRange implements SourceOperation<Integer> {
+public final class IntegerRange implements Supplier<Stream<Integer>> {
 
 	private int start = 0;
 	private int end = 100;
@@ -43,12 +45,6 @@ public final class IntegerRange implements SourceOperation<Integer> {
 	}
 
 	@Override
-	public String getSourceCode() {
-		return String.format("IntStream.range%s(%s, %s).boxed()", this.closed ? "Closed" : "",
-				Integer.toString(this.start), Integer.toString(this.end));
-	}
-
-	@Override
 	public Stream<Integer> get() {
 		final IntStream stream;
 		if (this.closed)
@@ -56,5 +52,11 @@ public final class IntegerRange implements SourceOperation<Integer> {
 		else
 			stream = IntStream.range(this.start, this.end);
 		return stream.boxed();
+	}
+
+	@Override
+	public String toString() {
+		return String.format("IntStream.range%s(%s, %s).boxed()", this.closed ? "Closed" : "",
+				Integer.toString(this.start), Integer.toString(this.end));
 	}
 }

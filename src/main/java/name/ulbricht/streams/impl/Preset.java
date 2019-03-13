@@ -12,8 +12,8 @@ import name.ulbricht.streams.impl.intermediate.JavaScriptMap;
 import name.ulbricht.streams.impl.intermediate.LowerCase;
 import name.ulbricht.streams.impl.intermediate.RegExSplitter;
 import name.ulbricht.streams.impl.intermediate.Sorted;
-import name.ulbricht.streams.impl.intermediate.ToStringMapper;
 import name.ulbricht.streams.impl.intermediate.SystemOutPeek;
+import name.ulbricht.streams.impl.intermediate.ToStringMapper;
 import name.ulbricht.streams.impl.source.Empty;
 import name.ulbricht.streams.impl.source.FindFiles;
 import name.ulbricht.streams.impl.source.Modules;
@@ -91,7 +91,7 @@ public enum Preset {
 	private static StreamOperationSet createCountLines() {
 		final var fileFilter = new JavaScriptFilter();
 		fileFilter.setScript("result = element.getFileName().toString().endsWith(\".java\")");
-		
+
 		return new StreamOperationSet(new FindFiles(), List.of(fileFilter, new FileLines()), new Count());
 	}
 

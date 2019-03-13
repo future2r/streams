@@ -7,26 +7,25 @@ import java.util.Objects;
 
 public final class StreamOperationSet {
 
-	private final SourceOperation<?> source;
-	private final List<IntermediateOperation<?, ?>> intermediats;
-	private final TerminalOperation<?> terminal;
+	private final Object source;
+	private final List<Object> intermediats;
+	private final Object terminal;
 
-	public StreamOperationSet(final SourceOperation<?> source, final List<IntermediateOperation<?, ?>> intermediats,
-			final TerminalOperation<?> terminal) {
+	public StreamOperationSet(final Object source, final List<Object> intermediates, final Object terminal) {
 		this.source = Objects.requireNonNull(source, "source must not be null");
-		this.intermediats = new ArrayList<>(Objects.requireNonNull(intermediats, "intermediat must not be null"));
+		this.intermediats = new ArrayList<>(Objects.requireNonNull(intermediates, "intermediates must not be null"));
 		this.terminal = Objects.requireNonNull(terminal, "terminal must not be null");
 	}
 
-	public SourceOperation<?> getSource() {
+	public Object getSource() {
 		return this.source;
 	}
 
-	public List<IntermediateOperation<?, ?>> getIntermediats() {
+	public List<Object> getIntermediats() {
 		return Collections.unmodifiableList(this.intermediats);
 	}
 
-	public TerminalOperation<?> getTerminal() {
+	public Object getTerminal() {
 		return this.terminal;
 	}
 }

@@ -1,21 +1,23 @@
 package name.ulbricht.streams.impl.source;
 
+import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
+
 import java.util.Locale;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Operation;
-import name.ulbricht.streams.api.SourceOperation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name="Locales List", output = Locale.class)
-public final class Locales implements SourceOperation<Locale> {
-
-	@Override
-	public String getSourceCode() {
-		return "Stream.of(Locale.getAvailableLocales())";
-	}
+@StreamOperation(name = "Locales List", type = SOURCE, output = Locale.class)
+public final class Locales implements Supplier<Stream<Locale>> {
 
 	@Override
 	public Stream<Locale> get() {
 		return Stream.of(Locale.getAvailableLocales());
+	}
+
+	@Override
+	public String toString() {
+		return "Stream.of(Locale.getAvailableLocales())";
 	}
 }

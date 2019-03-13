@@ -1,21 +1,22 @@
 package name.ulbricht.streams.impl.source;
 
+import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.Operation;
-import name.ulbricht.streams.api.SourceOperation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "Find Files", output = Path.class)
+@StreamOperation(name = "Find Files", type = SOURCE, output = Path.class)
 @Configuration(name = "directory", type = ConfigurationType.DIRECTORY, displayName = "Directory")
-public final class FindFiles implements SourceOperation<Path> {
+public final class FindFiles implements Supplier<Stream<Path>> {
 
 	private Path directory = Paths.get(System.getProperty("user.dir"));
 
@@ -28,12 +29,6 @@ public final class FindFiles implements SourceOperation<Path> {
 	}
 
 	@Override
-	public String getSourceCode() {
-		return String.format("Files.find(Paths.get(\"%s\"), Integer.MAX_VALUE, (p, a) -> a.isRegularFile())",
-				quote(this.directory.toString()));
-	}
-
-	@Override
 	public Stream<Path> get() {
 		try {
 			return Files.find(this.directory, Integer.MAX_VALUE, (p, a) -> a.isRegularFile());
@@ -41,5 +36,11 @@ public final class FindFiles implements SourceOperation<Path> {
 			ex.printStackTrace();
 			return Stream.empty();
 		}
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Files.find(Paths.get(\"%s\"), Integer.MAX_VALUE, (p, a) -> a.isRegularFile())",
+				quote(this.directory.toString()));
 	}
 }

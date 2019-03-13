@@ -1,16 +1,18 @@
 package name.ulbricht.streams.impl.source;
 
+import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
+
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.Operation;
-import name.ulbricht.streams.api.SourceOperation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "Text Lines", output = String.class)
+@StreamOperation(name = "Text Lines", type = SOURCE, output = String.class)
 @Configuration(name = "text", type = ConfigurationType.MULTILINE_STRING, displayName = "Text Lines")
-public final class TextLines implements SourceOperation<String> {
+public final class TextLines implements Supplier<Stream<String>> {
 
 	private String text = "Hello World!\n" // en
 			+ "Hallo Welt!\n" // de
@@ -28,12 +30,12 @@ public final class TextLines implements SourceOperation<String> {
 	}
 
 	@Override
-	public String getSourceCode() {
-		return this.text.lines().map(l -> "\"" + l + "\\n\"").collect(Collectors.joining("\n + ", "", ".lines()"));
+	public Stream<String> get() {
+		return this.text.lines();
 	}
 
 	@Override
-	public Stream<String> get() {
-		return this.text.lines();
+	public String toString() {
+		return this.text.lines().map(l -> "\"" + l + "\\n\"").collect(Collectors.joining("\n + ", "", ".lines()"));
 	}
 }

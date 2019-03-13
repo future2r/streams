@@ -77,8 +77,7 @@ public final class Images extends ListResourceBundle {
 				{ TERMINAL_OPERATION, loadMultiResolutionImage("terminal-%s.png") }, //
 				{ LOG, loadMultiResolutionImage("log-%s.png") }, //
 				{ CONSOLE, loadMultiResolutionImage("console-%s.png") }, //
-				{ STATISTICS, loadMultiResolutionImage("statistics-%s.png") }
-		};
+				{ STATISTICS, loadMultiResolutionImage("statistics-%s.png") } };
 	}
 
 	private static final int[] TYPICAL_IMAGE_SIZES = new int[] { 16, 24, 32, 48, 64, 128, 256, 512 };

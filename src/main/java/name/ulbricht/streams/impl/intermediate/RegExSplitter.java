@@ -1,17 +1,18 @@
 package name.ulbricht.streams.impl.intermediate;
 
+import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Operation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "Regular Expression Splitter", input = String.class, output = String.class)
+@StreamOperation(name = "Regular Expression Splitter", type = INTERMEDIATE, input = String.class, output = String.class)
 @Configuration(name = "pattern", type = ConfigurationType.STRING, displayName = "Split Pattern")
-public final class RegExSplitter implements IntermediateOperation<String, String> {
+public final class RegExSplitter implements Function<Stream<String>, Stream<String>> {
 
 	private String pattern = "\\s";
 
@@ -24,12 +25,12 @@ public final class RegExSplitter implements IntermediateOperation<String, String
 	}
 
 	@Override
-	public String getSourceCode() {
-		return String.format(".flatMap(s -> Stream.of(s.split(\"%s\")))", quote(this.pattern));
+	public Stream<String> apply(final Stream<String> stream) {
+		return stream.flatMap(s -> Stream.of(s.split(this.pattern)));
 	}
 
 	@Override
-	public Stream<String> apply(final Stream<String> stream) {
-		return stream.flatMap(s -> Stream.of(s.split(this.pattern)));
+	public String toString() {
+		return String.format(".flatMap(s -> Stream.of(s.split(\"%s\")))", quote(this.pattern));
 	}
 }

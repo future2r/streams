@@ -1,15 +1,17 @@
 package name.ulbricht.streams.impl.intermediate;
 
+import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
+
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Operation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "Limit Elements")
+@StreamOperation(name = "Limit Elements", type = INTERMEDIATE)
 @Configuration(name = "limit", type = ConfigurationType.LONG, displayName = "Maximum Size")
-public final class Limit implements IntermediateOperation<Object, Object> {
+public final class Limit implements Function<Stream<Object>, Stream<Object>> {
 
 	private long limit = 5;
 
@@ -22,12 +24,12 @@ public final class Limit implements IntermediateOperation<Object, Object> {
 	}
 
 	@Override
-	public String getSourceCode() {
-		return String.format(".limit(%s)", Long.toString(this.limit));
+	public Stream<Object> apply(final Stream<Object> stream) {
+		return stream.limit(this.limit);
 	}
 
 	@Override
-	public Stream<Object> apply(final Stream<Object> stream) {
-		return stream.limit(this.limit);
+	public String toString() {
+		return String.format(".limit(%s)", Long.toString(this.limit));
 	}
 }

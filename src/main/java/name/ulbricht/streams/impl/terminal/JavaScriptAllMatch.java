@@ -1,29 +1,31 @@
 package name.ulbricht.streams.impl.terminal;
 
+import static name.ulbricht.streams.api.StreamOperationType.TERMINAL;
+
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.Operation;
-import name.ulbricht.streams.api.TerminalOperation;
+import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@Operation(name = "JavaScript All Match", description = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
+@StreamOperation(name = "JavaScript All Match", type = TERMINAL, description = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
 @Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript")
-public final class JavaScriptAllMatch extends JavaScriptOperation implements TerminalOperation<Object> {
+public final class JavaScriptAllMatch extends JavaScriptOperation implements Function<Stream<Object>, Object> {
 
 	public JavaScriptAllMatch() {
 		super("result = true;");
 	}
 
 	@Override
-	public String getSourceCode() {
-		return ".allMatch( /* please check source code for JavaScript execution */)";
+	public Object apply(final Stream<Object> stream) {
+		return stream.allMatch(e -> evalScript(Map.of("element", e)));
 	}
 
 	@Override
-	public Object apply(final Stream<Object> stream) {
-		return stream.allMatch(e -> evalScript(Map.of("element", e)));
+	public String toString() {
+		return ".allMatch( /* please check source code for JavaScript execution */)";
 	}
 }

@@ -1,20 +1,22 @@
 package name.ulbricht.streams.impl.intermediate;
 
+import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Operation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "Read Text File", input = Path.class, output = String.class)
+@StreamOperation(name = "Read Text File", type = INTERMEDIATE, input = Path.class, output = String.class)
 @Configuration(name = "encoding", type = ConfigurationType.ENCODING, displayName = "Encoding")
-public final class FileLines implements IntermediateOperation<Path, String> {
+public final class FileLines implements Function<Stream<Path>, Stream<String>> {
 
 	private Charset encoding = StandardCharsets.UTF_8;
 
@@ -27,19 +29,6 @@ public final class FileLines implements IntermediateOperation<Path, String> {
 	}
 
 	@Override
-	public String getSourceCode() {
-		return String.format("stream.flatMap(f -> {\n" //
-				+ "  try {\n" //
-				+ "    return Files.lines(f, Charset.forName(\"%s\"));\n" //
-				+ "  } catch (IOException ex) {\n" //
-				+ "    ex.printStackTrace();\n" //
-				+ "    return Stream.empty();\n" //
-				+ "  }\n"//
-				+ "})", //
-				this.encoding.name());
-	}
-
-	@Override
 	public Stream<String> apply(final Stream<Path> stream) {
 		return stream.flatMap(f -> {
 			try {
@@ -49,5 +38,18 @@ public final class FileLines implements IntermediateOperation<Path, String> {
 				return Stream.empty();
 			}
 		});
+	}
+
+	@Override
+	public String toString() {
+		return String.format("stream.flatMap(f -> {\n" //
+				+ "  try {\n" //
+				+ "    return Files.lines(f, Charset.forName(\"%s\"));\n" //
+				+ "  } catch (IOException ex) {\n" //
+				+ "    ex.printStackTrace();\n" //
+				+ "    return Stream.empty();\n" //
+				+ "  }\n"//
+				+ "})", //
+				this.encoding.name());
 	}
 }

@@ -1,20 +1,22 @@
 package name.ulbricht.streams.impl.source;
 
+import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
+
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Operation;
-import name.ulbricht.streams.api.SourceOperation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "Empty Stream")
-public final class Empty implements SourceOperation<Object> {
-
-	@Override
-	public String getSourceCode() {
-		return "Stream.empty()";
-	}
+@StreamOperation(name = "Empty Stream", type = SOURCE)
+public final class Empty implements Supplier<Stream<Object>> {
 
 	@Override
 	public Stream<Object> get() {
 		return Stream.empty();
+	}
+
+	@Override
+	public String toString() {
+		return "Stream.empty()";
 	}
 }

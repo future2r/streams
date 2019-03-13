@@ -1,20 +1,22 @@
 package name.ulbricht.streams.impl.intermediate;
 
+import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
+
+import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Operation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "System.out Peek")
-public final class SystemOutPeek implements IntermediateOperation<Object, Object> {
+@StreamOperation(name = "System.out Peek", type = INTERMEDIATE)
+public final class SystemOutPeek implements Function<Stream<Object>, Stream<Object>> {
 
-	@Override
-	public String getSourceCode() {
-		return ".peek(System.out::println)";
-	}
-	
 	@Override
 	public Stream<Object> apply(final Stream<Object> stream) {
 		return stream.peek(System.out::println);
+	}
+
+	@Override
+	public String toString() {
+		return ".peek(System.out::println)";
 	}
 }

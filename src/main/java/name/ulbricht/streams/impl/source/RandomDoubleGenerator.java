@@ -1,18 +1,20 @@
 package name.ulbricht.streams.impl.source;
 
+import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
+
 import java.util.Random;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
-import name.ulbricht.streams.api.Operation;
-import name.ulbricht.streams.api.SourceOperation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "Random Double Generator", output = Double.class)
+@StreamOperation(name = "Random Double Generator", type = SOURCE, output = Double.class)
 @Configuration(name = "number", type = ConfigurationType.LONG, displayName = "Number")
 @Configuration(name = "origin", type = ConfigurationType.DOUBLE, displayName = "Origin (inclusive)")
 @Configuration(name = "bound", type = ConfigurationType.DOUBLE, displayName = "Bound (exclusive)")
-public final class RandomDoubleGenerator implements SourceOperation<Double> {
+public final class RandomDoubleGenerator implements Supplier<Stream<Double>> {
 
 	private long number = 10;
 	private double origin = 0.1;
@@ -43,13 +45,13 @@ public final class RandomDoubleGenerator implements SourceOperation<Double> {
 	}
 
 	@Override
-	public String getSourceCode() {
-		return String.format("new Random().doubles(%s, %s, %s).boxed()", Long.toString(this.number),
-				Double.toString(this.origin), Double.toString(this.bound));
+	public Stream<Double> get() {
+		return new Random().doubles(this.number, this.origin, this.bound).boxed();
 	}
 
 	@Override
-	public Stream<Double> get() {
-		return new Random().doubles(this.number, this.origin, this.bound).boxed();
+	public String toString() {
+		return String.format("new Random().doubles(%s, %s, %s).boxed()", Long.toString(this.number),
+				Double.toString(this.origin), Double.toString(this.bound));
 	}
 }

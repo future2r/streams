@@ -1,20 +1,22 @@
 package name.ulbricht.streams.impl.intermediate;
 
+import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
+
+import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.IntermediateOperation;
-import name.ulbricht.streams.api.Operation;
+import name.ulbricht.streams.api.StreamOperation;
 
-@Operation(name = "UpperCase", input = String.class, output = String.class)
-public final class UpperCase implements IntermediateOperation<String, String> {
-
-	@Override
-	public String getSourceCode() {
-		return ".map(String::toUpperCase)";
-	}
+@StreamOperation(name = "UpperCase", type = INTERMEDIATE, input = String.class, output = String.class)
+public final class UpperCase implements Function<Stream<String>, Stream<String>> {
 
 	@Override
 	public Stream<String> apply(final Stream<String> stream) {
 		return stream.map(String::toUpperCase);
+	}
+
+	@Override
+	public String toString() {
+		return ".map(String::toUpperCase)";
 	}
 }
