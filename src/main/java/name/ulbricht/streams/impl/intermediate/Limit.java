@@ -5,7 +5,9 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.IntermediateOperation;
+import name.ulbricht.streams.api.Operation;
 
+@Operation(name = "Limit Elements")
 @Configuration(name = "limit", type = ConfigurationType.LONG, displayName = "Maximum Size")
 public final class Limit implements IntermediateOperation<Object, Object> {
 

@@ -2,8 +2,10 @@ package name.ulbricht.streams.impl.terminal;
 
 import java.util.stream.Stream;
 
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.TerminalOperation;
 
+@Operation(name = "Count Elements")
 public final class Count implements TerminalOperation<Object> {
 
 	@Override

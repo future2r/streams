@@ -34,6 +34,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 
 import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.api.StreamOperation;
 
 @SuppressWarnings("serial")
@@ -64,8 +65,8 @@ final class ConfigurationDialog extends JDialog {
 		contentPane.setBorder(new EmptyBorder(8, 8, 8, 8));
 		setContentPane(contentPane);
 
-		final var description = StreamOperation.getDescription(operation);
-		if (description != null) {
+		final var description = this.operation.getClass().getAnnotation(Operation.class).description();
+		if (!description.isEmpty()) {
 			final var descriptionLabel = new JLabel(
 					String.format("<html><p style='width: auto'>%s</p></html>", description));
 			descriptionLabel.setBorder(new EmptyBorder(4, 4, 4, 4));

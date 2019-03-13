@@ -9,7 +9,7 @@ import name.ulbricht.streams.api.IntermediateOperation;
 import name.ulbricht.streams.api.Operation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@Operation(name = "JavaScript FlatMap", description = "The current element is provided as 'element', the result must a Stream stored in 'result'.")
+@Operation(name = "JavaScript Flat Map", description = "The current element is provided as 'element', the result must a Stream stored in 'result'.")
 @Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript")
 public final class JavaScriptFlatMap extends JavaScriptOperation implements IntermediateOperation<Object, Object> {
 

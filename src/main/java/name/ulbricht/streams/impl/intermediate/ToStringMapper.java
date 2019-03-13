@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.IntermediateOperation;
 import name.ulbricht.streams.api.Operation;
 
-@Operation(name = "ToString Mapper", output=String.class)
+@Operation(name = "ToString Mapper", output = String.class)
 public final class ToStringMapper implements IntermediateOperation<Object, String> {
 
 	@Override

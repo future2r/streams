@@ -5,7 +5,9 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.IntermediateOperation;
+import name.ulbricht.streams.api.Operation;
 
+@Operation(name = "Skip Elements")
 @Configuration(name = "skip", type = ConfigurationType.LONG, displayName = "Skip Elements")
 public final class Skip implements IntermediateOperation<Object, Object> {
 

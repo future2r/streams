@@ -3,7 +3,9 @@ package name.ulbricht.streams.impl.intermediate;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.IntermediateOperation;
+import name.ulbricht.streams.api.Operation;
 
+@Operation(name = "Sequential")
 public final class Sequential implements IntermediateOperation<Object, Object> {
 
 	@Override

@@ -32,12 +32,9 @@ public interface StreamOperation {
 		final var operation = Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
 				.getAnnotation(Operation.class);
 
-		var name = operation != null ? operation.name() : "";
-		if (name.isEmpty())
-			name = streamOperationClass.getSimpleName();
-
-		final var input = operation != null ? operation.input().getSimpleName() : Object.class.getSimpleName();
-		final var output = operation != null ? operation.output().getSimpleName() : Object.class.getSimpleName();
+		final var name = operation.name();
+		final var input = operation.input().getSimpleName();
+		final var output = operation.output().getSimpleName();
 
 		if (SourceOperation.class.isAssignableFrom(streamOperationClass)) {
 			return String.format("%s (%s)", name, output);
@@ -47,20 +44,6 @@ public interface StreamOperation {
 			return String.format("%s (%s)", name, input);
 		}
 		throw new IllegalArgumentException("Cannot handle " + streamOperationClass);
-	}
-
-	static <T extends StreamOperation> String getDescription(final T streamOperation) {
-		return getDescription(Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass());
-	}
-
-	static <T extends StreamOperation> String getDescription(final Class<T> streamOperationClass) {
-		final var operation = Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
-				.getAnnotation(Operation.class);
-
-		final var description = operation != null ? operation.description() : "";
-		if (!description.isEmpty())
-			return description;
-		return null;
 	}
 
 	static boolean supportsConfiguration(final StreamOperation streamOperation) {
@@ -148,7 +131,8 @@ public interface StreamOperation {
 					.map(StreamOperation::loadClass) //
 					.filter(Optional::isPresent) //
 					.map(Optional::get) //
-					.filter(operationInterface::isAssignableFrom) //
+					.filter(c -> StreamOperation.class.isAssignableFrom(c)) //
+					.filter(c -> c.getAnnotation(Operation.class) != null) //
 					.sorted(Comparator
 							.comparing(c -> StreamOperation.getDisplayName((Class<? extends StreamOperation>) c))) //
 					.toArray(Class<?>[]::new);
