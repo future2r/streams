@@ -13,14 +13,14 @@ import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @StreamOperation(name = "JavaScript Filter", type = INTERMEDIATE, description = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
 @Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript")
-public final class JavaScriptFilter extends JavaScriptOperation implements Function<Stream<Object>, Stream<Object>> {
+public final class JavaScriptFilter<T> extends JavaScriptOperation implements Function<Stream<T>, Stream<T>> {
 
 	public JavaScriptFilter() {
 		super("result = true;");
 	}
 
 	@Override
-	public Stream<Object> apply(final Stream<Object> stream) {
+	public Stream<T> apply(final Stream<T> stream) {
 		return stream.filter(e -> evalScript(Map.of("element", e)));
 	}
 

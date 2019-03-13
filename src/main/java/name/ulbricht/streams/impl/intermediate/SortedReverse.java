@@ -9,11 +9,10 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Sorted Reverse", type = INTERMEDIATE, input = Comparable.class, output = Comparable.class)
-public final class SortedReverse
-		implements Function<Stream<Comparable<? super Comparable<?>>>, Stream<Comparable<? super Comparable<?>>>> {
+public final class SortedReverse<T extends Comparable<T>> implements Function<Stream<T>, Stream<T>> {
 
 	@Override
-	public Stream<Comparable<? super Comparable<?>>> apply(final Stream<Comparable<? super Comparable<?>>> stream) {
+	public Stream<T> apply(final Stream<T> stream) {
 		return stream.sorted(Comparator.reverseOrder());
 	}
 

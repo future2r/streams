@@ -9,10 +9,10 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Non Null Filter", type = INTERMEDIATE)
-public final class NonNullFilter implements Function<Stream<Object>, Stream<Object>> {
+public final class NonNullFilter<T> implements Function<Stream<T>, Stream<T>> {
 
 	@Override
-	public Stream<Object> apply(final Stream<Object> stream) {
+	public Stream<T> apply(final Stream<T> stream) {
 		return stream.filter(Objects::nonNull);
 	}
 

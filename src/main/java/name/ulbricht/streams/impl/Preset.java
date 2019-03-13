@@ -61,7 +61,7 @@ public enum Preset {
 	}
 
 	private static StreamOperationSet createDefault() {
-		return new StreamOperationSet(new Empty(), List.of(), new SystemOut());
+		return new StreamOperationSet(new Empty<>(), List.of(), new SystemOut<>());
 	}
 
 	private static StreamOperationSet createSplitWords() {
@@ -77,40 +77,42 @@ public enum Preset {
 	}
 
 	private static StreamOperationSet createFilterJavaScript() {
-		final var filter = new JavaScriptFilter();
+		final var filter = new JavaScriptFilter<>();
 		filter.setScript("result = element.indexOf('H') >= 0");
 
-		return new StreamOperationSet(new TextLines(), List.of(filter), new SystemOut());
+		return new StreamOperationSet(new TextLines(), List.of(filter), new SystemOut<>());
 	}
 
 	private static StreamOperationSet createSortLines() {
-		return new StreamOperationSet(new TextFileReader(), List.of(new Distinct(), new Sorted()),
+		return new StreamOperationSet(new TextFileReader(), List.of(new Distinct<>(), new Sorted<>()),
 				new TextFileWriter());
 	}
 
 	private static StreamOperationSet createCountLines() {
-		final var fileFilter = new JavaScriptFilter();
+		final var fileFilter = new JavaScriptFilter<>();
 		fileFilter.setScript("result = element.getFileName().toString().endsWith(\".java\")");
 
-		return new StreamOperationSet(new FindFiles(), List.of(fileFilter, new FileLines()), new Count());
+		return new StreamOperationSet(new FindFiles(), List.of(fileFilter, new FileLines()), new Count<>());
 	}
 
 	private static StreamOperationSet createGenerateNumbers() {
 		return new StreamOperationSet(new RandomIntegerGenerator(),
-				List.of(new Distinct(), new Sorted(), new ToStringMapper()), new TextFileWriter());
+				List.of(new Distinct<>(), new Sorted<>(), new ToStringMapper<>()), new TextFileWriter());
 	}
 
 	private static StreamOperationSet createSystemProperties() {
-		final var propertyReader = new JavaScriptMap();
+		final var propertyReader = new JavaScriptMap<>();
 		propertyReader.setScript("result = element + \":\\t\" + java.lang.System.getProperty(element);");
 
-		return new StreamOperationSet(new SystemProperties(), List.of(new Sorted(), propertyReader), new SystemOut());
+		return new StreamOperationSet(new SystemProperties(), List.of(new Sorted<>(), propertyReader),
+				new SystemOut<>());
 	}
 
 	private static StreamOperationSet createModulesAndPackages() {
-		JavaScriptFlatMap packageExtractor = new JavaScriptFlatMap();
+		JavaScriptFlatMap<Module, String> packageExtractor = new JavaScriptFlatMap<>();
 		packageExtractor.setScript("result = element.getPackages().stream();");
 
-		return new StreamOperationSet(new Modules(), List.of(new SystemOutPeek(), packageExtractor), new SystemOut());
+		return new StreamOperationSet(new Modules(), List.of(new SystemOutPeek<>(), packageExtractor),
+				new SystemOut<>());
 	}
 }

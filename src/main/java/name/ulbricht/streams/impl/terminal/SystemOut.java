@@ -8,10 +8,10 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "System.out", type = TERMINAL)
-public final class SystemOut implements Function<Stream<Object>, Object> {
+public final class SystemOut<T> implements Function<Stream<T>, Void> {
 
 	@Override
-	public Object apply(final Stream<Object> stream) {
+	public Void apply(final Stream<T> stream) {
 		stream.forEach(System.out::println);
 		return null;
 	}

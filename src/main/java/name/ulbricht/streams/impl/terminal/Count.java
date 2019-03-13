@@ -8,10 +8,10 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Count Elements", type = TERMINAL)
-public final class Count implements Function<Stream<Object>, Object> {
+public final class Count<T> implements Function<Stream<T>, Long> {
 
 	@Override
-	public Object apply(final Stream<Object> stream) {
+	public Long apply(final Stream<T> stream) {
 		return stream.count();
 	}
 

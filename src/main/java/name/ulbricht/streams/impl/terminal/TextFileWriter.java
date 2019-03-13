@@ -20,7 +20,7 @@ import name.ulbricht.streams.api.StreamOperation;
 @StreamOperation(name = "Text File Writer", type = TERMINAL, input = String.class)
 @Configuration(name = "file", type = ConfigurationType.FILE, displayName = "Current File")
 @Configuration(name = "encoding", type = ConfigurationType.ENCODING, displayName = "Encoding")
-public final class TextFileWriter implements Function<Stream<String>, Object> {
+public final class TextFileWriter implements Function<Stream<String>, Void> {
 
 	private Path file = Paths.get(System.getProperty("user.dir"), "output.txt");
 	private Charset encoding = StandardCharsets.UTF_8;
@@ -42,7 +42,7 @@ public final class TextFileWriter implements Function<Stream<String>, Object> {
 	}
 
 	@Override
-	public Object apply(final Stream<String> stream) {
+	public Void apply(final Stream<String> stream) {
 		stream.map(s -> s + '\n').forEach(s -> {
 			try {
 				Files.writeString(this.file, s, this.encoding, StandardOpenOption.CREATE, StandardOpenOption.APPEND);

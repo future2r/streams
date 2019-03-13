@@ -13,14 +13,14 @@ import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @StreamOperation(name = "JavaScript Sorted", type = INTERMEDIATE, description = "Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
 @Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript")
-public final class JavaScriptSorted extends JavaScriptOperation implements Function<Stream<Object>, Stream<Object>> {
+public final class JavaScriptSorted<T> extends JavaScriptOperation implements Function<Stream<T>, Stream<T>> {
 
 	public JavaScriptSorted() {
 		super("result = java.util.Objects.compare(element1, element2, java.util.Comparator.naturalOrder());");
 	}
 
 	@Override
-	public Stream<Object> apply(final Stream<Object> stream) {
+	public Stream<T> apply(final Stream<T> stream) {
 		return stream.sorted(this::compare);
 	}
 

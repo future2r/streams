@@ -12,7 +12,7 @@ import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "String Formatter", type = INTERMEDIATE, output = String.class)
 @Configuration(name = "format", type = ConfigurationType.STRING, displayName = "Format Pattern")
-public final class StringFormatter implements Function<Stream<Object>, Stream<String>> {
+public final class StringFormatter<T> implements Function<Stream<T>, Stream<String>> {
 
 	private String format = "%s";
 
@@ -25,7 +25,7 @@ public final class StringFormatter implements Function<Stream<Object>, Stream<St
 	}
 
 	@Override
-	public Stream<String> apply(final Stream<Object> stream) {
+	public Stream<String> apply(final Stream<T> stream) {
 		return stream.map(e -> String.format(this.format, e));
 	}
 

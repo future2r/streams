@@ -11,7 +11,7 @@ import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Skip Elements", type = INTERMEDIATE)
 @Configuration(name = "skip", type = ConfigurationType.LONG, displayName = "Skip Elements")
-public final class Skip implements Function<Stream<Object>, Stream<Object>> {
+public final class Skip<T> implements Function<Stream<T>, Stream<T>> {
 
 	private long skip = 5;
 
@@ -24,7 +24,7 @@ public final class Skip implements Function<Stream<Object>, Stream<Object>> {
 	}
 
 	@Override
-	public Stream<Object> apply(final Stream<Object> stream) {
+	public Stream<T> apply(final Stream<T> stream) {
 		return stream.skip(this.skip);
 	}
 

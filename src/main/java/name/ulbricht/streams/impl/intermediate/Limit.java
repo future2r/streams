@@ -11,7 +11,7 @@ import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Limit Elements", type = INTERMEDIATE)
 @Configuration(name = "limit", type = ConfigurationType.LONG, displayName = "Maximum Size")
-public final class Limit implements Function<Stream<Object>, Stream<Object>> {
+public final class Limit<T> implements Function<Stream<T>, Stream<T>> {
 
 	private long limit = 5;
 
@@ -24,7 +24,7 @@ public final class Limit implements Function<Stream<Object>, Stream<Object>> {
 	}
 
 	@Override
-	public Stream<Object> apply(final Stream<Object> stream) {
+	public Stream<T> apply(final Stream<T> stream) {
 		return stream.limit(this.limit);
 	}
 

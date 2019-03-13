@@ -3,6 +3,7 @@ package name.ulbricht.streams.impl.terminal;
 import static name.ulbricht.streams.api.StreamOperationType.TERMINAL;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -13,14 +14,14 @@ import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @StreamOperation(name = "JavaScript Maximum", type = TERMINAL, description = "Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
 @Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript")
-public final class JavaScriptMax extends JavaScriptOperation implements Function<Stream<Object>, Object> {
+public final class JavaScriptMax<T> extends JavaScriptOperation implements Function<Stream<T>, Optional<T>> {
 
 	public JavaScriptMax() {
 		super("result = java.util.Objects.compare(element1, element2, java.util.Comparator.naturalOrder());");
 	}
 
 	@Override
-	public Object apply(final Stream<Object> stream) {
+	public Optional<T> apply(final Stream<T> stream) {
 		return stream.max(this::compare);
 	}
 

@@ -9,10 +9,10 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Find Any", type = TERMINAL)
-public final class FindAny implements Function<Stream<Object>, Object> {
+public final class FindAny<T> implements Function<Stream<T>, Optional<T>> {
 
 	@Override
-	public Optional<Object> apply(final Stream<Object> stream) {
+	public Optional<T> apply(final Stream<T> stream) {
 		return stream.findAny();
 	}
 

@@ -13,14 +13,14 @@ import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @StreamOperation(name = "JavaScript For Each", type = TERMINAL, description = "The current element is provided as 'element'.")
 @Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript")
-public final class JavaScriptForEach extends JavaScriptOperation implements Function<Stream<Object>, Object> {
+public final class JavaScriptForEach<T> extends JavaScriptOperation implements Function<Stream<T>, Void> {
 
 	public JavaScriptForEach() {
 		super("java.lang.System.out.println(element);");
 	}
 
 	@Override
-	public Object apply(final Stream<Object> stream) {
+	public Void apply(final Stream<T> stream) {
 		stream.forEach(e -> evalScript(Map.of("element", e)));
 		return null;
 	}

@@ -8,10 +8,10 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Empty Stream", type = SOURCE)
-public final class Empty implements Supplier<Stream<Object>> {
+public final class Empty<T> implements Supplier<Stream<T>> {
 
 	@Override
-	public Stream<Object> get() {
+	public Stream<T> get() {
 		return Stream.empty();
 	}
 

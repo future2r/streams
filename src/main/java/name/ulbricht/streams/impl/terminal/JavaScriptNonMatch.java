@@ -13,14 +13,14 @@ import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @StreamOperation(name = "JavaScript None Match", type = TERMINAL, description = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
 @Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript")
-public final class JavaScriptNonMatch extends JavaScriptOperation implements Function<Stream<Object>, Object> {
+public final class JavaScriptNonMatch<T> extends JavaScriptOperation implements Function<Stream<T>, Boolean> {
 
 	public JavaScriptNonMatch() {
 		super("result = true;");
 	}
 
 	@Override
-	public Object apply(final Stream<Object> stream) {
+	public Boolean apply(final Stream<T> stream) {
 		return stream.noneMatch(e -> evalScript(Map.of("element", e)));
 	}
 

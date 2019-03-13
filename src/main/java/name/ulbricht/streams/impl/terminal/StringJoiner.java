@@ -15,7 +15,7 @@ import name.ulbricht.streams.api.StreamOperation;
 @Configuration(name = "delimiter", type = ConfigurationType.STRING, displayName = "Delimiter")
 @Configuration(name = "prefix", type = ConfigurationType.STRING, displayName = "Prefix")
 @Configuration(name = "suffix", type = ConfigurationType.STRING, displayName = "Suffix")
-public final class StringJoiner implements Function<Stream<String>, Object> {
+public final class StringJoiner implements Function<Stream<String>, String> {
 
 	private String delimiter = ",";
 	private String prefix = "{";
@@ -46,7 +46,7 @@ public final class StringJoiner implements Function<Stream<String>, Object> {
 	}
 
 	@Override
-	public Object apply(final Stream<String> stream) {
+	public String apply(final Stream<String> stream) {
 		return stream.collect(Collectors.joining(this.delimiter, this.prefix, this.suffix));
 	}
 

@@ -13,14 +13,14 @@ import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @StreamOperation(name = "JavaScript All Match", type = TERMINAL, description = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
 @Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript")
-public final class JavaScriptAllMatch extends JavaScriptOperation implements Function<Stream<Object>, Object> {
+public final class JavaScriptAllMatch<T> extends JavaScriptOperation implements Function<Stream<T>, Boolean> {
 
 	public JavaScriptAllMatch() {
 		super("result = true;");
 	}
 
 	@Override
-	public Object apply(final Stream<Object> stream) {
+	public Boolean apply(final Stream<T> stream) {
 		return stream.allMatch(e -> evalScript(Map.of("element", e)));
 	}
 

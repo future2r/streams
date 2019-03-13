@@ -8,10 +8,10 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "System.out Peek", type = INTERMEDIATE)
-public final class SystemOutPeek implements Function<Stream<Object>, Stream<Object>> {
+public final class SystemOutPeek<T> implements Function<Stream<T>, Stream<T>> {
 
 	@Override
-	public Stream<Object> apply(final Stream<Object> stream) {
+	public Stream<T> apply(final Stream<T> stream) {
 		return stream.peek(System.out::println);
 	}
 

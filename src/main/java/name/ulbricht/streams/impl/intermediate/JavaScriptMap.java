@@ -13,14 +13,14 @@ import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @StreamOperation(name = "JavaScript Map", type = INTERMEDIATE, description = "The current element is provided as 'element', the result must stored in 'result'.")
 @Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript")
-public final class JavaScriptMap extends JavaScriptOperation implements Function<Stream<Object>, Stream<Object>> {
+public final class JavaScriptMap<I, O> extends JavaScriptOperation implements Function<Stream<I>, Stream<O>> {
 
 	public JavaScriptMap() {
 		super("result = element.getClass().getSimpleName();");
 	}
 
 	@Override
-	public Stream<Object> apply(final Stream<Object> stream) {
+	public Stream<O> apply(final Stream<I> stream) {
 		return stream.map(e -> evalScript(Map.of("element", e)));
 	}
 

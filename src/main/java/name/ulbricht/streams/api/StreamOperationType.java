@@ -7,19 +7,19 @@ public enum StreamOperationType {
 
 	/**
 	 * Marks a stream operations as a stream source. The operation must be a
-	 * {@code Supplier<Stream>}.
+	 * {@code Supplier<Stream<?>>}.
 	 */
 	SOURCE,
 
 	/**
 	 * Marks a stream operations as a intermediate operation. The operation must be
-	 * a {@code Function<Stream, Stream>}.
+	 * a {@code Function<Stream<?>, Stream<?>>}.
 	 */
 	INTERMEDIATE,
 
 	/**
 	 * Marks a stream operations as a terminal operation. The operation must be a
-	 * {@code Function<Stream, Object>}.
+	 * {@code Function<Stream<?>, ?>}.
 	 */
 	TERMINAL;
 

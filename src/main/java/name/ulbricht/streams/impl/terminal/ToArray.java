@@ -8,11 +8,12 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "ToArray", type = TERMINAL)
-public final class ToArray implements Function<Stream<Object>, Object> {
+public final class ToArray<T> implements Function<Stream<T>, T[]> {
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object apply(final Stream<Object> stream) {
-		return stream.toArray();
+	public T[] apply(final Stream<T> stream) {
+		return (T[]) stream.toArray();
 	}
 
 	@Override
