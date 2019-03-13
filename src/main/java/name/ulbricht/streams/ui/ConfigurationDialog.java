@@ -52,6 +52,7 @@ final class ConfigurationDialog extends JDialog {
 	private boolean result;
 	private final Object operation;
 	private final List<Runnable> applyFunctions = new ArrayList<>();
+	private int configurationRow;
 
 	ConfigurationDialog(final Window owner, final Object operation) {
 		super(owner);
@@ -76,11 +77,9 @@ final class ConfigurationDialog extends JDialog {
 		final var configurationPanel = new JPanel(new GridBagLayout());
 		configurationPanel.setOpaque(false);
 
-		final var configurations = StreamOperations.getConfigurations(this.operation);
-		var row = 0;
-		for (final var config : configurations) {
-			row = addConfiguration(row, configurationPanel, config);
-		}
+		StreamOperations.getConfigurations(this.operation).entrySet().stream()
+				.sorted((e1, e2) -> Integer.compare(e1.getValue().ordinal(), e2.getValue().ordinal()))
+				.forEach(e -> addConfiguration(configurationPanel, e.getKey(), e.getValue()));
 
 		contentPane.add(configurationPanel, BorderLayout.CENTER);
 
@@ -116,127 +115,121 @@ final class ConfigurationDialog extends JDialog {
 		});
 	}
 
-	private int addConfiguration(final int row, final JPanel panel, final Configuration configuration) {
+	private int addConfiguration(final JPanel panel, final String name, final Configuration configuration) {
 		var displayName = configuration.displayName();
 		if (displayName.isEmpty())
-			displayName = configuration.name();
+			displayName = name;
 
 		final var label = new JLabel(displayName + ':');
 
 		switch (configuration.type()) {
 		case STRING: {
 			final var textField = new JTextField(30);
-			textField.setText(StreamOperations.getConfigurationValue(this.operation, configuration));
-			applyFunctions.add(
-					() -> StreamOperations.setConfigurationValue(this.operation, configuration, textField.getText()));
+			textField.setText(StreamOperations.getConfigurationValue(name, this.operation));
+			applyFunctions.add(() -> StreamOperations.setConfigurationValue(name, this.operation, textField.getText()));
 
-			return addComponent(panel, row, label, textField);
+			return addComponent(panel, label, textField);
 		}
 		case MULTILINE_STRING: {
 			final var textArea = new JTextArea(10, 50);
-			textArea.setText(StreamOperations.getConfigurationValue(this.operation, configuration));
+			textArea.setText(StreamOperations.getConfigurationValue(name, this.operation));
 			textArea.setCaretPosition(0);
-			applyFunctions.add(
-					() -> StreamOperations.setConfigurationValue(this.operation, configuration, textArea.getText()));
+			applyFunctions.add(() -> StreamOperations.setConfigurationValue(name, this.operation, textArea.getText()));
 
-			return addScrollableComponent(panel, row, label, textArea);
+			return addScrollableComponent(panel, label, textArea);
 		}
 		case INTEGER: {
 			final var spinner = new JSpinner(new SpinnerNumberModel(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
-			spinner.setValue(StreamOperations.getConfigurationValue(this.operation, configuration));
-			applyFunctions.add(() -> StreamOperations.setConfigurationValue(this.operation, configuration,
+			spinner.setValue(StreamOperations.getConfigurationValue(name, this.operation));
+			applyFunctions.add(() -> StreamOperations.setConfigurationValue(name, this.operation,
 					((Number) spinner.getValue()).intValue()));
 
-			return addComponent(panel, row, label, spinner);
+			return addComponent(panel, label, spinner);
 		}
 		case LONG: {
 			final var spinner = new JSpinner(new SpinnerNumberModel(0L, Long.MIN_VALUE, Long.MAX_VALUE, 1L));
-			spinner.setValue(StreamOperations.getConfigurationValue(this.operation, configuration));
-			applyFunctions.add(() -> StreamOperations.setConfigurationValue(this.operation, configuration,
+			spinner.setValue(StreamOperations.getConfigurationValue(name, this.operation));
+			applyFunctions.add(() -> StreamOperations.setConfigurationValue(name, this.operation,
 					((Number) spinner.getValue()).longValue()));
 
-			return addComponent(panel, row, label, spinner);
+			return addComponent(panel, label, spinner);
 		}
 		case DOUBLE: {
 			final var spinner = new JSpinner(
 					new SpinnerNumberModel(0.0, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1.0));
-			spinner.setValue(StreamOperations.getConfigurationValue(this.operation, configuration));
-			applyFunctions.add(() -> StreamOperations.setConfigurationValue(this.operation, configuration,
+			spinner.setValue(StreamOperations.getConfigurationValue(name, this.operation));
+			applyFunctions.add(() -> StreamOperations.setConfigurationValue(name, this.operation,
 					((Number) spinner.getValue()).doubleValue()));
 
-			return addComponent(panel, row, label, spinner);
+			return addComponent(panel, label, spinner);
 		}
 		case BOOLEAN: {
 			final var checkBox = new JCheckBox();
-			checkBox.setSelected(StreamOperations.getConfigurationValue(this.operation, configuration));
-			applyFunctions.add(
-					() -> StreamOperations.setConfigurationValue(this.operation, configuration, checkBox.isSelected()));
+			checkBox.setSelected(StreamOperations.getConfigurationValue(name, this.operation));
+			applyFunctions
+					.add(() -> StreamOperations.setConfigurationValue(name, this.operation, checkBox.isSelected()));
 
-			return addComponent(panel, row, label, checkBox);
+			return addComponent(panel, label, checkBox);
 		}
 		case DIRECTORY: {
 			final var textField = new JTextField(30);
 			textField.setEditable(false);
 			final var button = new JButton(Messages.getString("ConfigurationDialog.browse"));
 			button.addActionListener(e -> browseDirectory(textField));
-			textField.setText(
-					Objects.toString(StreamOperations.getConfigurationValue(this.operation, configuration), ""));
-			applyFunctions.add(() -> StreamOperations.setConfigurationValue(this.operation, configuration,
-					Paths.get(textField.getText())));
+			textField.setText(Objects.toString(StreamOperations.getConfigurationValue(name, this.operation), ""));
+			applyFunctions.add(
+					() -> StreamOperations.setConfigurationValue(name, this.operation, Paths.get(textField.getText())));
 
-			return addComponent(panel, row, label, textField, button);
+			return addComponent(panel, label, textField, button);
 		}
 		case FILE: {
 			final var textField = new JTextField(30);
 			textField.setEditable(false);
 			final var button = new JButton(Messages.getString("ConfigurationDialog.browse"));
 			button.addActionListener(e -> browseFile(textField));
-			textField.setText(
-					Objects.toString(StreamOperations.getConfigurationValue(this.operation, configuration), ""));
-			applyFunctions.add(() -> StreamOperations.setConfigurationValue(this.operation, configuration,
-					Paths.get(textField.getText())));
+			textField.setText(Objects.toString(StreamOperations.getConfigurationValue(name, this.operation), ""));
+			applyFunctions.add(
+					() -> StreamOperations.setConfigurationValue(name, this.operation, Paths.get(textField.getText())));
 
-			return addComponent(panel, row, label, textField, button);
+			return addComponent(panel, label, textField, button);
 		}
 		case ENCODING: {
 			final var comboBox = new JComboBox<String>(Charset.availableCharsets().keySet().toArray(new String[0]));
-			final Charset charset = StreamOperations.getConfigurationValue(this.operation, configuration);
+			final Charset charset = StreamOperations.getConfigurationValue(name, this.operation);
 			if (charset != null)
 				comboBox.setSelectedItem(charset.name());
-			applyFunctions.add(() -> StreamOperations.setConfigurationValue(this.operation, configuration,
+			applyFunctions.add(() -> StreamOperations.setConfigurationValue(name, this.operation,
 					Charset.forName((String) comboBox.getSelectedItem())));
 
-			return addComponent(panel, row, label, comboBox);
+			return addComponent(panel, label, comboBox);
 		}
 		default:
 			throw new IllegalArgumentException(configuration.type().name());
 		}
 	}
 
-	private int addComponent(final JPanel panel, final int row, final JLabel label, final JComponent component) {
-		return addComponent(panel, row, label, component, null);
+	private int addComponent(final JPanel panel, final JLabel label, final JComponent component) {
+		return addComponent(panel, label, component, null);
 	}
 
-	private int addComponent(final JPanel panel, final int row, final JLabel label, final JComponent component,
-			final JButton button) {
-		panel.add(label, new GridBagConstraints(0, row, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE,
-				new Insets(4, 4, 4, 4), 0, 0));
-		panel.add(component, new GridBagConstraints(1, row, 1, 1, 1, 0, GridBagConstraints.WEST,
+	private int addComponent(final JPanel panel, final JLabel label, final JComponent component, final JButton button) {
+		panel.add(label, new GridBagConstraints(0, this.configurationRow, 1, 1, 0, 0, GridBagConstraints.WEST,
+				GridBagConstraints.NONE, new Insets(4, 4, 4, 4), 0, 0));
+		panel.add(component, new GridBagConstraints(1, this.configurationRow, 1, 1, 1, 0, GridBagConstraints.WEST,
 				GridBagConstraints.BOTH, new Insets(4, 4, 4, 4), 0, 0));
 		if (button != null) {
-			panel.add(button, new GridBagConstraints(2, row, 1, 1, 0, 0, GridBagConstraints.CENTER,
+			panel.add(button, new GridBagConstraints(2, this.configurationRow, 1, 1, 0, 0, GridBagConstraints.CENTER,
 					GridBagConstraints.NONE, new Insets(4, 4, 4, 4), 0, 0));
 		}
-		return row + 1;
+		return this.configurationRow++;
 	}
 
-	private int addScrollableComponent(final JPanel panel, final int row, final JLabel label,
-			final JComponent component) {
-		panel.add(label, new GridBagConstraints(0, row, 2, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE,
-				new Insets(4, 4, 0, 4), 0, 0));
-		panel.add(new JScrollPane(component), new GridBagConstraints(0, row + 1, 2, 1, 1, 1, GridBagConstraints.WEST,
-				GridBagConstraints.BOTH, new Insets(4, 4, 4, 4), 0, 0));
-		return row + 2;
+	private int addScrollableComponent(final JPanel panel, final JLabel label, final JComponent component) {
+		panel.add(label, new GridBagConstraints(0, this.configurationRow, 2, 1, 0, 0, GridBagConstraints.WEST,
+				GridBagConstraints.NONE, new Insets(4, 4, 0, 4), 0, 0));
+		panel.add(new JScrollPane(component), new GridBagConstraints(0, this.configurationRow + 1, 2, 1, 1, 1,
+				GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(4, 4, 4, 4), 0, 0));
+		return this.configurationRow += 2;
 	}
 
 	private void browseDirectory(final JTextField textField) {

@@ -18,27 +18,27 @@ import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Text File Writer", type = TERMINAL, input = String.class)
-@Configuration(name = "file", type = ConfigurationType.FILE, displayName = "Current File")
-@Configuration(name = "encoding", type = ConfigurationType.ENCODING, displayName = "Encoding")
 public final class TextFileWriter implements Function<Stream<String>, Void> {
 
 	private Path file = Paths.get(System.getProperty("user.dir"), "output.txt");
 	private Charset encoding = StandardCharsets.UTF_8;
 
-	public Charset getEncoding() {
-		return encoding;
-	}
-
-	public void setEncoding(final Charset encoding) {
-		this.encoding = encoding;
-	}
-
+	@Configuration(type = ConfigurationType.FILE, displayName = "Current File", ordinal = 1)
 	public Path getFile() {
 		return this.file;
 	}
 
 	public void setFile(Path file) {
 		this.file = file;
+	}
+
+	@Configuration(type = ConfigurationType.ENCODING, displayName = "Encoding", ordinal = 2)
+	public Charset getEncoding() {
+		return encoding;
+	}
+
+	public void setEncoding(final Charset encoding) {
+		this.encoding = encoding;
 	}
 
 	@Override

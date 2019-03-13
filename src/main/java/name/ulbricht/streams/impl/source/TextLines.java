@@ -11,7 +11,6 @@ import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Text Lines", type = SOURCE, output = String.class)
-@Configuration(name = "text", type = ConfigurationType.MULTILINE_STRING, displayName = "Text Lines")
 public final class TextLines implements Supplier<Stream<String>> {
 
 	private String text = "Hello World!\n" // en
@@ -21,6 +20,7 @@ public final class TextLines implements Supplier<Stream<String>> {
 			+ "Salve, mondo!\n" // it
 			+ "qo' vIvan!"; // tlh
 
+	@Configuration(type = ConfigurationType.MULTILINE_STRING, displayName = "Text Lines")
 	public String getText() {
 		return this.text;
 	}

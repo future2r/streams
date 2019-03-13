@@ -8,6 +8,8 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperationException;
 
 public abstract class JavaScriptOperation {
@@ -21,6 +23,7 @@ public abstract class JavaScriptOperation {
 		this.script = Objects.requireNonNull(script, "script must not be null");
 	}
 
+	@Configuration(type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript")
 	public final String getScript() {
 		return this.script;
 	}

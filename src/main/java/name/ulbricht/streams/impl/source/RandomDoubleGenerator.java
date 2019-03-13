@@ -11,15 +11,13 @@ import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Random Double Generator", type = SOURCE, output = Double.class)
-@Configuration(name = "number", type = ConfigurationType.LONG, displayName = "Number")
-@Configuration(name = "origin", type = ConfigurationType.DOUBLE, displayName = "Origin (inclusive)")
-@Configuration(name = "bound", type = ConfigurationType.DOUBLE, displayName = "Bound (exclusive)")
 public final class RandomDoubleGenerator implements Supplier<Stream<Double>> {
 
 	private long number = 10;
 	private double origin = 0.1;
 	private double bound = 0.5;
 
+	@Configuration(type = ConfigurationType.LONG, displayName = "Number", ordinal = 1)
 	public long getNumber() {
 		return this.number;
 	}
@@ -28,6 +26,7 @@ public final class RandomDoubleGenerator implements Supplier<Stream<Double>> {
 		this.number = number;
 	}
 
+	@Configuration(type = ConfigurationType.DOUBLE, displayName = "Origin (inclusive)", ordinal = 2)
 	public double getOrigin() {
 		return this.origin;
 	}
@@ -36,6 +35,7 @@ public final class RandomDoubleGenerator implements Supplier<Stream<Double>> {
 		this.origin = origin;
 	}
 
+	@Configuration(type = ConfigurationType.DOUBLE, displayName = "Bound (exclusive)", ordinal = 3)
 	public double getBound() {
 		return this.bound;
 	}

@@ -11,11 +11,11 @@ import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Characters", type = SOURCE, output = Integer.class)
-@Configuration(name = "text", type = ConfigurationType.STRING, displayName = "Text")
 public final class Characters implements Supplier<Stream<Integer>> {
 
 	private String text = "Hello World!";
 
+	@Configuration(type = ConfigurationType.STRING, displayName = "Text")
 	public String getText() {
 		return this.text;
 	}

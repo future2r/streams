@@ -11,11 +11,11 @@ import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Regular Expression Splitter", type = INTERMEDIATE, input = String.class, output = String.class)
-@Configuration(name = "pattern", type = ConfigurationType.STRING, displayName = "Split Pattern")
 public final class RegExSplitter implements Function<Stream<String>, Stream<String>> {
 
 	private String pattern = "\\s";
 
+	@Configuration(type = ConfigurationType.STRING, displayName = "Split Pattern")
 	public String getPattern() {
 		return this.pattern;
 	}

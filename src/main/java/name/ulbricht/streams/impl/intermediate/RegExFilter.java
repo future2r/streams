@@ -12,11 +12,11 @@ import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Regular Expression Filter", type = INTERMEDIATE, input = String.class, output = String.class)
-@Configuration(name = "pattern", type = ConfigurationType.STRING, displayName = "Filter Pattern")
 public final class RegExFilter implements Function<Stream<String>, Stream<String>> {
 
 	private String pattern = ".*";
 
+	@Configuration(type = ConfigurationType.STRING, displayName = "Filter Pattern")
 	public String getPattern() {
 		return this.pattern;
 	}

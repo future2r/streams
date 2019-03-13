@@ -11,15 +11,13 @@ import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Integer Range", type = SOURCE, output = Integer.class)
-@Configuration(name = "start", type = ConfigurationType.INTEGER, displayName = "Start")
-@Configuration(name = "end", type = ConfigurationType.INTEGER, displayName = "End")
-@Configuration(name = "closed", type = ConfigurationType.BOOLEAN, displayName = "Range is closed")
 public final class IntegerRange implements Supplier<Stream<Integer>> {
 
 	private int start = 0;
 	private int end = 100;
 	private boolean closed = false;
 
+	@Configuration(type = ConfigurationType.INTEGER, displayName = "Start", ordinal = 1)
 	public int getStart() {
 		return start;
 	}
@@ -28,6 +26,7 @@ public final class IntegerRange implements Supplier<Stream<Integer>> {
 		this.start = start;
 	}
 
+	@Configuration(type = ConfigurationType.INTEGER, displayName = "End", ordinal = 2)
 	public int getEnd() {
 		return end;
 	}
@@ -36,6 +35,7 @@ public final class IntegerRange implements Supplier<Stream<Integer>> {
 		this.end = end;
 	}
 
+	@Configuration(type = ConfigurationType.BOOLEAN, displayName = "Range is closed", ordinal = 3)
 	public boolean isClosed() {
 		return closed;
 	}

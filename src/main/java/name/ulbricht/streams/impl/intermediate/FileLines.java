@@ -15,11 +15,11 @@ import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Read Text File", type = INTERMEDIATE, input = Path.class, output = String.class)
-@Configuration(name = "encoding", type = ConfigurationType.ENCODING, displayName = "Encoding")
 public final class FileLines implements Function<Stream<Path>, Stream<String>> {
 
 	private Charset encoding = StandardCharsets.UTF_8;
 
+	@Configuration(type = ConfigurationType.ENCODING, displayName = "Encoding")
 	public Charset getEncoding() {
 		return encoding;
 	}

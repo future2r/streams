@@ -11,15 +11,13 @@ import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Random Integer Generator", type = SOURCE, output = Integer.class)
-@Configuration(name = "number", type = ConfigurationType.LONG, displayName = "Number")
-@Configuration(name = "origin", type = ConfigurationType.INTEGER, displayName = "Origin (inclusive)")
-@Configuration(name = "bound", type = ConfigurationType.INTEGER, displayName = "Bound (exclusive)")
 public final class RandomIntegerGenerator implements Supplier<Stream<Integer>> {
 
 	private long number = 10;
 	private int origin = 0;
 	private int bound = 100;
 
+	@Configuration(type = ConfigurationType.LONG, displayName = "Number", ordinal = 1)
 	public long getNumber() {
 		return this.number;
 	}
@@ -28,6 +26,7 @@ public final class RandomIntegerGenerator implements Supplier<Stream<Integer>> {
 		this.number = number;
 	}
 
+	@Configuration(type = ConfigurationType.INTEGER, displayName = "Origin (inclusive)", ordinal = 2)
 	public int getOrigin() {
 		return this.origin;
 	}
@@ -36,6 +35,7 @@ public final class RandomIntegerGenerator implements Supplier<Stream<Integer>> {
 		this.origin = origin;
 	}
 
+	@Configuration(type = ConfigurationType.INTEGER, displayName = "Bound (exclusive)", ordinal = 3)
 	public int getBound() {
 		return this.bound;
 	}

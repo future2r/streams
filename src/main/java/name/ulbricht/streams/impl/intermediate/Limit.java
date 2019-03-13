@@ -10,11 +10,11 @@ import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Limit Elements", type = INTERMEDIATE)
-@Configuration(name = "limit", type = ConfigurationType.LONG, displayName = "Maximum Size")
 public final class Limit<T> implements Function<Stream<T>, Stream<T>> {
 
 	private long limit = 5;
 
+	@Configuration(type = ConfigurationType.LONG, displayName = "Maximum Size")
 	public long getLimit() {
 		return this.limit;
 	}

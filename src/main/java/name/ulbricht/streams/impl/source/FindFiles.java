@@ -15,11 +15,11 @@ import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Find Files", type = SOURCE, output = Path.class)
-@Configuration(name = "directory", type = ConfigurationType.DIRECTORY, displayName = "Directory")
 public final class FindFiles implements Supplier<Stream<Path>> {
 
 	private Path directory = Paths.get(System.getProperty("user.dir"));
 
+	@Configuration(type = ConfigurationType.DIRECTORY, displayName = "Directory")
 	public Path getDirectory() {
 		return this.directory;
 	}

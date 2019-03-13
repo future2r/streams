@@ -10,11 +10,11 @@ import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Skip Elements", type = INTERMEDIATE)
-@Configuration(name = "skip", type = ConfigurationType.LONG, displayName = "Skip Elements")
 public final class Skip<T> implements Function<Stream<T>, Stream<T>> {
 
 	private long skip = 5;
 
+	@Configuration(type = ConfigurationType.LONG, displayName = "Skip Elements")
 	public long getSkip() {
 		return this.skip;
 	}

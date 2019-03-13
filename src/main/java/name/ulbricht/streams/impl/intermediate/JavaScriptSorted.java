@@ -6,13 +6,10 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Configuration;
-import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @StreamOperation(name = "JavaScript Sorted", type = INTERMEDIATE, description = "Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
-@Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript")
 public final class JavaScriptSorted<T> extends JavaScriptOperation implements Function<Stream<T>, Stream<T>> {
 
 	public JavaScriptSorted() {

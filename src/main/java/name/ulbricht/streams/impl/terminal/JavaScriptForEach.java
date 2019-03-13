@@ -6,13 +6,10 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Configuration;
-import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @StreamOperation(name = "JavaScript For Each", type = TERMINAL, description = "The current element is provided as 'element'.")
-@Configuration(name = "script", type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript")
 public final class JavaScriptForEach<T> extends JavaScriptOperation implements Function<Stream<T>, Void> {
 
 	public JavaScriptForEach() {
