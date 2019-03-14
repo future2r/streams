@@ -9,16 +9,16 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@StreamOperation(name = "JavaScript Filter", type = INTERMEDIATE, description = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
+@StreamOperation(name = "JavaScript Filter", type = INTERMEDIATE, description = "The current element is provided as 'element', the result must a boolean value stored in 'pass'.")
 public final class JavaScriptFilter<T> extends JavaScriptOperation implements Function<Stream<T>, Stream<T>> {
 
 	public JavaScriptFilter() {
-		super("result = true;");
+		super("pass = true;");
 	}
 
 	@Override
 	public Stream<T> apply(final Stream<T> stream) {
-		return stream.filter(e -> evalScript(Map.of("element", e)));
+		return stream.filter(e -> evalScript(Map.of("element", e), "pass"));
 	}
 
 	@Override

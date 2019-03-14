@@ -31,6 +31,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import name.ulbricht.streams.api.Configuration;
@@ -68,10 +69,16 @@ final class ConfigurationDialog extends JDialog {
 
 		final var description = this.operation.getClass().getAnnotation(StreamOperation.class).description();
 		if (!description.isEmpty()) {
-			final var descriptionLabel = new JLabel(
-					String.format("<html><p style='width: auto'>%s</p></html>", description));
-			descriptionLabel.setBorder(new EmptyBorder(4, 4, 4, 4));
-			contentPane.add(descriptionLabel, BorderLayout.NORTH);
+			final var descriptionTextArea = new JTextArea(description);
+			descriptionTextArea.setLineWrap(true);
+			descriptionTextArea.setWrapStyleWord(true);
+			descriptionTextArea.setFocusable(false);
+			descriptionTextArea.setEditable(false);
+			descriptionTextArea.setOpaque(false);
+			descriptionTextArea.setFont(UIManager.getFont("Label.font"));
+
+			descriptionTextArea.setBorder(new EmptyBorder(4, 4, 4, 4));
+			contentPane.add(descriptionTextArea, BorderLayout.NORTH);
 		}
 
 		final var configurationPanel = new JPanel(new GridBagLayout());
@@ -131,7 +138,7 @@ final class ConfigurationDialog extends JDialog {
 			return addComponent(panel, label, textField);
 		}
 		case MULTILINE_STRING: {
-			final var textArea = new JTextArea(10, 50);
+			final var textArea = new JTextArea(7, 80);
 			textArea.setText(StreamOperations.getConfigurationValue(name, this.operation));
 			textArea.setCaretPosition(0);
 			applyFunctions.add(() -> StreamOperations.setConfigurationValue(name, this.operation, textArea.getText()));

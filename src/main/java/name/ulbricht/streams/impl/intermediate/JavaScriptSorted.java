@@ -22,7 +22,7 @@ public final class JavaScriptSorted<T> extends JavaScriptOperation implements Fu
 	}
 
 	private int compare(final Object element1, final Object element2) {
-		return evalScript(Map.of("element1", element1, "element2", element2));
+		return evalScript(Map.of("element1", element1, "element2", element2), "result");
 	}
 
 	@Override

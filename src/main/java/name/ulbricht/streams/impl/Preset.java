@@ -78,7 +78,7 @@ public enum Preset {
 
 	private static StreamOperationSet createFilterJavaScript() {
 		final var filter = new JavaScriptFilter<>();
-		filter.setScript("result = element.indexOf('H') >= 0");
+		filter.setScript("pass = element.indexOf('H') >= 0");
 
 		return new StreamOperationSet(new TextLines(), List.of(filter), new SystemOut<>());
 	}
@@ -90,7 +90,7 @@ public enum Preset {
 
 	private static StreamOperationSet createCountLines() {
 		final var fileFilter = new JavaScriptFilter<>();
-		fileFilter.setScript("result = element.getFileName().toString().endsWith(\".java\")");
+		fileFilter.setScript("pass = element.getFileName().toString().endsWith(\".java\")");
 
 		return new StreamOperationSet(new FindFiles(), List.of(fileFilter, new FileLines()), new Count<>());
 	}
@@ -102,7 +102,7 @@ public enum Preset {
 
 	private static StreamOperationSet createSystemProperties() {
 		final var propertyReader = new JavaScriptMap<>();
-		propertyReader.setScript("result = element + \":\\t\" + java.lang.System.getProperty(element);");
+		propertyReader.setScript("mapped = element + \":\\t\" + java.lang.System.getProperty(element);");
 
 		return new StreamOperationSet(new SystemProperties(), List.of(new Sorted<>(), propertyReader),
 				new SystemOut<>());
@@ -110,7 +110,7 @@ public enum Preset {
 
 	private static StreamOperationSet createModulesAndPackages() {
 		JavaScriptFlatMap<Module, String> packageExtractor = new JavaScriptFlatMap<>();
-		packageExtractor.setScript("result = element.getPackages().stream();");
+		packageExtractor.setScript("mappedStream = element.getPackages().stream();");
 
 		return new StreamOperationSet(new Modules(), List.of(new SystemOutPeek<>(), packageExtractor),
 				new SystemOut<>());

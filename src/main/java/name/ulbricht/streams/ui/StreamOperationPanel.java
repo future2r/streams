@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -21,7 +20,7 @@ final class StreamOperationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private final JLabel nameLabel;
-	private final JTextField configTextField;
+	private final JLabel configLabel;
 
 	StreamOperationPanel() {
 		setLayout(new GridLayout(0, 1, 2, 2));
@@ -29,14 +28,10 @@ final class StreamOperationPanel extends JPanel {
 		this.nameLabel = new JLabel();
 		this.nameLabel.setFont(this.nameLabel.getFont().deriveFont(Font.BOLD));
 
-		this.configTextField = new JTextField();
-		this.configTextField.setBorder(null);
-		this.configTextField.setOpaque(false);
-		this.configTextField.setFont(this.configTextField.getFont().deriveFont(Font.PLAIN));
-		this.configTextField.setEditable(false);
+		this.configLabel = new JLabel();
 
 		add(this.nameLabel);
-		add(this.configTextField);
+		add(this.configLabel);
 	}
 
 	@Override
@@ -55,8 +50,8 @@ final class StreamOperationPanel extends JPanel {
 		super.setForeground(fg);
 		if (this.nameLabel != null)
 			this.nameLabel.setForeground(fg);
-		if (this.configTextField != null)
-			this.configTextField.setForeground(fg);
+		if (this.configLabel != null)
+			this.configLabel.setForeground(fg);
 	}
 
 	void updateContent(final Object streamOperation) {
@@ -83,14 +78,14 @@ final class StreamOperationPanel extends JPanel {
 			this.nameLabel.setIcon(icon);
 		}
 
-		this.configTextField
-				.setText(streamOperation != null ? omit(createConfigurationText(streamOperation), 100) : " ");
+		this.configLabel.setText(streamOperation != null ? omit(createConfigurationText(streamOperation), 100) : " ");
 	}
 
 	private static String createConfigurationText(final Object streamOperation) {
 		final var configurations = StreamOperations.getConfigurations(streamOperation);
 		if (!configurations.isEmpty()) {
 			return configurations.entrySet().stream()
+					.sorted((e1, e2) -> Integer.compare(e1.getValue().ordinal(), e2.getValue().ordinal()))
 					.map(e -> String.format("%s=%s", e.getValue().displayName(),
 							StreamOperations.getConfigurationValue(e.getKey(), streamOperation)))
 					.collect(Collectors.joining(", ", "", ""));

@@ -9,16 +9,16 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@StreamOperation(name = "JavaScript Flat Map", type = INTERMEDIATE, description = "The current element is provided as 'element', the result must a Stream stored in 'result'.")
+@StreamOperation(name = "JavaScript Flat Map", type = INTERMEDIATE, description = "The current element is provided as 'element', the result must a Stream stored in 'mappedStream'.")
 public final class JavaScriptFlatMap<I, O> extends JavaScriptOperation implements Function<Stream<I>, Stream<O>> {
 
 	public JavaScriptFlatMap() {
-		super("result = element.toString().chars().boxed()");
+		super("mappedStream = element.toString().chars().boxed()");
 	}
 
 	@Override
 	public Stream<O> apply(final Stream<I> stream) {
-		return stream.flatMap(e -> evalScript(Map.of("element", e)));
+		return stream.flatMap(e -> evalScript(Map.of("element", e), "mappedStream"));
 	}
 
 	@Override

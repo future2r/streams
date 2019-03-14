@@ -9,16 +9,16 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@StreamOperation(name = "JavaScript Drop While", type = INTERMEDIATE, description = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
+@StreamOperation(name = "JavaScript Drop While", type = INTERMEDIATE, description = "The current element is provided as 'element', the result must a boolean value stored in 'drop'.")
 public final class JavaScriptDropWhile<T> extends JavaScriptOperation implements Function<Stream<T>, Stream<T>> {
 
 	public JavaScriptDropWhile() {
-		super("result = true;");
+		super("drop = true;");
 	}
 
 	@Override
 	public Stream<T> apply(final Stream<T> stream) {
-		return stream.dropWhile(e -> evalScript(Map.of("element", e)));
+		return stream.dropWhile(e -> evalScript(Map.of("element", e), "drop"));
 	}
 
 	@Override

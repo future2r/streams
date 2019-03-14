@@ -9,16 +9,16 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@StreamOperation(name = "JavaScript None Match", type = TERMINAL, description = "The current element is provided as 'element', the result must a boolean value stored in 'result'.")
+@StreamOperation(name = "JavaScript None Match", type = TERMINAL, description = "The current element is provided as 'element', the result must a boolean value stored in 'matches'.")
 public final class JavaScriptNonMatch<T> extends JavaScriptOperation implements Function<Stream<T>, Boolean> {
 
 	public JavaScriptNonMatch() {
-		super("result = true;");
+		super("matches = true;");
 	}
 
 	@Override
 	public Boolean apply(final Stream<T> stream) {
-		return stream.noneMatch(e -> evalScript(Map.of("element", e)));
+		return stream.noneMatch(e -> evalScript(Map.of("element", e), "matches"));
 	}
 
 	@Override
