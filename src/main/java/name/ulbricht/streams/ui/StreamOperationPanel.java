@@ -91,7 +91,7 @@ final class StreamOperationPanel extends JPanel {
 		final var configurations = StreamOperations.getConfigurations(streamOperation);
 		if (!configurations.isEmpty()) {
 			return configurations.entrySet().stream()
-					.map(e -> String.format("%s=%s", e.getKey(),
+					.map(e -> String.format("%s=%s", e.getValue().displayName(),
 							StreamOperations.getConfigurationValue(e.getKey(), streamOperation)))
 					.collect(Collectors.joining(", ", "", ""));
 		}
