@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Fibonacci Numbers", type = SOURCE)
+@StreamOperation(name = "Fibonacci Numbers", type = SOURCE, output = Long.class)
 public final class FibonacciGenerator implements Supplier<Stream<Long>> {
 
 	@Override
