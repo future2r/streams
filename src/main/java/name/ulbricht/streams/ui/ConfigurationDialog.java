@@ -53,7 +53,7 @@ final class ConfigurationDialog extends JDialog {
 	private boolean result;
 	private final Object operation;
 	private final List<Runnable> applyFunctions = new ArrayList<>();
-	private int configurationRow;
+	private int componentLayoutRow;
 
 	ConfigurationDialog(final Window owner, final Object operation) {
 		super(owner);
@@ -66,6 +66,9 @@ final class ConfigurationDialog extends JDialog {
 		contentPane.setOpaque(false);
 		contentPane.setBorder(new EmptyBorder(8, 8, 8, 8));
 		setContentPane(contentPane);
+
+		final var configurationPanel = new JPanel(new GridBagLayout());
+		configurationPanel.setOpaque(false);
 
 		final var description = this.operation.getClass().getAnnotation(StreamOperation.class).description();
 		if (!description.isEmpty()) {
@@ -80,9 +83,6 @@ final class ConfigurationDialog extends JDialog {
 			descriptionTextArea.setBorder(new EmptyBorder(4, 4, 4, 4));
 			contentPane.add(descriptionTextArea, BorderLayout.NORTH);
 		}
-
-		final var configurationPanel = new JPanel(new GridBagLayout());
-		configurationPanel.setOpaque(false);
 
 		StreamOperations.getConfigurations(this.operation).entrySet().stream()
 				.sorted((e1, e2) -> Integer.compare(e1.getValue().ordinal(), e2.getValue().ordinal()))
@@ -110,6 +110,7 @@ final class ConfigurationDialog extends JDialog {
 				new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 
 		pack();
+		setSize(getPreferredSize());
 	}
 
 	private void registerKeyStrokeEvent(final String key, final KeyStroke keyStroke, final AWTEvent event) {
@@ -220,23 +221,23 @@ final class ConfigurationDialog extends JDialog {
 	}
 
 	private int addComponent(final JPanel panel, final JLabel label, final JComponent component, final JButton button) {
-		panel.add(label, new GridBagConstraints(0, this.configurationRow, 1, 1, 0, 0, GridBagConstraints.WEST,
+		panel.add(label, new GridBagConstraints(0, this.componentLayoutRow, 1, 1, 0, 0, GridBagConstraints.WEST,
 				GridBagConstraints.NONE, new Insets(4, 4, 4, 4), 0, 0));
-		panel.add(component, new GridBagConstraints(1, this.configurationRow, 1, 1, 1, 0, GridBagConstraints.WEST,
+		panel.add(component, new GridBagConstraints(1, this.componentLayoutRow, 1, 1, 1, 0, GridBagConstraints.WEST,
 				GridBagConstraints.BOTH, new Insets(4, 4, 4, 4), 0, 0));
 		if (button != null) {
-			panel.add(button, new GridBagConstraints(2, this.configurationRow, 1, 1, 0, 0, GridBagConstraints.CENTER,
+			panel.add(button, new GridBagConstraints(2, this.componentLayoutRow, 1, 1, 0, 0, GridBagConstraints.CENTER,
 					GridBagConstraints.NONE, new Insets(4, 4, 4, 4), 0, 0));
 		}
-		return this.configurationRow++;
+		return this.componentLayoutRow++;
 	}
 
 	private int addScrollableComponent(final JPanel panel, final JLabel label, final JComponent component) {
-		panel.add(label, new GridBagConstraints(0, this.configurationRow, 2, 1, 0, 0, GridBagConstraints.WEST,
+		panel.add(label, new GridBagConstraints(0, this.componentLayoutRow, 2, 1, 0, 0, GridBagConstraints.WEST,
 				GridBagConstraints.NONE, new Insets(4, 4, 0, 4), 0, 0));
-		panel.add(new JScrollPane(component), new GridBagConstraints(0, this.configurationRow + 1, 2, 1, 1, 1,
+		panel.add(new JScrollPane(component), new GridBagConstraints(0, this.componentLayoutRow + 1, 2, 1, 1, 1,
 				GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(4, 4, 4, 4), 0, 0));
-		return this.configurationRow += 2;
+		return this.componentLayoutRow += 2;
 	}
 
 	private void browseDirectory(final JTextField textField) {
