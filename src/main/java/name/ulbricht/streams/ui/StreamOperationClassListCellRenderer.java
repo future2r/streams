@@ -29,13 +29,13 @@ final class StreamOperationClassListCellRenderer implements ListCellRenderer<Cla
 			if (value != null) {
 				switch (value.getAnnotation(StreamOperation.class).type()) {
 				case SOURCE:
-					icon = Images.getSmallIcon(Images.SOURCE_OPERATION);
+					icon = Icons.getSmallIcon(Icons.SOURCE_OPERATION);
 					break;
 				case INTERMEDIATE:
-					icon = Images.getSmallIcon(Images.INTERMEDIATE_OPERATION);
+					icon = Icons.getSmallIcon(Icons.INTERMEDIATE_OPERATION);
 					break;
 				case TERMINAL:
-					icon = Images.getSmallIcon(Images.TERMINAL_OPERATION);
+					icon = Icons.getSmallIcon(Icons.TERMINAL_OPERATION);
 					break;
 				}
 			}

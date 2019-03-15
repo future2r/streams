@@ -65,15 +65,15 @@ public final class MainFrame extends JFrame {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setLocationByPlatform(true);
 		setTitle(Messages.getString("MainFrame.title"));
-		setIconImages(Images.getImages(Images.APPLICATION));
+		setIconImages(Icons.getImages(Icons.APPLICATION));
 
 		setJMenuBar(createMenuBar());
 
 		final var tabbedPane = new JTabbedPane();
 		tabbedPane.setFocusable(false);
-		addTab(tabbedPane, createSetupPanel(), "tabSetup.title", Images.SETUP);
-		addTab(tabbedPane, createCodePanel(), "tabCode.title", Images.CODE);
-		addTab(tabbedPane, createExecutionPanel(), "tabExecution.title", Images.EXECUTION);
+		addTab(tabbedPane, createSetupPanel(), "tabSetup.title", Icons.SETUP);
+		addTab(tabbedPane, createCodePanel(), "tabCode.title", Icons.CODE);
+		addTab(tabbedPane, createExecutionPanel(), "tabExecution.title", Icons.EXECUTION);
 
 		final var contentPane = new JPanel(new BorderLayout());
 		contentPane.setBackground(SystemColor.window);
@@ -100,7 +100,8 @@ public final class MainFrame extends JFrame {
 
 		final var presetsMenu = menuBar.add(new JMenu(Messages.getString("presetsMenu.text")));
 		Stream.of(Preset.values()).forEach(preset -> {
-			final var menuItem = presetsMenu.add(new JMenuItem(preset.getDisplayName()));
+			final var menuItem = presetsMenu
+					.add(new JMenuItem(preset.getDisplayName(), Icons.getSmallIcon(Icons.APPLICATION)));
 			menuItem.addActionListener(e -> presetSelected(preset));
 		});
 
@@ -522,9 +523,9 @@ public final class MainFrame extends JFrame {
 
 		final var tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 		tabbedPane.setFocusable(false);
-		addTab(tabbedPane, new JScrollPane(this.logTextArea), "tabLog.title", Images.LOG);
-		addTab(tabbedPane, new JScrollPane(this.sysOutTextArea), "tabSysOut.title", Images.CONSOLE);
-		addTab(tabbedPane, new JScrollPane(this.statisticsTable), "tabStatistics.title", Images.STATISTICS);
+		addTab(tabbedPane, new JScrollPane(this.logTextArea), "tabLog.title", Icons.LOG);
+		addTab(tabbedPane, new JScrollPane(this.sysOutTextArea), "tabSysOut.title", Icons.CONSOLE);
+		addTab(tabbedPane, new JScrollPane(this.statisticsTable), "tabStatistics.title", Icons.STATISTICS);
 
 		panel.add(executeButton, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(4, 4, 4, 4), 0, 0));
@@ -590,7 +591,7 @@ public final class MainFrame extends JFrame {
 			final String iconResource) {
 		tabbedPane.add(Messages.getString(titleResource), component);
 		final var tabIndex = tabbedPane.indexOfComponent(component);
-		tabbedPane.setIconAt(tabIndex, Images.getSmallIcon(iconResource));
+		tabbedPane.setIconAt(tabIndex, Icons.getSmallIcon(iconResource));
 	}
 
 	private void showAbout() {

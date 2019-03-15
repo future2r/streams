@@ -64,13 +64,13 @@ final class StreamOperationPanel extends JPanel {
 			final Icon icon;
 			switch (streamOperationAnnotation.type()) {
 			case SOURCE:
-				icon = Images.getSmallIcon(Images.SOURCE_OPERATION);
+				icon = Icons.getSmallIcon(Icons.SOURCE_OPERATION);
 				break;
 			case INTERMEDIATE:
-				icon = Images.getSmallIcon(Images.INTERMEDIATE_OPERATION);
+				icon = Icons.getSmallIcon(Icons.INTERMEDIATE_OPERATION);
 				break;
 			case TERMINAL:
-				icon = Images.getSmallIcon(Images.TERMINAL_OPERATION);
+				icon = Icons.getSmallIcon(Icons.TERMINAL_OPERATION);
 				break;
 			default:
 				icon = null;
