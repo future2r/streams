@@ -22,7 +22,7 @@ public class JavaScriptFilterTest {
 	@Test
 	public void testUserScript() {
 		final var filter = new JavaScriptFilter<String>();
-		filter.setScript("result = element.startsWith(\"H\");");
+		filter.setScript("pass = element.startsWith(\"H\");");
 
 		Stream<String> stream = Stream.of("Hello", "World");
 		stream = filter.apply(stream);
