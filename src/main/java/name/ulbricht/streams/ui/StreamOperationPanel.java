@@ -59,9 +59,10 @@ final class StreamOperationPanel extends JPanel {
 				.setText(streamOperation != null ? StreamOperations.getDisplayName(streamOperation.getClass()) : " ");
 
 		if (streamOperation != null) {
-			final Icon icon;
+			final var streamOperationAnnotation = streamOperation.getClass().getAnnotation(StreamOperation.class);
 
-			switch (streamOperation.getClass().getAnnotation(StreamOperation.class).type()) {
+			final Icon icon;
+			switch (streamOperationAnnotation.type()) {
 			case SOURCE:
 				icon = Images.getSmallIcon(Images.SOURCE_OPERATION);
 				break;
@@ -74,11 +75,17 @@ final class StreamOperationPanel extends JPanel {
 			default:
 				icon = null;
 			}
-
 			this.nameLabel.setIcon(icon);
+
+			final var description = streamOperationAnnotation.description();
+			if (!description.isEmpty())
+				this.setToolTipText(String.format("<html><p width=\"300px\">%s</p</html>", description));
+			else
+				this.setToolTipText(null);
 		}
 
 		this.configLabel.setText(streamOperation != null ? omit(createConfigurationText(streamOperation), 100) : " ");
+
 	}
 
 	private static String createConfigurationText(final Object streamOperation) {
