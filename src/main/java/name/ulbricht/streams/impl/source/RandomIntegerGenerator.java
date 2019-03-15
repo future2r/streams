@@ -10,7 +10,7 @@ import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Random Integer Generator", type = SOURCE, output = Integer.class)
+@StreamOperation(name = "Random Integer Generator", type = SOURCE, output = Integer.class, description = "Generates a random sequence of integer values as a new stream.")
 public final class RandomIntegerGenerator implements Supplier<Stream<Integer>> {
 
 	private long number = 10;

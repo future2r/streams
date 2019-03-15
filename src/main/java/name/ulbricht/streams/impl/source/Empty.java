@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Empty Stream", type = SOURCE)
+@StreamOperation(name = "Empty Stream", type = SOURCE, description = "Creates a stream with no elements at all.")
 public final class Empty<T> implements Supplier<Stream<T>> {
 
 	@Override

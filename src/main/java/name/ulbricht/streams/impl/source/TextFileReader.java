@@ -16,7 +16,7 @@ import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Text File Reader", type = SOURCE, output = String.class)
+@StreamOperation(name = "Text File Reader", type = SOURCE, output = String.class, description = "Reads a text file and provides a stream with all lines.")
 public final class TextFileReader implements Supplier<Stream<String>> {
 
 	private Path file = Paths.get(System.getProperty("user.dir"), "input.txt");

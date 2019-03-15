@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@StreamOperation(name = "JavaScript Map", type = INTERMEDIATE, description = "The current element is provided as 'element', the mapped result must stored in 'mapped'.")
+@StreamOperation(name = "JavaScript Map", type = INTERMEDIATE, description = "Returns a stream consisting of the results of applying the given function to the elements of this stream. The current element is provided as 'element', the mapped result must stored in 'mapped'.")
 public final class JavaScriptMap<I, O> extends JavaScriptOperation implements Function<Stream<I>, Stream<O>> {
 
 	public JavaScriptMap() {

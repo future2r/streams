@@ -11,7 +11,7 @@ import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Regular Expression Filter", type = INTERMEDIATE, input = String.class, output = String.class)
+@StreamOperation(name = "Regular Expression Filter", type = INTERMEDIATE, input = String.class, output = String.class, description = "Returns a stream with only those elements of this stream, that pass a regular expression.")
 public final class RegExFilter implements Function<Stream<String>, Stream<String>> {
 
 	private String pattern = ".*";

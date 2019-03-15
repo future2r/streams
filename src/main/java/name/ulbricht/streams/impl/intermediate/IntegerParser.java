@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Integer Parser", type = INTERMEDIATE, input = String.class, output = Integer.class)
+@StreamOperation(name = "Integer Parser", type = INTERMEDIATE, input = String.class, output = Integer.class, description = "Parses a stream of strings into a stream of integer values.")
 public final class IntegerParser implements Function<Stream<String>, Stream<Integer>> {
 
 	@Override

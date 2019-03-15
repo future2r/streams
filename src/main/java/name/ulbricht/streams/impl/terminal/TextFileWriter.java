@@ -17,7 +17,7 @@ import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Text File Writer", type = TERMINAL, input = String.class)
+@StreamOperation(name = "Text File Writer", type = TERMINAL, input = String.class, description = "Writes all strings the the stream as lines into a text file.")
 public final class TextFileWriter implements Function<Stream<String>, Void> {
 
 	private Path file = Paths.get(System.getProperty("user.dir"), "output.txt");

@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Count Elements", type = TERMINAL)
+@StreamOperation(name = "Count Elements", type = TERMINAL, description = "Returns the count of elements in this stream.")
 public final class Count<T> implements Function<Stream<T>, Long> {
 
 	@Override

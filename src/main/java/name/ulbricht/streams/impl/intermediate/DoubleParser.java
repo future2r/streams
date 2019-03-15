@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Double Parser", type = INTERMEDIATE, input = String.class, output = Double.class)
+@StreamOperation(name = "Double Parser", type = INTERMEDIATE, input = String.class, output = Double.class, description = "Parses a stream of strings into a stream of double values.")
 public final class DoubleParser implements Function<Stream<String>, Stream<Double>> {
 
 	@Override

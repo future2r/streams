@@ -10,7 +10,7 @@ import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Integer Range", type = SOURCE, output = Integer.class)
+@StreamOperation(name = "Integer Range", type = SOURCE, output = Integer.class, description = "Generates a sequence of integer values as a new stream.")
 public final class IntegerRange implements Supplier<Stream<Integer>> {
 
 	private int start = 0;

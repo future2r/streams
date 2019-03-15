@@ -10,7 +10,7 @@ import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Characters", type = SOURCE, output = Integer.class)
+@StreamOperation(name = "Characters", type = SOURCE, output = Integer.class, description = "Provides the characters of a string as a new stream.")
 public final class Characters implements Supplier<Stream<Integer>> {
 
 	private String text = "Hello World!";

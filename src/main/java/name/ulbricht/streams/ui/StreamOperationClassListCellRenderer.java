@@ -23,11 +23,13 @@ final class StreamOperationClassListCellRenderer implements ListCellRenderer<Cla
 
 		final var component = delegate.getListCellRendererComponent(list, text, index, isSelected, cellHasFocus);
 
-		if (component instanceof JLabel) {
+		if (value != null && component instanceof JLabel) {
+			final var streamOperationAnnotation = value.getAnnotation(StreamOperation.class);
+
 			final var label = (JLabel) component;
 			Icon icon = null;
 			if (value != null) {
-				switch (value.getAnnotation(StreamOperation.class).type()) {
+				switch (streamOperationAnnotation.type()) {
 				case SOURCE:
 					icon = Icons.getSmallIcon(Icons.SOURCE_OPERATION);
 					break;
@@ -40,6 +42,12 @@ final class StreamOperationClassListCellRenderer implements ListCellRenderer<Cla
 				}
 			}
 			label.setIcon(icon);
+
+			final var description = streamOperationAnnotation.description();
+			if (!description.isEmpty())
+				label.setToolTipText(String.format("<html><p width=\"300px\">%s</p</html>", description));
+			else
+				label.setToolTipText(null);
 		}
 
 		return component;

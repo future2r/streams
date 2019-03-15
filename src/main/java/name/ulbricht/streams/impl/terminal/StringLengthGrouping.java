@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "String Length Grouping", type = TERMINAL, input = String.class)
+@StreamOperation(name = "String Length Grouping", type = TERMINAL, input = String.class, description = "Groups all strings in the stream into a map using their length as the key.")
 public final class StringLengthGrouping implements Function<Stream<String>, Map<Integer, List<String>>> {
 
 	@Override

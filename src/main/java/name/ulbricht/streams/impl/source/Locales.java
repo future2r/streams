@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Locales List", type = SOURCE, output = Locale.class)
+@StreamOperation(name = "Locales List", type = SOURCE, output = Locale.class, description = "Creates a stream with all locales.")
 public final class Locales implements Supplier<Stream<Locale>> {
 
 	@Override

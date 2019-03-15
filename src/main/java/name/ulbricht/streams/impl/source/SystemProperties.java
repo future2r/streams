@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Java System Properties", type = SOURCE)
+@StreamOperation(name = "Java System Properties", type = SOURCE, description = "Creates a stream with the keys of all Java system properties.")
 public final class SystemProperties implements Supplier<Stream<Object>> {
 
 	@Override

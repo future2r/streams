@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "LowerCase", type = INTERMEDIATE, input = String.class, output = String.class)
+@StreamOperation(name = "LowerCase", type = INTERMEDIATE, input = String.class, output = String.class, description = "Converts a string in its lower-case version.")
 public final class LowerCase implements Function<Stream<String>, Stream<String>> {
 
 	@Override

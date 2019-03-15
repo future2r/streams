@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Find Any", type = TERMINAL)
+@StreamOperation(name = "Find Any", type = TERMINAL, description = "Returns an Optional describing some element of the stream, or an empty Optional if the stream is empty.")
 public final class FindAny<T> implements Function<Stream<T>, Optional<T>> {
 
 	@Override

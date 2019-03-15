@@ -9,7 +9,7 @@ import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Limit Elements", type = INTERMEDIATE)
+@StreamOperation(name = "Limit Elements", type = INTERMEDIATE, description = "Returns a stream consisting of the elements of this stream, truncated to be no longer than maximum size in length. ")
 public final class Limit<T> implements Function<Stream<T>, Stream<T>> {
 
 	private long limit = 5;

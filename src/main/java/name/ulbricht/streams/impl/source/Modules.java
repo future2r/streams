@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Modules List", type = SOURCE, output = Module.class)
+@StreamOperation(name = "Modules List", type = SOURCE, output = Module.class, description = "Creates a stream with all modules currently available.")
 public final class Modules implements Supplier<Stream<Module>> {
 
 	@Override

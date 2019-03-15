@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Minimum", type = TERMINAL, input = Comparable.class)
+@StreamOperation(name = "Minimum", type = TERMINAL, input = Comparable.class, description = "Returns the minimum element of this stream according to the natural order.")
 public final class Min<T extends Comparable<T>> implements Function<Stream<T>, Optional<T>> {
 
 	@Override

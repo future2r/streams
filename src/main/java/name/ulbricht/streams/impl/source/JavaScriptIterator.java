@@ -11,8 +11,8 @@ import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@StreamOperation(name = "JavaScript Iterator", type = SOURCE, description = "This operation requires 3 scripts."
-		+ " First, an initial value must be stored in 'seed'."
+@StreamOperation(name = "JavaScript Iterator", type = SOURCE, description = "Returns an infinite sequential ordered Stream produced by iterative application of a function to an initial element."
+		+ " This operation requires 3 scripts." + " First, an initial value must be stored in 'seed'."
 		+ " Second, depending on the current element (provided as 'element'), return a boolean value stored in 'hasNext', indicating if there is a next element."
 		+ " Finally, the next element stored in 'next', depending on the current element provided as 'element'.")
 public final class JavaScriptIterator extends JavaScriptOperation implements Supplier<Stream<Object>> {
