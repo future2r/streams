@@ -159,6 +159,13 @@ public final class MainFrame extends JFrame {
 		this.sourceOperationComboBox.addActionListener(e -> sourceOperationSelected());
 
 		this.sourceOperationPanel = new StreamOperationPanel();
+		this.sourceOperationPanel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(final MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2)
+					configureSourceOperation();
+			}
+		});
 
 		final var configureButton = new JButton(this.actions.add(Actions.action("configureSourceOperation",
 				this::configureSourceOperation, () -> this.currentSourceOperation != null
@@ -196,7 +203,8 @@ public final class MainFrame extends JFrame {
 	}
 
 	private void configureSourceOperation() {
-		if (this.currentSourceOperation != null) {
+		if (this.currentSourceOperation != null
+				&& StreamOperations.supportsConfiguration(this.currentSourceOperation)) {
 			if (showConfigureDialog(this.currentSourceOperation)) {
 				this.sourceOperationPanel.updateContent(this.currentSourceOperation);
 			}
@@ -386,6 +394,13 @@ public final class MainFrame extends JFrame {
 		this.terminalOperationComboBox.addActionListener(e -> terminalOperationSelected());
 
 		this.terminalOperationPanel = new StreamOperationPanel();
+		this.terminalOperationPanel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(final MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2)
+					configureTerminalOperation();
+			}
+		});
 
 		final var configureButton = new JButton(this.actions.add(Actions.action("configureTerminalOperation",
 				this::configureTerminalOperation, () -> this.currentTerminalOperation != null
@@ -421,7 +436,8 @@ public final class MainFrame extends JFrame {
 	}
 
 	private void configureTerminalOperation() {
-		if (this.currentTerminalOperation != null) {
+		if (this.currentTerminalOperation != null
+				&& StreamOperations.supportsConfiguration(this.currentTerminalOperation)) {
 			if (showConfigureDialog(this.currentTerminalOperation)) {
 				this.terminalOperationPanel.updateContent(this.currentTerminalOperation);
 			}
