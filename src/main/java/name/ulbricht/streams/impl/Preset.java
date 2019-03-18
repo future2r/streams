@@ -11,11 +11,12 @@ import name.ulbricht.streams.impl.intermediate.JavaScriptFlatMap;
 import name.ulbricht.streams.impl.intermediate.JavaScriptMap;
 import name.ulbricht.streams.impl.intermediate.LowerCase;
 import name.ulbricht.streams.impl.intermediate.RegExSplitter;
+import name.ulbricht.streams.impl.intermediate.SleepPeek;
 import name.ulbricht.streams.impl.intermediate.Sorted;
 import name.ulbricht.streams.impl.intermediate.SystemOutPeek;
 import name.ulbricht.streams.impl.intermediate.ToStringMapper;
-import name.ulbricht.streams.impl.source.Empty;
 import name.ulbricht.streams.impl.source.FindFiles;
+import name.ulbricht.streams.impl.source.IntegerRange;
 import name.ulbricht.streams.impl.source.Modules;
 import name.ulbricht.streams.impl.source.RandomIntegerGenerator;
 import name.ulbricht.streams.impl.source.SystemProperties;
@@ -61,7 +62,7 @@ public enum Preset {
 	}
 
 	private static StreamOperationSet createDefault() {
-		return new StreamOperationSet(new Empty<>(), List.of(), new SystemOut<>());
+		return new StreamOperationSet(new IntegerRange(), List.of(new SleepPeek<>()), new SystemOut<>());
 	}
 
 	private static StreamOperationSet createSplitWords() {

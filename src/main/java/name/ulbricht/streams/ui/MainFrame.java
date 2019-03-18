@@ -523,9 +523,9 @@ public final class MainFrame extends JFrame {
 
 		final var tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 		tabbedPane.setFocusable(false);
+		addTab(tabbedPane, new JScrollPane(this.statisticsTable), "tabStatistics.title", Icons.STATISTICS);
 		addTab(tabbedPane, new JScrollPane(this.logTextArea), "tabLog.title", Icons.LOG);
 		addTab(tabbedPane, new JScrollPane(this.sysOutTextArea), "tabSysOut.title", Icons.CONSOLE);
-		addTab(tabbedPane, new JScrollPane(this.statisticsTable), "tabStatistics.title", Icons.STATISTICS);
 
 		panel.add(executeButton, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(4, 4, 4, 4), 0, 0));
@@ -545,7 +545,8 @@ public final class MainFrame extends JFrame {
 
 			final var operations = new StreamOperationSet(this.currentSourceOperation,
 					this.intermediateOperationListModel.getAllElements(), this.currentTerminalOperation);
-			final var executor = new StreamExecutor(operations);
+			final var executor = new StreamExecutor(operations,
+					logger -> SwingUtilities.invokeLater(() -> this.statisticsTableModel.update(logger)));
 
 			this.executionWorker = new ExecutionWorker(executor);
 			this.executionWorker.addPropertyChangeListener(e -> {
@@ -553,6 +554,8 @@ public final class MainFrame extends JFrame {
 					workerStateChanged((ExecutionWorker) e.getSource(), (SwingWorker.StateValue) e.getNewValue());
 				}
 			});
+
+			this.statisticsTableModel.replaceAll(this.executionWorker.getExecutor().getExecutionLoggers());
 
 			this.actions.validate();
 
@@ -572,8 +575,6 @@ public final class MainFrame extends JFrame {
 			} catch (final InterruptedException | ExecutionException ex) {
 				Alerts.showError(this, ex);
 			}
-
-			this.statisticsTableModel.replaceAll(worker.getExecutor().getExecutionLoggers());
 
 			this.actions.validate();
 			break;

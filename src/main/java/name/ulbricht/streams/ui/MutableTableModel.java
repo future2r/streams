@@ -123,12 +123,25 @@ final class MutableTableModel<T> implements TableModel {
 			fireRowsInserted(0, this.rows.size() - 1);
 	}
 
+	void update(final T row) {
+		final var rowIndex = this.rows.indexOf(row);
+		fireRowUpdated(rowIndex);
+	}
+
 	private void fireRowsInserted(final int firstRow, final int lastRow) {
 		fireTableChanged(firstRow, lastRow, TableModelEvent.INSERT);
 	}
 
 	private void fireRowsDeleted(final int firstRow, final int lastRow) {
 		fireTableChanged(firstRow, lastRow, TableModelEvent.DELETE);
+	}
+
+	private void fireRowUpdated(final int row) {
+		fireRowsUpdated(row, row);
+	}
+
+	private void fireRowsUpdated(final int firstRow, final int lastRow) {
+		fireTableChanged(firstRow, lastRow, TableModelEvent.UPDATE);
 	}
 
 	private void fireTableChanged(final int firstRow, final int lastRow, final int type) {

@@ -19,22 +19,25 @@ public final class StreamExecutor {
 		private long elementsProvided;
 		private final Object operation;
 		private final String operationName;
+		private final Consumer<ExecutionLogger> updateHandler;
 
-		private ExecutionLogger(final Object operation) {
+		private ExecutionLogger(final Object operation, final Consumer<ExecutionLogger> updateHandler) {
 			this.operation = operation;
+			this.updateHandler = updateHandler;
 			this.operationName = StreamOperations.getDisplayName(this.operation.getClass());
 		}
 
 		@Override
 		public void accept(final Object element) {
 			this.elementsProvided++;
+			this.updateHandler.accept(this);
 			log.info(() -> String.format("%s: %s", this.operationName, element));
 		}
 
 		public Object getOperation() {
 			return this.operation;
 		}
-
+		
 		public String getOperationName() {
 			return this.operationName;
 		}
@@ -45,31 +48,40 @@ public final class StreamExecutor {
 	}
 
 	private final StreamOperationSet operations;
+
+	@SuppressWarnings("rawtypes")
+	private final Stream stream;
+	private boolean executed;
+
 	private final List<ExecutionLogger> executionLoggers = new ArrayList<>();
 
-	public StreamExecutor(final StreamOperationSet operations) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public StreamExecutor(final StreamOperationSet operations, final Consumer<ExecutionLogger> updateHandler) {
 		this.operations = Objects.requireNonNull(operations, "operations must not be null");
+
+		final var sourceOperation = this.operations.getSource();
+		Stream tempStream = addExecutionLogger(((Supplier<Stream>) sourceOperation).get(), sourceOperation, updateHandler);
+
+		for (final var intermediatOperation : this.operations.getIntermediats()) {
+			tempStream = addExecutionLogger(((Function<Stream, Stream>) intermediatOperation).apply(tempStream),
+					intermediatOperation, updateHandler);
+		}
+
+		this.stream = tempStream;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object execute() {
+		if (this.executed)
+			throw new StreamOperationException("Pipeline was already executed.");
 		this.executionLoggers.clear();
 
-		final var source = this.operations.getSource();
-		Stream stream = ((Supplier<Stream>) source).get();
-		stream = addExecutionLogger(stream, source);
-
-		for (final var intermediatOperation : this.operations.getIntermediats()) {
-			stream = ((Function<Stream, Stream>) intermediatOperation).apply(stream);
-			stream = addExecutionLogger(stream, intermediatOperation);
-		}
-
-		final var terminal = this.operations.getTerminal();
-		return ((Function<Stream, Object>) terminal).apply(stream);
+		return ((Function<Stream, Object>) this.operations.getTerminal()).apply(stream);
 	}
 
-	private Stream<?> addExecutionLogger(final Stream<?> stream, final Object operation) {
-		final var executionLogger = new ExecutionLogger(operation);
+	private Stream<?> addExecutionLogger(final Stream<?> stream, final Object operation,
+			final Consumer<ExecutionLogger> updateHandler) {
+		final var executionLogger = new ExecutionLogger(operation, updateHandler);
 		this.executionLoggers.add(executionLogger);
 		return stream.peek(executionLogger);
 	}
