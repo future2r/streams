@@ -5,6 +5,8 @@ import java.util.function.Supplier;
 
 import name.ulbricht.streams.api.StreamOperationSet;
 import name.ulbricht.streams.impl.intermediate.Distinct;
+import name.ulbricht.streams.impl.intermediate.EmployeesFilter;
+import name.ulbricht.streams.impl.intermediate.EmployeesSorter;
 import name.ulbricht.streams.impl.intermediate.FileLines;
 import name.ulbricht.streams.impl.intermediate.JavaScriptFilter;
 import name.ulbricht.streams.impl.intermediate.JavaScriptFlatMap;
@@ -15,6 +17,7 @@ import name.ulbricht.streams.impl.intermediate.SleepPeek;
 import name.ulbricht.streams.impl.intermediate.Sorted;
 import name.ulbricht.streams.impl.intermediate.SystemOutPeek;
 import name.ulbricht.streams.impl.intermediate.ToStringMapper;
+import name.ulbricht.streams.impl.source.Employees;
 import name.ulbricht.streams.impl.source.FindFiles;
 import name.ulbricht.streams.impl.source.IntegerRange;
 import name.ulbricht.streams.impl.source.Modules;
@@ -23,6 +26,7 @@ import name.ulbricht.streams.impl.source.SystemProperties;
 import name.ulbricht.streams.impl.source.TextFileReader;
 import name.ulbricht.streams.impl.source.TextLines;
 import name.ulbricht.streams.impl.terminal.Count;
+import name.ulbricht.streams.impl.terminal.EmployeesDepartmentGrouping;
 import name.ulbricht.streams.impl.terminal.StringLengthGrouping;
 import name.ulbricht.streams.impl.terminal.SystemOut;
 import name.ulbricht.streams.impl.terminal.TextFileWriter;
@@ -33,13 +37,15 @@ public enum Preset {
 
 	SPLIT_WORDS("Word length statistics", Preset::createSplitWords),
 
-	FILTER_JAVA_SCRIPT("Filter by JavaScript", Preset::createFilterJavaScript),
-
 	SORT_LINES("Sort lines in a file", Preset::createSortLines),
+
+	EPLOYEES_BY_DEPARTMENT("Group employees by department", Preset::createEmployeesByDepartment),
 
 	COUNT_LINES("Count lines in all files", Preset::createCountLines),
 
 	GENERATE_NUMBERS("Generate a file with sorted numbers", Preset::createGenerateNumbers),
+
+	FILTER_JAVA_SCRIPT("Filter by JavaScript", Preset::createFilterJavaScript),
 
 	SYSTEM_PROPERTIES("Display Java system properties", Preset::createSystemProperties),
 
@@ -77,16 +83,14 @@ public enum Preset {
 				new StringLengthGrouping());
 	}
 
-	private static StreamOperationSet createFilterJavaScript() {
-		final var filter = new JavaScriptFilter<>();
-		filter.setScript("pass = element.indexOf('H') >= 0");
-
-		return new StreamOperationSet(new TextLines(), List.of(filter), new SystemOut<>());
-	}
-
 	private static StreamOperationSet createSortLines() {
 		return new StreamOperationSet(new TextFileReader(), List.of(new Distinct<>(), new Sorted<>()),
 				new TextFileWriter());
+	}
+
+	private static StreamOperationSet createEmployeesByDepartment() {
+		return new StreamOperationSet(new Employees(), List.of(new EmployeesFilter(), new EmployeesSorter()),
+				new EmployeesDepartmentGrouping());
 	}
 
 	private static StreamOperationSet createCountLines() {
@@ -94,6 +98,13 @@ public enum Preset {
 		fileFilter.setScript("pass = element.getFileName().toString().endsWith(\".java\")");
 
 		return new StreamOperationSet(new FindFiles(), List.of(fileFilter, new FileLines()), new Count<>());
+	}
+
+	private static StreamOperationSet createFilterJavaScript() {
+		final var filter = new JavaScriptFilter<>();
+		filter.setScript("pass = element.indexOf('H') >= 0");
+
+		return new StreamOperationSet(new TextLines(), List.of(filter), new SystemOut<>());
 	}
 
 	private static StreamOperationSet createGenerateNumbers() {

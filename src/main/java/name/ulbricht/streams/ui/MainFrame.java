@@ -572,6 +572,7 @@ public final class MainFrame extends JFrame {
 				final var result = worker.get();
 				log.info(() -> String.format("Result (class: %s): %s",
 						result != null ? result.getClass().getName() : "n/a", toString(result)));
+				System.out.println(result);
 			} catch (final InterruptedException | ExecutionException ex) {
 				Alerts.showError(this, ex);
 			}
