@@ -53,6 +53,14 @@ final class Actions {
 		final var action = new ActionImpl(actionListener, validator);
 		action.putValue(Action.ACTION_COMMAND_KEY, commandKey);
 		action.putValue(Action.NAME, Messages.getString("action." + commandKey + ".name"));
+
+		action.putValue(Action.SMALL_ICON,
+				Icons.getSmallIcon(Messages.getString("action." + commandKey + ".smallIcon")));
+		action.putValue(Action.LARGE_ICON_KEY,
+				Icons.getSmallIcon(Messages.getString("action." + commandKey + ".largeIcon")));
+
+		action.putValue(Action.SHORT_DESCRIPTION, Messages.getString("action." + commandKey + ".shortDescription"));
+
 		return action;
 	}
 

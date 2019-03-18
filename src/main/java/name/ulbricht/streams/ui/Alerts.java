@@ -7,9 +7,13 @@ import javax.swing.JOptionPane;
 final class Alerts {
 
 	static void showError(final Component parent, final Throwable ta) {
-		JOptionPane.showMessageDialog(parent, String.format(Messages.getString("Alerts.error.messagePattern"), ta),
-				Messages.getString("Alerts.error.title"), JOptionPane.ERROR_MESSAGE);
+		showError(parent,  String.format(Messages.getString("Alerts.error.messagePattern"), ta));
 		ta.printStackTrace();
+	}
+
+	static void showError(final Component parent, String message) {
+		JOptionPane.showMessageDialog(parent, message, Messages.getString("Alerts.error.title"),
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	static void showInfo(final Component parent, final String message) {

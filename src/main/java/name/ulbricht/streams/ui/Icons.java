@@ -26,6 +26,7 @@ public final class Icons {
 	static final String CONSOLE = "console";
 	static final String STATISTICS = "statistics";
 	static final String INFO = "info";
+	static final String INTERRUPT = "interrupt";
 
 	private static final int[] TYPICAL_IMAGE_SIZES = new int[] { 16, 24, 32, 48, 64, 128, 256, 512 };
 
@@ -42,6 +43,7 @@ public final class Icons {
 		loadIcons(LOG, "log-%s.png");
 		loadIcons(CONSOLE, "console-%s.png");
 		loadIcons(STATISTICS, "statistics-%s.png");
+		loadIcons(INTERRUPT, "interrupt-%s.png");
 	}
 
 	public static Icon getSmallIcon(final String key) {

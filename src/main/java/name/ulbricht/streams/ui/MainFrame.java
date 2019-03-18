@@ -30,11 +30,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import name.ulbricht.streams.api.SourceCodeBuilder;
@@ -60,6 +60,8 @@ public final class MainFrame extends JFrame {
 	}
 
 	private final Actions actions = Actions.of();
+	private final JTabbedPane mainTabbedPane;
+	private final JPanel executionPanel;
 
 	private MainFrame() {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -69,21 +71,25 @@ public final class MainFrame extends JFrame {
 
 		setJMenuBar(createMenuBar());
 
-		final var tabbedPane = new JTabbedPane();
-		tabbedPane.setFocusable(false);
-		addTab(tabbedPane, createSetupPanel(), "tabSetup.title", Icons.SETUP);
-		addTab(tabbedPane, createCodePanel(), "tabCode.title", Icons.CODE);
-		addTab(tabbedPane, createExecutionPanel(), "tabExecution.title", Icons.EXECUTION);
+		this.mainTabbedPane = new JTabbedPane();
+		this.mainTabbedPane.setFocusable(false);
+		addTab(this.mainTabbedPane, createSetupPanel(), "tabSetup.title", Icons.SETUP);
+		addTab(this.mainTabbedPane, createCodePanel(), "tabCode.title", Icons.CODE);
+		
+		this.executionPanel = createExecutionPanel();
+		addTab(this.mainTabbedPane, executionPanel, "tabExecution.title", Icons.EXECUTION);
 
-		final var contentPane = new JPanel(new BorderLayout());
+		final var contentPane = new JPanel(new BorderLayout(8, 8));
 		contentPane.setBackground(SystemColor.window);
-		contentPane.setBorder(new EmptyBorder(8, 8, 8, 8));
-		contentPane.add(tabbedPane, BorderLayout.CENTER);
+		contentPane.add(mainTabbedPane, BorderLayout.CENTER);
+
+		contentPane.add(createToolBar(), BorderLayout.NORTH);
 
 		setContentPane(contentPane);
 		pack();
 
 		SwingUtilities.invokeLater(() -> presetSelected(Preset.DEFAULT));
+		SwingUtilities.invokeLater(() -> this.sourceOperationComboBox.requestFocusInWindow());
 	}
 
 	@Override
@@ -109,6 +115,16 @@ public final class MainFrame extends JFrame {
 		helpMenu.add(this.actions.add(Actions.action("about", this::showAbout)));
 
 		return menuBar;
+	}
+
+	private JToolBar createToolBar() {
+		final var toolBar = new JToolBar();
+		toolBar.setFloatable(false);
+
+		toolBar.add(this.actions.add(Actions.action("execute", this::execute, () -> this.executionWorker == null)));
+		toolBar.add(this.actions.add(Actions.action("interrupt", this::interrupt, () -> this.executionWorker != null)));
+
+		return toolBar;
 	}
 
 	private void presetSelected(final Preset preset) {
@@ -496,11 +512,8 @@ public final class MainFrame extends JFrame {
 	private JTable statisticsTable;
 
 	private JPanel createExecutionPanel() {
-		final var panel = new JPanel(new GridBagLayout());
+		final var panel = new JPanel(new BorderLayout());
 		panel.setOpaque(false);
-
-		final var executeButton = new JButton(
-				this.actions.add(Actions.action("execute", this::execute, () -> this.executionWorker == null)));
 
 		this.sysOutTextArea = new JTextArea();
 		this.sysOutTextArea.setEditable(false);
@@ -527,10 +540,7 @@ public final class MainFrame extends JFrame {
 		addTab(tabbedPane, new JScrollPane(this.logTextArea), "tabLog.title", Icons.LOG);
 		addTab(tabbedPane, new JScrollPane(this.sysOutTextArea), "tabSysOut.title", Icons.CONSOLE);
 
-		panel.add(executeButton, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.EAST,
-				GridBagConstraints.NONE, new Insets(4, 4, 4, 4), 0, 0));
-		panel.add(tabbedPane, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.CENTER,
-				GridBagConstraints.BOTH, new Insets(4, 4, 4, 4), 0, 0));
+		panel.add(tabbedPane, BorderLayout.CENTER);
 
 		return panel;
 	}
@@ -556,6 +566,7 @@ public final class MainFrame extends JFrame {
 			});
 
 			this.statisticsTableModel.replaceAll(this.executionWorker.getExecutor().getExecutionLoggers());
+			this.mainTabbedPane.setSelectedComponent(this.executionPanel);
 
 			this.actions.validate();
 
@@ -581,6 +592,10 @@ public final class MainFrame extends JFrame {
 			break;
 		default: // ignore
 		}
+	}
+
+	private void interrupt() {
+		Alerts.showError(this, Messages.getString("interrupt.message"));
 	}
 
 	private static String toString(final Object result) {
