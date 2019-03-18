@@ -12,6 +12,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -211,6 +214,16 @@ final class ConfigurationDialog extends JDialog {
 
 			return addComponent(panel, label, comboBox);
 		}
+		case LOCAL_DATE: {
+			final var textField = new JTextField(10);
+			final LocalDate date = StreamOperations.getConfigurationValue(name, this.operation);
+			if (date != null)
+				textField.setText(date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)));
+			applyFunctions.add(() -> StreamOperations.setConfigurationValue(name, this.operation,
+					LocalDate.parse(textField.getText(), DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))));
+
+			return addComponent(panel, label, textField);
+		}
 		default:
 			throw new IllegalArgumentException(configuration.type().name());
 		}
@@ -280,9 +293,13 @@ final class ConfigurationDialog extends JDialog {
 	}
 
 	private void apply() {
-		this.applyFunctions.forEach(Runnable::run);
-		this.result = true;
-		dispose();
+		try {
+			this.applyFunctions.forEach(Runnable::run);
+			this.result = true;
+			dispose();
+		} catch (final Exception ex) {
+			Alerts.showError(this, ex.toString());
+		}
 	}
 
 	private void cancel() {
