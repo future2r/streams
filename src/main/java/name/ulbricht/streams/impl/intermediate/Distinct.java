@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Distinct Elements", type = INTERMEDIATE, description = "Returns a stream consisting of the distinct elements (according to the natural order) of this stream.")
+@StreamOperation(name = "Distinct Elements", type = INTERMEDIATE)
 public final class Distinct<T> implements Function<Stream<T>, Stream<T>> {
 
 	@Override

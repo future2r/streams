@@ -9,8 +9,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@StreamOperation(name = "JavaScript All Match", type = TERMINAL, description = "Returns whether all elements of this stream match the provided predicate."
-		+ " The current element is provided as 'element', the result must a boolean value stored in 'matches'.")
+@StreamOperation(name = "JavaScript All Match", type = TERMINAL)
 public final class JavaScriptAllMatch<T> extends JavaScriptOperation implements Function<Stream<T>, Boolean> {
 
 	public JavaScriptAllMatch() {

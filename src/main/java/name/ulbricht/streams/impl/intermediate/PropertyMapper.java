@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Property Mapper", type = INTERMEDIATE, description = "Maps an object to the value of a property.")
+@StreamOperation(name = "Property Mapper", type = INTERMEDIATE)
 public final class PropertyMapper implements Function<Stream<Object>, Stream<Object>> {
 
 	private String property = "class";

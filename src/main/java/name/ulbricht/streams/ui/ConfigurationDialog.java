@@ -38,7 +38,6 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import name.ulbricht.streams.api.Configuration;
-import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.api.StreamOperations;
 
 @SuppressWarnings("serial")
@@ -73,8 +72,8 @@ final class ConfigurationDialog extends JDialog {
 		final var configurationPanel = new JPanel(new GridBagLayout());
 		configurationPanel.setOpaque(false);
 
-		final var description = this.operation.getClass().getAnnotation(StreamOperation.class).description();
-		if (!description.isEmpty()) {
+		final var description = StreamOperations.getDescription(this.operation.getClass());
+		if (description != null) {
 			final var descriptionTextArea = new JTextArea(description);
 			descriptionTextArea.setLineWrap(true);
 			descriptionTextArea.setWrapStyleWord(true);

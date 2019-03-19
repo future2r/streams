@@ -77,8 +77,8 @@ final class StreamOperationPanel extends JPanel {
 			}
 			this.nameLabel.setIcon(icon);
 
-			final var description = streamOperationAnnotation.description();
-			if (!description.isEmpty())
+			final var description = StreamOperations.getDescription(streamOperation.getClass());
+			if (description != null)
 				this.setToolTipText(String.format("<html><p width=\"300px\">%s</p</html>", description));
 			else
 				this.setToolTipText(null);

@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.Employee;
 
-@StreamOperation(name = "Employees Sorter", type = INTERMEDIATE, input = Employee.class, output = Employee.class, description = "Sorts employees by their last name.")
+@StreamOperation(name = "Employees Sorter", type = INTERMEDIATE, input = Employee.class, output = Employee.class)
 public final class EmployeesSorter implements Function<Stream<Employee>, Stream<Employee>> {
 
 	@Override

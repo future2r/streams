@@ -9,8 +9,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@StreamOperation(name = "JavaScript Filter", type = INTERMEDIATE, description = "Returns a stream consisting of the elements of this stream that match the given predicate."
-		+ " The current element is provided as 'element', the result must a boolean value stored in 'pass'.")
+@StreamOperation(name = "JavaScript Filter", type = INTERMEDIATE)
 public final class JavaScriptFilter<T> extends JavaScriptOperation implements Function<Stream<T>, Stream<T>> {
 
 	public JavaScriptFilter() {

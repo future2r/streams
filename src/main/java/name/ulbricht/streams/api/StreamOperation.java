@@ -16,6 +16,4 @@ public @interface StreamOperation {
 	Class<?> input() default Object.class;
 
 	Class<?> output() default Object.class;
-
-	String description() default "";
 }

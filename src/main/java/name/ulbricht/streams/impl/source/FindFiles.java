@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Find Files", type = SOURCE, output = Path.class, description = "Finds all files in a directory and its subdirectories.")
+@StreamOperation(name = "Find Files", type = SOURCE, output = Path.class)
 public final class FindFiles implements Supplier<Stream<Path>> {
 
 	private Path directory = Paths.get(System.getProperty("user.dir"));

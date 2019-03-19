@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "String Formatter", type = INTERMEDIATE, output = String.class, description = "Formats the elements into a string using a pattern.")
+@StreamOperation(name = "String Formatter", type = INTERMEDIATE, output = String.class)
 public final class StringFormatter<T> implements Function<Stream<T>, Stream<String>> {
 
 	private String format = "%s";

@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Text Lines", type = SOURCE, output = String.class, description = "Splits a text into lines and returns them as a new stream.")
+@StreamOperation(name = "Text Lines", type = SOURCE, output = String.class)
 public final class TextLines implements Supplier<Stream<String>> {
 
 	private String text = "Hello World!\n" // en

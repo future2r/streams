@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Regular Expression Splitter", type = INTERMEDIATE, input = String.class, output = String.class, description = "Uses a regular expression to split a string into multiple strings and retuns them as a stream.")
+@StreamOperation(name = "Regular Expression Splitter", type = INTERMEDIATE, input = String.class, output = String.class)
 public final class RegExSplitter implements Function<Stream<String>, Stream<String>> {
 
 	private String pattern = "\\s";

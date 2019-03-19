@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "System.out", type = TERMINAL, description = "Writes each element in the stream to System.out.")
+@StreamOperation(name = "System.out", type = TERMINAL)
 public final class SystemOut<T> implements Function<Stream<T>, Void> {
 
 	@Override

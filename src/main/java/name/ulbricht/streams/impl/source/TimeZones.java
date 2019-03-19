@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "ZoneId List", type = SOURCE, output = ZoneId.class, description = "Creates a stream with all time zones.")
+@StreamOperation(name = "Time Zone List", type = SOURCE, output = ZoneId.class)
 public final class TimeZones implements Supplier<Stream<ZoneId>> {
 
 	@Override

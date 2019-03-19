@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "ToArray", type = TERMINAL, description = "Returns an array containing the elements of this stream.")
+@StreamOperation(name = "ToArray", type = TERMINAL)
 public final class ToArray<T> implements Function<Stream<T>, T[]> {
 
 	@SuppressWarnings("unchecked")

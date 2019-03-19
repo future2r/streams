@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@StreamOperation(name = "JavaScript For Each", type = TERMINAL, description = "Performs an action for each element of this stream. The current element is provided as 'element'.")
+@StreamOperation(name = "JavaScript For Each", type = TERMINAL)
 public final class JavaScriptForEach<T> extends JavaScriptOperation implements Function<Stream<T>, Void> {
 
 	public JavaScriptForEach() {

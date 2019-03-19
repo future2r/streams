@@ -10,8 +10,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@StreamOperation(name = "JavaScript Minimum", type = TERMINAL, description = "Returns the minimum element of this stream according to the provided Comparator."
-		+ " Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
+@StreamOperation(name = "JavaScript Minimum", type = TERMINAL)
 public final class JavaScriptMin<T> extends JavaScriptOperation implements Function<Stream<T>, Optional<T>> {
 
 	public JavaScriptMin() {

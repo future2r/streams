@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "List Collector", type = TERMINAL, description = "Collects all elements of the stream into a List")
+@StreamOperation(name = "List Collector", type = TERMINAL)
 public final class ListCollector<T> implements Function<Stream<T>, List<T>> {
 
 	@Override

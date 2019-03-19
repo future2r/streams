@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "String Joiner", type = TERMINAL, input = String.class, description = "Collects all strings in the stream into a single string.")
+@StreamOperation(name = "String Joiner", type = TERMINAL, input = String.class)
 public final class StringJoiner implements Function<Stream<String>, String> {
 
 	private String delimiter = ",";

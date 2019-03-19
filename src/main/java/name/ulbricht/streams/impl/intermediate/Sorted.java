@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Sorted", type = INTERMEDIATE, input = Comparable.class, output = Comparable.class, description = "Returns a stream consisting of the elements of this stream, sorted according to natural order.")
+@StreamOperation(name = "Sorted", type = INTERMEDIATE, input = Comparable.class, output = Comparable.class)
 public final class Sorted<T extends Comparable<T>> implements Function<Stream<T>, Stream<T>> {
 
 	@Override

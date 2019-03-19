@@ -6,10 +6,13 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 public final class StreamOperations {
@@ -42,6 +45,20 @@ public final class StreamOperations {
 		}
 
 		throw new IllegalArgumentException("Unsupported operation type: " + streamOperationAnnotation.type());
+	}
+
+	public static String getDescription(final Class<?> streamOperationClass) {
+		return getResourceBundle(streamOperationClass).map(rb -> rb.getString("description")).orElse(null);
+	}
+
+	private static Optional<ResourceBundle> getResourceBundle(final Class<?> streamOperationClass) {
+		Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null");
+		try {
+			return Optional.of(ResourceBundle.getBundle(streamOperationClass.getName().replace('.', '/'),
+					Locale.getDefault(Locale.Category.DISPLAY), streamOperationClass.getClassLoader()));
+		} catch (final MissingResourceException ex) {
+			return Optional.empty();
+		}
 	}
 
 	public static boolean supportsConfiguration(final Object streamOperation) {

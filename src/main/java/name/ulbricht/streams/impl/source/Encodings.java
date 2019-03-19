@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Charsets List", type = SOURCE, output = Charset.class, description = "Creates a stream with all charsets.")
+@StreamOperation(name = "Charsets List", type = SOURCE, output = Charset.class)
 public final class Encodings implements Supplier<Stream<Charset>> {
 
 	@Override

@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Maximum", type = TERMINAL, input = Comparable.class, description = "Returns the maximum element of this stream according to the natural order.")
+@StreamOperation(name = "Maximum", type = TERMINAL, input = Comparable.class)
 public final class Max<T extends Comparable<T>> implements Function<Stream<T>, Optional<T>> {
 
 	@Override

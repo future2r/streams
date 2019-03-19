@@ -43,8 +43,8 @@ final class StreamOperationClassListCellRenderer implements ListCellRenderer<Cla
 			}
 			label.setIcon(icon);
 
-			final var description = streamOperationAnnotation.description();
-			if (!description.isEmpty())
+			final var description = StreamOperations.getDescription(value);
+			if (description != null)
 				label.setToolTipText(String.format("<html><p width=\"300px\">%s</p</html>", description));
 			else
 				label.setToolTipText(null);

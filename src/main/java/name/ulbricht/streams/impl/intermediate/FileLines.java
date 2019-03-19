@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Read Text File", type = INTERMEDIATE, input = Path.class, output = String.class, description = "Reads a text file and provides a stream with all lines.")
+@StreamOperation(name = "Read Text File", type = INTERMEDIATE, input = Path.class, output = String.class)
 public final class FileLines implements Function<Stream<Path>, Stream<String>> {
 
 	private Charset encoding = StandardCharsets.UTF_8;

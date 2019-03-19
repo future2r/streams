@@ -7,8 +7,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Parallel", type = INTERMEDIATE, description = "Returns an equivalent stream that is parallel. "
-		+ "May return itself, either because the stream was already parallel, or because the underlying stream state was modified to be parallel.")
+@StreamOperation(name = "Parallel", type = INTERMEDIATE)
 public final class Parallel<T> implements Function<Stream<T>, Stream<T>> {
 
 	@Override

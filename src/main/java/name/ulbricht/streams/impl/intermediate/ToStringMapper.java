@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "ToString Mapper", type = INTERMEDIATE, output = String.class, description = "Returns a stream with the string representation of the elements of this stream.")
+@StreamOperation(name = "ToString Mapper", type = INTERMEDIATE, output = String.class)
 public final class ToStringMapper<T> implements Function<Stream<T>, Stream<String>> {
 
 	@Override

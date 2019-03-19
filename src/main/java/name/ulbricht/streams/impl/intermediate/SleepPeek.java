@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Sleep Peek", type = INTERMEDIATE, description = "Sleeps for some time before forwarding the next element. This can be used for debugging purposes.")
+@StreamOperation(name = "Sleep Peek", type = INTERMEDIATE)
 public final class SleepPeek<T> implements Function<Stream<T>, Stream<T>> {
 
 	private long millis = 100;

@@ -10,7 +10,7 @@ import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.Employee;
 
-@StreamOperation(name = "Employees Filter", type = INTERMEDIATE, input = Employee.class, output = Employee.class, description = "Filters employees by their salary.")
+@StreamOperation(name = "Employees Filter", type = INTERMEDIATE, input = Employee.class, output = Employee.class)
 public final class EmployeesFilter implements Function<Stream<Employee>, Stream<Employee>> {
 
 	private int salary = 2000;
