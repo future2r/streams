@@ -2,6 +2,7 @@ package name.ulbricht.streams.impl.terminal;
 
 import static name.ulbricht.streams.api.StreamOperationType.TERMINAL;
 
+import java.beans.JavaBean;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -10,7 +11,9 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@StreamOperation(name = "JavaScript Maximum", type = TERMINAL)
+@JavaBean(description = "Returns the maximum element of this stream according to the provided Comparator."
+		+ " Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
+@StreamOperation(type = TERMINAL)
 public final class JavaScriptMax<T> extends JavaScriptOperation implements Function<Stream<T>, Optional<T>> {
 
 	public JavaScriptMax() {

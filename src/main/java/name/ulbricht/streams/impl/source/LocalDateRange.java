@@ -4,6 +4,7 @@ import static name.ulbricht.streams.api.ConfigurationType.LOCAL_DATE;
 import static name.ulbricht.streams.api.ConfigurationType.LONG;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 
+import java.beans.JavaBean;
 import java.time.LocalDate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -11,7 +12,8 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "LocalDate Range", type = SOURCE, output = LocalDate.class)
+@JavaBean(description = "Generates a sequence of LocalDate values as a new stream.")
+@StreamOperation(type = SOURCE, output = LocalDate.class)
 public final class LocalDateRange implements Supplier<Stream<LocalDate>> {
 
 	private LocalDate start = LocalDate.now().withMonth(1).withDayOfMonth(1);

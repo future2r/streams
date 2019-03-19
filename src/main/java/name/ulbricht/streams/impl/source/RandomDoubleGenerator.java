@@ -4,6 +4,7 @@ import static name.ulbricht.streams.api.ConfigurationType.DOUBLE;
 import static name.ulbricht.streams.api.ConfigurationType.LONG;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 
+import java.beans.JavaBean;
 import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -11,7 +12,8 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Random Double Generator", type = SOURCE, output = Double.class)
+@JavaBean(description = "Generates a random sequence of double values as a new stream.")
+@StreamOperation(type = SOURCE, output = Double.class)
 public final class RandomDoubleGenerator implements Supplier<Stream<Double>> {
 
 	private long number = 10;

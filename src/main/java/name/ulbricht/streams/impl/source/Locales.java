@@ -2,13 +2,15 @@ package name.ulbricht.streams.impl.source;
 
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 
+import java.beans.JavaBean;
 import java.util.Locale;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Locales List", type = SOURCE, output = Locale.class)
+@JavaBean(description = "Creates a stream with all locales.")
+@StreamOperation(type = SOURCE, output = Locale.class)
 public final class Locales implements Supplier<Stream<Locale>> {
 
 	@Override

@@ -5,6 +5,7 @@ import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
+import java.beans.JavaBean;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
@@ -13,7 +14,8 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Property Mapper", type = INTERMEDIATE)
+@JavaBean(description = "Maps an object to the value of a property.")
+@StreamOperation(type = INTERMEDIATE)
 public final class PropertyMapper implements Function<Stream<Object>, Stream<Object>> {
 
 	private String property = "class";
@@ -51,14 +53,13 @@ public final class PropertyMapper implements Function<Stream<Object>, Stream<Obj
 
 	@Override
 	public String toString() {
-		return String.format(".map(obj -> { try {\n" + 
-				"    return Stream.of(Introspector.getBeanInfo(obj.getClass()).getPropertyDescriptors())\n" + 
-				"      .filter(pd -> pd.getName().equals(\"%s\")).findFirst()\n" + 
-				"      .map(PropertyDescriptor::getReadMethod)\n" + 
-				"      .map(rm -> { try { return rm.invoke(obj, (Object[]) null);\n" + 
-				"        } catch (IllegalAccessException | InvocationTargetException e) { return null; }\n" + 
-				"       }).orElse(null);\n" + 
-				"  } catch (IntrospectionException e) { return null; }\n" + 
-				"})", this.property);
+		return String.format(".map(obj -> { try {\n"
+				+ "    return Stream.of(Introspector.getBeanInfo(obj.getClass()).getPropertyDescriptors())\n"
+				+ "      .filter(pd -> pd.getName().equals(\"%s\")).findFirst()\n"
+				+ "      .map(PropertyDescriptor::getReadMethod)\n"
+				+ "      .map(rm -> { try { return rm.invoke(obj, (Object[]) null);\n"
+				+ "        } catch (IllegalAccessException | InvocationTargetException e) { return null; }\n"
+				+ "       }).orElse(null);\n" + "  } catch (IntrospectionException e) { return null; }\n" + "})",
+				this.property);
 	}
 }

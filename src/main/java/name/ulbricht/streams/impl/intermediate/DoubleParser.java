@@ -2,12 +2,14 @@ package name.ulbricht.streams.impl.intermediate;
 
 import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
 
+import java.beans.JavaBean;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Double Parser", type = INTERMEDIATE, input = String.class, output = Double.class)
+@JavaBean(description = "Parses a stream of strings into a stream of double values.")
+@StreamOperation(type = INTERMEDIATE, input = String.class, output = Double.class)
 public final class DoubleParser implements Function<Stream<String>, Stream<Double>> {
 
 	@Override

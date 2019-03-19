@@ -2,6 +2,7 @@ package name.ulbricht.streams.impl.intermediate;
 
 import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
 
+import java.beans.JavaBean;
 import java.util.Comparator;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -9,7 +10,8 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.Employee;
 
-@StreamOperation(name = "Employees Sorter", type = INTERMEDIATE, input = Employee.class, output = Employee.class)
+@JavaBean(description = "Sorts employees by their last name.")
+@StreamOperation(type = INTERMEDIATE, input = Employee.class, output = Employee.class)
 public final class EmployeesSorter implements Function<Stream<Employee>, Stream<Employee>> {
 
 	@Override

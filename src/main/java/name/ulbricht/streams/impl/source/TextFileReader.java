@@ -5,6 +5,7 @@ import static name.ulbricht.streams.api.ConfigurationType.FILE;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
+import java.beans.JavaBean;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -17,7 +18,8 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Text File Reader", type = SOURCE, output = String.class)
+@JavaBean(description = "Reads a text file and provides a stream with all lines.")
+@StreamOperation(type = SOURCE, output = String.class)
 public final class TextFileReader implements Supplier<Stream<String>> {
 
 	private Path file = Paths.get(System.getProperty("user.dir"), "input.txt");

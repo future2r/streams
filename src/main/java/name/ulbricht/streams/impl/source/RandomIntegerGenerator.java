@@ -4,6 +4,7 @@ import static name.ulbricht.streams.api.ConfigurationType.INTEGER;
 import static name.ulbricht.streams.api.ConfigurationType.LONG;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 
+import java.beans.JavaBean;
 import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -11,7 +12,8 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Random Integer Generator", type = SOURCE, output = Integer.class)
+@JavaBean(description = "Generates a random sequence of integer values as a new stream.")
+@StreamOperation(type = SOURCE, output = Integer.class)
 public final class RandomIntegerGenerator implements Supplier<Stream<Integer>> {
 
 	private long number = 10;

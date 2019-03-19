@@ -3,6 +3,7 @@ package name.ulbricht.streams.impl.source;
 import static name.ulbricht.streams.api.ConfigurationType.MULTILINE_STRING;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 
+import java.beans.JavaBean;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -10,7 +11,8 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Text Lines", type = SOURCE, output = String.class)
+@JavaBean(description = "Splits a text into lines and returns them as a new stream.")
+@StreamOperation(type = SOURCE, output = String.class)
 public final class TextLines implements Supplier<Stream<String>> {
 
 	private String text = "Hello World!\n" // en

@@ -1,18 +1,16 @@
 package name.ulbricht.streams.api;
 
+import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 public final class StreamOperations {
@@ -27,11 +25,13 @@ public final class StreamOperations {
 	}
 
 	public static String getDisplayName(final Class<?> streamOperationClass) {
+		final var beanInfo = getBeanInfo(streamOperationClass);
+		
 		final var streamOperationAnnotation = Objects
 				.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
 				.getAnnotation(StreamOperation.class);
 
-		final var name = streamOperationAnnotation.name();
+		final var name = beanInfo.getBeanDescriptor().getName();
 		final var input = streamOperationAnnotation.input().getSimpleName();
 		final var output = streamOperationAnnotation.output().getSimpleName();
 
@@ -48,17 +48,7 @@ public final class StreamOperations {
 	}
 
 	public static String getDescription(final Class<?> streamOperationClass) {
-		return getResourceBundle(streamOperationClass).map(rb -> rb.getString("description")).orElse(null);
-	}
-
-	private static Optional<ResourceBundle> getResourceBundle(final Class<?> streamOperationClass) {
-		Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null");
-		try {
-			return Optional.of(ResourceBundle.getBundle(streamOperationClass.getName().replace('.', '/'),
-					Locale.getDefault(Locale.Category.DISPLAY), streamOperationClass.getClassLoader()));
-		} catch (final MissingResourceException ex) {
-			return Optional.empty();
-		}
+		return getBeanInfo(streamOperationClass).getBeanDescriptor().getShortDescription();
 	}
 
 	public static boolean supportsConfiguration(final Object streamOperation) {
@@ -168,6 +158,15 @@ public final class StreamOperations {
 			return Optional.of(Class.forName(className));
 		} catch (ClassNotFoundException e) {
 			return Optional.empty();
+		}
+	}
+
+	private static BeanInfo getBeanInfo(final Class<?> streamOperationClass) {
+		try {
+			return Introspector
+					.getBeanInfo(Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null"));
+		} catch (final IntrospectionException ex) {
+			throw new StreamOperationException("Could not load bean info for " + streamOperationClass, ex);
 		}
 	}
 

@@ -3,6 +3,7 @@ package name.ulbricht.streams.impl.intermediate;
 import static name.ulbricht.streams.api.ConfigurationType.INTEGER;
 import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
 
+import java.beans.JavaBean;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -10,7 +11,8 @@ import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.Employee;
 
-@StreamOperation(name = "Employees Filter", type = INTERMEDIATE, input = Employee.class, output = Employee.class)
+@JavaBean(description = "Filters employees by their salary.")
+@StreamOperation(type = INTERMEDIATE, input = Employee.class, output = Employee.class)
 public final class EmployeesFilter implements Function<Stream<Employee>, Stream<Employee>> {
 
 	private int salary = 2000;

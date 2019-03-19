@@ -3,6 +3,7 @@ package name.ulbricht.streams.impl.intermediate;
 import static name.ulbricht.streams.api.ConfigurationType.ENCODING;
 import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
 
+import java.beans.JavaBean;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -14,7 +15,8 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Read Text File", type = INTERMEDIATE, input = Path.class, output = String.class)
+@JavaBean(description = "Reads a text file and provides a stream with all lines.")
+@StreamOperation(type = INTERMEDIATE, input = Path.class, output = String.class)
 public final class FileLines implements Function<Stream<Path>, Stream<String>> {
 
 	private Charset encoding = StandardCharsets.UTF_8;

@@ -5,6 +5,7 @@ import static name.ulbricht.streams.api.ConfigurationType.FILE;
 import static name.ulbricht.streams.api.StreamOperationType.TERMINAL;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
+import java.beans.JavaBean;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -18,7 +19,8 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Text File Writer", type = TERMINAL, input = String.class)
+@JavaBean(description = "Writes all strings the the stream as lines into a text file.")
+@StreamOperation(type = TERMINAL, input = String.class)
 public final class TextFileWriter implements Function<Stream<String>, Void> {
 
 	private Path file = Paths.get(System.getProperty("user.dir"), "output.txt");

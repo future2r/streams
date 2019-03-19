@@ -4,6 +4,7 @@ import static name.ulbricht.streams.api.ConfigurationType.BOOLEAN;
 import static name.ulbricht.streams.api.ConfigurationType.INTEGER;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 
+import java.beans.JavaBean;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -11,7 +12,8 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Integer Range", type = SOURCE, output = Integer.class)
+@JavaBean(description = "Generates a sequence of integer values as a new stream.")
+@StreamOperation(type = SOURCE, output = Integer.class)
 public final class IntegerRange implements Supplier<Stream<Integer>> {
 
 	private int start = 0;

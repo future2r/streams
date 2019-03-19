@@ -3,6 +3,7 @@ package name.ulbricht.streams.impl.source;
 import static name.ulbricht.streams.api.ConfigurationType.MULTILINE_STRING;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 
+import java.beans.JavaBean;
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -11,7 +12,11 @@ import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@StreamOperation(name = "JavaScript Iterator", type = SOURCE)
+@JavaBean(description = "Returns an infinite sequential ordered Stream produced by iterative application of a function to an initial element."
+		+ " This operation requires 3 scripts.\" + \" First, an initial value must be stored in 'seed'."
+		+ " Second, depending on the current element (provided as 'element'), return a boolean value stored in 'hasNext', indicating if there is a next element."
+		+ " Finally, the next element stored in 'next', depending on the current element provided as 'element'.")
+@StreamOperation(type = SOURCE)
 public final class JavaScriptIterator extends JavaScriptOperation implements Supplier<Stream<Object>> {
 
 	private String hasNextScript = "hasNext = element <= 42";

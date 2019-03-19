@@ -2,12 +2,14 @@ package name.ulbricht.streams.impl.intermediate;
 
 import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
 
+import java.beans.JavaBean;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "System.out Peek", type = INTERMEDIATE)
+@JavaBean(description = "Prints the element to System.out and then forwards it.")
+@StreamOperation(type = INTERMEDIATE)
 public final class SystemOutPeek<T> implements Function<Stream<T>, Stream<T>> {
 
 	@Override

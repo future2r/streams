@@ -9,8 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface StreamOperation {
 
-	String name();
-
 	StreamOperationType type();
 
 	Class<?> input() default Object.class;

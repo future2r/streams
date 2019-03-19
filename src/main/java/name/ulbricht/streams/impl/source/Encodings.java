@@ -2,13 +2,15 @@ package name.ulbricht.streams.impl.source;
 
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 
+import java.beans.JavaBean;
 import java.nio.charset.Charset;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Charsets List", type = SOURCE, output = Charset.class)
+@JavaBean(description = "Creates a stream with all charsets.")
+@StreamOperation(type = SOURCE, output = Charset.class)
 public final class Encodings implements Supplier<Stream<Charset>> {
 
 	@Override

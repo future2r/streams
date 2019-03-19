@@ -4,13 +4,15 @@ import static name.ulbricht.streams.api.ConfigurationType.STRING;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
+import java.beans.JavaBean;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Characters", type = SOURCE, output = Integer.class)
+@JavaBean(description = "Provides the characters of a string as a new stream.")
+@StreamOperation(type = SOURCE, output = Integer.class)
 public final class Characters implements Supplier<Stream<Integer>> {
 
 	private String text = "Hello World!";

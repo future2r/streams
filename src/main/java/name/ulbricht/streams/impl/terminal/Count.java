@@ -2,12 +2,14 @@ package name.ulbricht.streams.impl.terminal;
 
 import static name.ulbricht.streams.api.StreamOperationType.TERMINAL;
 
+import java.beans.JavaBean;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Count Elements", type = TERMINAL)
+@JavaBean(description = "Returns the count of elements in this stream.")
+@StreamOperation(type = TERMINAL)
 public final class Count<T> implements Function<Stream<T>, Long> {
 
 	@Override
