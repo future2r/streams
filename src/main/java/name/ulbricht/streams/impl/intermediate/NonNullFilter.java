@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Non Null Filter", type = INTERMEDIATE, description = "Returns a stream that onyl the consists of the non-null elements of this stream.")
+@StreamOperation(name = "Non Null Filter", type = INTERMEDIATE, description = "Returns a stream that only consists of the non-null elements of this stream.")
 public final class NonNullFilter<T> implements Function<Stream<T>, Stream<T>> {
 
 	@Override

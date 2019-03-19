@@ -1,5 +1,7 @@
 package name.ulbricht.streams.impl.source;
 
+import static name.ulbricht.streams.api.ConfigurationType.ENCODING;
+import static name.ulbricht.streams.api.ConfigurationType.FILE;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
@@ -13,7 +15,6 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
-import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Text File Reader", type = SOURCE, output = String.class, description = "Reads a text file and provides a stream with all lines.")
@@ -22,7 +23,7 @@ public final class TextFileReader implements Supplier<Stream<String>> {
 	private Path file = Paths.get(System.getProperty("user.dir"), "input.txt");
 	private Charset encoding = StandardCharsets.UTF_8;
 
-	@Configuration(type = ConfigurationType.FILE, displayName = "Text File", ordinal = 1)
+	@Configuration(type = FILE, displayName = "Text File", ordinal = 1)
 	public Path getFile() {
 		return this.file;
 	}
@@ -31,7 +32,7 @@ public final class TextFileReader implements Supplier<Stream<String>> {
 		this.file = file;
 	}
 
-	@Configuration(type = ConfigurationType.ENCODING, displayName = "Encoding", ordinal = 2)
+	@Configuration(type = ENCODING, displayName = "Encoding", ordinal = 2)
 	public Charset getEncoding() {
 		return encoding;
 	}

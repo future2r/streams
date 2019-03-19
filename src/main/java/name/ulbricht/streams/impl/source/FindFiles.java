@@ -1,5 +1,6 @@
 package name.ulbricht.streams.impl.source;
 
+import static name.ulbricht.streams.api.ConfigurationType.DIRECTORY;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
@@ -11,7 +12,6 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
-import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Find Files", type = SOURCE, output = Path.class, description = "Finds all files in a directory and its subdirectories.")
@@ -19,7 +19,7 @@ public final class FindFiles implements Supplier<Stream<Path>> {
 
 	private Path directory = Paths.get(System.getProperty("user.dir"));
 
-	@Configuration(type = ConfigurationType.DIRECTORY, displayName = "Directory")
+	@Configuration(type = DIRECTORY, displayName = "Directory")
 	public Path getDirectory() {
 		return this.directory;
 	}

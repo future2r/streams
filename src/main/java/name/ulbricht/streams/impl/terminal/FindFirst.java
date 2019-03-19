@@ -8,7 +8,8 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperation;
 
-@StreamOperation(name = "Find First", type = TERMINAL, description = "Returns an Optional describing the first element of this stream, or an empty Optional if the stream is empty. If the stream has no encounter order, then any element may be returned.")
+@StreamOperation(name = "Find First", type = TERMINAL, description = "Returns an Optional describing the first element of this stream, or an empty Optional if the stream is empty."
+		+ " If the stream has no encounter order, then any element may be returned.")
 public final class FindFirst<T> implements Function<Stream<T>, Optional<T>> {
 
 	@Override

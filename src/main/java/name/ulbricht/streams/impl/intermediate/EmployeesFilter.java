@@ -1,12 +1,12 @@
 package name.ulbricht.streams.impl.intermediate;
 
+import static name.ulbricht.streams.api.ConfigurationType.INTEGER;
 import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
 
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
-import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.Employee;
 
@@ -15,7 +15,7 @@ public final class EmployeesFilter implements Function<Stream<Employee>, Stream<
 
 	private int salary = 2000;
 
-	@Configuration(displayName = "Monthly salary", type = ConfigurationType.INTEGER)
+	@Configuration(displayName = "Monthly salary", type = INTEGER)
 	public int getSalary() {
 		return this.salary;
 	}

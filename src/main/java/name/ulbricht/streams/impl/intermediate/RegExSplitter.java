@@ -1,5 +1,6 @@
 package name.ulbricht.streams.impl.intermediate;
 
+import static name.ulbricht.streams.api.ConfigurationType.STRING;
 import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
@@ -7,7 +8,6 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
-import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Regular Expression Splitter", type = INTERMEDIATE, input = String.class, output = String.class, description = "Uses a regular expression to split a string into multiple strings and retuns them as a stream.")
@@ -15,7 +15,7 @@ public final class RegExSplitter implements Function<Stream<String>, Stream<Stri
 
 	private String pattern = "\\s";
 
-	@Configuration(type = ConfigurationType.STRING, displayName = "Split Pattern")
+	@Configuration(type = STRING, displayName = "Split Pattern")
 	public String getPattern() {
 		return this.pattern;
 	}

@@ -1,5 +1,6 @@
 package name.ulbricht.streams.impl.source;
 
+import static name.ulbricht.streams.api.ConfigurationType.MULTILINE_STRING;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 
 import java.util.Map;
@@ -7,7 +8,6 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
-import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
@@ -24,13 +24,13 @@ public final class JavaScriptIterator extends JavaScriptOperation implements Sup
 		super("seed = 1");
 	}
 
-	@Configuration(type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript code for inital value", ordinal = 0)
+	@Configuration(type = MULTILINE_STRING, displayName = "JavaScript code for inital value", ordinal = 0)
 	@Override
 	public String getScript() {
 		return super.getScript();
 	}
 
-	@Configuration(type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript code if there is a next element", ordinal = 1)
+	@Configuration(type = MULTILINE_STRING, displayName = "JavaScript code if there is a next element", ordinal = 1)
 	public String getHasNextScript() {
 		return this.hasNextScript;
 	}
@@ -39,7 +39,7 @@ public final class JavaScriptIterator extends JavaScriptOperation implements Sup
 		this.hasNextScript = hasNextScript;
 	}
 
-	@Configuration(type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript code for next element", ordinal = 2)
+	@Configuration(type = MULTILINE_STRING, displayName = "JavaScript code for next element", ordinal = 2)
 	public String getNextScript() {
 		return this.nextScript;
 	}

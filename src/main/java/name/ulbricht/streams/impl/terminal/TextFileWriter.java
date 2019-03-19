@@ -1,5 +1,7 @@
 package name.ulbricht.streams.impl.terminal;
 
+import static name.ulbricht.streams.api.ConfigurationType.ENCODING;
+import static name.ulbricht.streams.api.ConfigurationType.FILE;
 import static name.ulbricht.streams.api.StreamOperationType.TERMINAL;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
@@ -14,7 +16,6 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
-import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Text File Writer", type = TERMINAL, input = String.class, description = "Writes all strings the the stream as lines into a text file.")
@@ -23,7 +24,7 @@ public final class TextFileWriter implements Function<Stream<String>, Void> {
 	private Path file = Paths.get(System.getProperty("user.dir"), "output.txt");
 	private Charset encoding = StandardCharsets.UTF_8;
 
-	@Configuration(type = ConfigurationType.FILE, displayName = "Current File", ordinal = 1)
+	@Configuration(type = FILE, displayName = "Current file", ordinal = 1)
 	public Path getFile() {
 		return this.file;
 	}
@@ -32,7 +33,7 @@ public final class TextFileWriter implements Function<Stream<String>, Void> {
 		this.file = file;
 	}
 
-	@Configuration(type = ConfigurationType.ENCODING, displayName = "Encoding", ordinal = 2)
+	@Configuration(type = ENCODING, displayName = "Encoding", ordinal = 2)
 	public Charset getEncoding() {
 		return encoding;
 	}

@@ -1,5 +1,7 @@
 package name.ulbricht.streams.impl.source;
 
+import static name.ulbricht.streams.api.ConfigurationType.BOOLEAN;
+import static name.ulbricht.streams.api.ConfigurationType.INTEGER;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 
 import java.util.function.Supplier;
@@ -7,7 +9,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
-import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Integer Range", type = SOURCE, output = Integer.class, description = "Generates a sequence of integer values as a new stream.")
@@ -17,30 +18,30 @@ public final class IntegerRange implements Supplier<Stream<Integer>> {
 	private int end = 100;
 	private boolean closed = false;
 
-	@Configuration(type = ConfigurationType.INTEGER, displayName = "Start", ordinal = 1)
+	@Configuration(type = INTEGER, displayName = "Start", ordinal = 1)
 	public int getStart() {
-		return start;
+		return this.start;
 	}
 
-	public void setStart(int start) {
+	public void setStart(final int start) {
 		this.start = start;
 	}
 
-	@Configuration(type = ConfigurationType.INTEGER, displayName = "End", ordinal = 2)
+	@Configuration(type = INTEGER, displayName = "End", ordinal = 2)
 	public int getEnd() {
-		return end;
+		return this.end;
 	}
 
-	public void setEnd(int end) {
+	public void setEnd(final int end) {
 		this.end = end;
 	}
 
-	@Configuration(type = ConfigurationType.BOOLEAN, displayName = "Range is closed", ordinal = 3)
+	@Configuration(type = BOOLEAN, displayName = "Range is closed", ordinal = 3)
 	public boolean isClosed() {
-		return closed;
+		return this.closed;
 	}
 
-	public void setClosed(boolean closed) {
+	public void setClosed(final boolean closed) {
 		this.closed = closed;
 	}
 

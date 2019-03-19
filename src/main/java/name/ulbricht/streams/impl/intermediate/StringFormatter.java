@@ -1,5 +1,6 @@
 package name.ulbricht.streams.impl.intermediate;
 
+import static name.ulbricht.streams.api.ConfigurationType.STRING;
 import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
@@ -7,7 +8,6 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
-import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "String Formatter", type = INTERMEDIATE, output = String.class, description = "Formats the elements into a string using a pattern.")
@@ -15,7 +15,7 @@ public final class StringFormatter<T> implements Function<Stream<T>, Stream<Stri
 
 	private String format = "%s";
 
-	@Configuration(type = ConfigurationType.STRING, displayName = "Format Pattern")
+	@Configuration(type = STRING, displayName = "Format Pattern")
 	public String getFormat() {
 		return this.format;
 	}

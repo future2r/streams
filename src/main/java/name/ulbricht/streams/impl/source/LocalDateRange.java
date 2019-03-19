@@ -1,5 +1,7 @@
 package name.ulbricht.streams.impl.source;
 
+import static name.ulbricht.streams.api.ConfigurationType.LOCAL_DATE;
+import static name.ulbricht.streams.api.ConfigurationType.LONG;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 
 import java.time.LocalDate;
@@ -7,7 +9,6 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
-import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "LocalDate Range", type = SOURCE, output = LocalDate.class, description = "Generates a sequence of LocalDate values as a new stream.")
@@ -17,7 +18,7 @@ public final class LocalDateRange implements Supplier<Stream<LocalDate>> {
 	private LocalDate end = LocalDate.now().withMonth(12).withDayOfMonth(31);
 	private long increment = 1;
 
-	@Configuration(type = ConfigurationType.LOCAL_DATE, displayName = "Start date", ordinal = 1)
+	@Configuration(type = LOCAL_DATE, displayName = "Start date", ordinal = 1)
 	public LocalDate getStart() {
 		return this.start;
 	}
@@ -26,7 +27,7 @@ public final class LocalDateRange implements Supplier<Stream<LocalDate>> {
 		this.start = start;
 	}
 
-	@Configuration(type = ConfigurationType.LOCAL_DATE, displayName = "End date", ordinal = 2)
+	@Configuration(type = LOCAL_DATE, displayName = "End date", ordinal = 2)
 	public LocalDate getEnd() {
 		return this.end;
 	}
@@ -34,12 +35,12 @@ public final class LocalDateRange implements Supplier<Stream<LocalDate>> {
 	public void setEnd(final LocalDate end) {
 		this.end = end;
 	}
-	
-	@Configuration(type = ConfigurationType.LONG, displayName = "Days to increment", ordinal = 3)
+
+	@Configuration(type = LONG, displayName = "Days to increment", ordinal = 3)
 	public long getIncrement() {
 		return this.increment;
 	}
-	
+
 	public void setIncrement(final long increment) {
 		this.increment = increment;
 	}

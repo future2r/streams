@@ -9,7 +9,8 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
-@StreamOperation(name = "JavaScript Sorted", type = INTERMEDIATE, description = "Returns a stream consisting of the elements of this stream, sorted according to the provided Comparator. Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
+@StreamOperation(name = "JavaScript Sorted", type = INTERMEDIATE, description = "Returns a stream consisting of the elements of this stream, sorted according to the provided Comparator."
+		+ " Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
 public final class JavaScriptSorted<T> extends JavaScriptOperation implements Function<Stream<T>, Stream<T>> {
 
 	public JavaScriptSorted() {

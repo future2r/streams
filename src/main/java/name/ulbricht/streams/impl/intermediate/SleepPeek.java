@@ -19,7 +19,7 @@ public final class SleepPeek<T> implements Function<Stream<T>, Stream<T>> {
 		return this.millis;
 	}
 
-	public void setMillis(long millis) {
+	public void setMillis(final long millis) {
 		this.millis = millis;
 	}
 

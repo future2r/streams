@@ -1,5 +1,6 @@
 package name.ulbricht.streams.impl.terminal;
 
+import static name.ulbricht.streams.api.ConfigurationType.STRING;
 import static name.ulbricht.streams.api.StreamOperationType.TERMINAL;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
@@ -8,7 +9,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
-import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "String Joiner", type = TERMINAL, input = String.class, description = "Collects all strings in the stream into a single string.")
@@ -18,7 +18,7 @@ public final class StringJoiner implements Function<Stream<String>, String> {
 	private String prefix = "{";
 	private String suffix = "}";
 
-	@Configuration(type = ConfigurationType.STRING, displayName = "Delimiter")
+	@Configuration(type = STRING, displayName = "Delimiter")
 	public String getDelimiter() {
 		return this.delimiter;
 	}
@@ -27,7 +27,7 @@ public final class StringJoiner implements Function<Stream<String>, String> {
 		this.delimiter = delimiter;
 	}
 
-	@Configuration(type = ConfigurationType.STRING, displayName = "Prefix")
+	@Configuration(type = STRING, displayName = "Prefix")
 	public String getPrefix() {
 		return this.prefix;
 	}
@@ -36,7 +36,7 @@ public final class StringJoiner implements Function<Stream<String>, String> {
 		this.prefix = prefix;
 	}
 
-	@Configuration(type = ConfigurationType.STRING, displayName = "Suffix")
+	@Configuration(type = STRING, displayName = "Suffix")
 	public String getSuffix() {
 		return this.suffix;
 	}

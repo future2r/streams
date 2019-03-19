@@ -1,5 +1,6 @@
 package name.ulbricht.streams.impl.source;
 
+import static name.ulbricht.streams.api.ConfigurationType.STRING;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
@@ -7,7 +8,6 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Configuration;
-import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @StreamOperation(name = "Characters", type = SOURCE, output = Integer.class, description = "Provides the characters of a string as a new stream.")
@@ -15,7 +15,7 @@ public final class Characters implements Supplier<Stream<Integer>> {
 
 	private String text = "Hello World!";
 
-	@Configuration(type = ConfigurationType.STRING, displayName = "Text")
+	@Configuration(type = STRING, displayName = "Text")
 	public String getText() {
 		return this.text;
 	}
