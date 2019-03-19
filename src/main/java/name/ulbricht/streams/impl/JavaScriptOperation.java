@@ -1,43 +1,22 @@
 package name.ulbricht.streams.impl;
 
 import java.util.Map;
-import java.util.Objects;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import name.ulbricht.streams.api.Configuration;
-import name.ulbricht.streams.api.ConfigurationType;
 import name.ulbricht.streams.api.StreamOperationException;
 
 public abstract class JavaScriptOperation {
 
 	private final static ScriptEngineManager engineManager = new ScriptEngineManager();
 
-	private String script;
 	private ScriptEngine engine;
 
-	public JavaScriptOperation(final String script) {
-		this.script = Objects.requireNonNull(script, "script must not be null");
-	}
-
-	@Configuration(type = ConfigurationType.MULTILINE_STRING, displayName = "JavaScript code")
-	public String getScript() {
-		return this.script;
-	}
-
-	public void setScript(String script) {
-		this.script = script;
-	}
-
-	protected final void evalScript(final Map<String, Object> input) {
-		evalScript(this.script, input, null);
-	}
-
-	protected final <T> T evalScript(final Map<String, Object> input, final String resultName) {
-		return evalScript(this.script, input, resultName);
+	protected final void evalScript(final String script, final Map<String, Object> input) {
+		evalScript(script, input, null);
 	}
 
 	@SuppressWarnings("unchecked")

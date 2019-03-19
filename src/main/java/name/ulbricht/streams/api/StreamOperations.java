@@ -6,9 +6,6 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -26,7 +23,7 @@ public final class StreamOperations {
 
 	public static String getDisplayName(final Class<?> streamOperationClass) {
 		final var beanInfo = getBeanInfo(streamOperationClass);
-		
+
 		final var streamOperationAnnotation = Objects
 				.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
 				.getAnnotation(StreamOperation.class);
@@ -51,76 +48,36 @@ public final class StreamOperations {
 		return getBeanInfo(streamOperationClass).getBeanDescriptor().getShortDescription();
 	}
 
-	public static boolean supportsConfiguration(final Object streamOperation) {
-		return !getConfigurations(streamOperation).isEmpty();
+	public static boolean hasProperties(final Class<?> streamOperationClass) {
+		return getProperties(streamOperationClass).length > 0;
 	}
 
-	private static final Map<Class<?>, Map<String, Configuration>> configurationCache = new HashMap<>();
-
-	public static Map<String, Configuration> getConfigurations(final Object streamOperation) {
-		Objects.requireNonNull(streamOperation, "streamOperation must not be null");
-		final var streamOperationClass = streamOperation.getClass();
-
-		synchronized (configurationCache) {
-			final var configurations = configurationCache.get(streamOperationClass);
-			if (configurations != null)
-				return configurations;
-		}
-
-		final Map<String, Configuration> configurations = new HashMap<>();
-		try {
-			final var propertyDescriptors = Introspector.getBeanInfo(streamOperationClass).getPropertyDescriptors();
-			for (final var propertyDescriptor : propertyDescriptors) {
-				final var readMethod = propertyDescriptor.getReadMethod();
-				if (readMethod != null) {
-					final var configurationAnnotation = readMethod.getAnnotation(Configuration.class);
-					if (configurationAnnotation != null) {
-						configurations.put(propertyDescriptor.getName(), configurationAnnotation);
-					}
-				}
-			}
-		} catch (final IntrospectionException ex) {
-			throw new StreamOperationException("Could not inspect " + streamOperationClass, ex);
-		}
-
-		synchronized (configurationCache) {
-			configurationCache.put(streamOperationClass, configurations);
-		}
-		return configurations;
+	public static PropertyDescriptor[] getProperties(final Class<?> streamOperationClass) {
+		final var beanInfo = getBeanInfo(streamOperationClass);
+		return Stream.of(beanInfo.getPropertyDescriptors()).filter(p -> !p.getName().equals("class"))
+				.toArray(PropertyDescriptor[]::new);
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T getConfigurationValue(final String name, final Object streamOperation) {
+	public static <T> T getPropertyValue(final PropertyDescriptor property, final Object streamOperation) {
 		try {
-			return (T) getPropertyDescriptor(
-					Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass(), name)
-							.getReadMethod().invoke(streamOperation, (Object[]) null);
+			return (T) property.getReadMethod().invoke(streamOperation, (Object[]) null);
 		} catch (final ReflectiveOperationException ex) {
-			throw new StreamOperationException("Could not read value for property " + name, ex);
+			throw new StreamOperationException("Could not read value for property " + property.getName(), ex);
 		}
 	}
 
-	public static void setConfigurationValue(final String name, final Object streamOperation, final Object value) {
+	public static void setPropertyValue(final PropertyDescriptor property, final Object streamOperation,
+			final Object value) {
 		try {
-			getPropertyDescriptor(
-					Objects.requireNonNull(streamOperation, "streamOperation must not be null").getClass(), name)
-							.getWriteMethod().invoke(streamOperation, value);
+			property.getWriteMethod().invoke(streamOperation, value);
 		} catch (final ReflectiveOperationException ex) {
-			throw new StreamOperationException("Could not write value for property " + name, ex);
+			throw new StreamOperationException("Could not write value for property " + property.getName(), ex);
 		}
 	}
 
-	private static PropertyDescriptor getPropertyDescriptor(final Class<?> streamOperationClass, final String name) {
-		try {
-			return Stream
-					.of(Introspector.getBeanInfo(
-							Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null"))
-							.getPropertyDescriptors()) //
-					.filter(pd -> name.equals(pd.getName())) //
-					.findFirst().get();
-		} catch (final IntrospectionException | NoSuchElementException ex) {
-			throw new StreamOperationException("Could not find property " + name, ex);
-		}
+	public static Optional<EditorHint> getEditorHint(final PropertyDescriptor property) {
+		return Optional.ofNullable(property.getReadMethod().getAnnotation(EditorHint.class));
 	}
 
 	@SuppressWarnings("unchecked")

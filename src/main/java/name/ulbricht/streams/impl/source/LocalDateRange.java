@@ -1,15 +1,13 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.api.ConfigurationType.LOCAL_DATE;
-import static name.ulbricht.streams.api.ConfigurationType.LONG;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 
+import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.time.LocalDate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
 @JavaBean(description = "Generates a sequence of LocalDate values as a new stream.")
@@ -20,7 +18,7 @@ public final class LocalDateRange implements Supplier<Stream<LocalDate>> {
 	private LocalDate end = LocalDate.now().withMonth(12).withDayOfMonth(31);
 	private long increment = 1;
 
-	@Configuration(type = LOCAL_DATE, displayName = "Start date", ordinal = 1)
+	@BeanProperty(description = "The lower limit of the date range")
 	public LocalDate getStart() {
 		return this.start;
 	}
@@ -29,7 +27,7 @@ public final class LocalDateRange implements Supplier<Stream<LocalDate>> {
 		this.start = start;
 	}
 
-	@Configuration(type = LOCAL_DATE, displayName = "End date", ordinal = 2)
+	@BeanProperty(description = "The upper limit of the date range")
 	public LocalDate getEnd() {
 		return this.end;
 	}
@@ -38,7 +36,7 @@ public final class LocalDateRange implements Supplier<Stream<LocalDate>> {
 		this.end = end;
 	}
 
-	@Configuration(type = LONG, displayName = "Days to increment", ordinal = 3)
+	@BeanProperty(description = "Number of days to increment")
 	public long getIncrement() {
 		return this.increment;
 	}

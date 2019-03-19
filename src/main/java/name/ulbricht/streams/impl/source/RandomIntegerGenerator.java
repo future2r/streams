@@ -1,15 +1,13 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.api.ConfigurationType.INTEGER;
-import static name.ulbricht.streams.api.ConfigurationType.LONG;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 
+import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
 @JavaBean(description = "Generates a random sequence of integer values as a new stream.")
@@ -20,7 +18,7 @@ public final class RandomIntegerGenerator implements Supplier<Stream<Integer>> {
 	private int origin = 0;
 	private int bound = 100;
 
-	@Configuration(type = LONG, displayName = "Number", ordinal = 1)
+	@BeanProperty(description = "Number of elements to generate")
 	public long getNumber() {
 		return this.number;
 	}
@@ -29,7 +27,7 @@ public final class RandomIntegerGenerator implements Supplier<Stream<Integer>> {
 		this.number = number;
 	}
 
-	@Configuration(type = INTEGER, displayName = "Origin (inclusive)", ordinal = 2)
+	@BeanProperty(description = "Minimum value (inclusive)")
 	public int getOrigin() {
 		return this.origin;
 	}
@@ -38,7 +36,7 @@ public final class RandomIntegerGenerator implements Supplier<Stream<Integer>> {
 		this.origin = origin;
 	}
 
-	@Configuration(type = INTEGER, displayName = "Bound (exclusive)", ordinal = 3)
+	@BeanProperty(description = "Maximum value (exclusive)")
 	public int getBound() {
 		return this.bound;
 	}

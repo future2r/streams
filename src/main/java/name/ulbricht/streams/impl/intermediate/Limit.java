@@ -1,13 +1,12 @@
 package name.ulbricht.streams.impl.intermediate;
 
-import static name.ulbricht.streams.api.ConfigurationType.LONG;
 import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
 
+import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
 @JavaBean(description = "Returns a stream consisting of the elements of this stream, truncated to be no longer than maximum size in length.")
@@ -16,7 +15,7 @@ public final class Limit<T> implements Function<Stream<T>, Stream<T>> {
 
 	private long limit = 5;
 
-	@Configuration(type = LONG, displayName = "Maximum size")
+	@BeanProperty(description = "Maximum number of elements")
 	public long getLimit() {
 		return this.limit;
 	}

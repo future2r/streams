@@ -10,6 +10,7 @@ import javax.swing.table.TableCellRenderer;
 
 import name.ulbricht.streams.api.StreamExecutor;
 import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.ui.common.MutableTableModel;
 
 public class StreamOperationTableCellRenderer implements TableCellRenderer {
 

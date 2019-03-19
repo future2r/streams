@@ -1,14 +1,15 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.api.ConfigurationType.MULTILINE_STRING;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 
+import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.EditorHint;
+import name.ulbricht.streams.api.EditorType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @JavaBean(description = "Splits a text into lines and returns them as a new stream.")
@@ -22,7 +23,8 @@ public final class TextLines implements Supplier<Stream<String>> {
 			+ "Salve, mondo!\n" // it
 			+ "qo' vIvan!"; // tlh
 
-	@Configuration(type = MULTILINE_STRING, displayName = "Text Lines")
+	@BeanProperty(description = "Lines of text to create the stream elements")
+	@EditorHint(EditorType.MULTILINE_TEXT)
 	public String getText() {
 		return this.text;
 	}

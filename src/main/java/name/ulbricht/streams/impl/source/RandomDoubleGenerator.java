@@ -1,15 +1,13 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.api.ConfigurationType.DOUBLE;
-import static name.ulbricht.streams.api.ConfigurationType.LONG;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 
+import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
 @JavaBean(description = "Generates a random sequence of double values as a new stream.")
@@ -20,7 +18,7 @@ public final class RandomDoubleGenerator implements Supplier<Stream<Double>> {
 	private double origin = 0.1;
 	private double bound = 0.5;
 
-	@Configuration(type = LONG, displayName = "Number", ordinal = 1)
+	@BeanProperty(description = "Number of values to generate")
 	public long getNumber() {
 		return this.number;
 	}
@@ -29,7 +27,7 @@ public final class RandomDoubleGenerator implements Supplier<Stream<Double>> {
 		this.number = number;
 	}
 
-	@Configuration(type = DOUBLE, displayName = "Origin (inclusive)", ordinal = 2)
+	@BeanProperty(description = "Minimum value (inclusive)")
 	public double getOrigin() {
 		return this.origin;
 	}
@@ -38,7 +36,7 @@ public final class RandomDoubleGenerator implements Supplier<Stream<Double>> {
 		this.origin = origin;
 	}
 
-	@Configuration(type = DOUBLE, displayName = "Bound (exclusive)", ordinal = 3)
+	@BeanProperty(description = "Maximum value (exclusive)")
 	public double getBound() {
 		return this.bound;
 	}

@@ -1,10 +1,9 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.api.ConfigurationType.ENCODING;
-import static name.ulbricht.streams.api.ConfigurationType.FILE;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
+import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -15,7 +14,8 @@ import java.nio.file.Paths;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.EditorHint;
+import name.ulbricht.streams.api.EditorType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @JavaBean(description = "Reads a text file and provides a stream with all lines.")
@@ -25,7 +25,8 @@ public final class TextFileReader implements Supplier<Stream<String>> {
 	private Path file = Paths.get(System.getProperty("user.dir"), "input.txt");
 	private Charset encoding = StandardCharsets.UTF_8;
 
-	@Configuration(type = FILE, displayName = "Text File", ordinal = 1)
+	@BeanProperty(description = "Path of the file to read")
+	@EditorHint(EditorType.FILE)
 	public Path getFile() {
 		return this.file;
 	}
@@ -34,7 +35,7 @@ public final class TextFileReader implements Supplier<Stream<String>> {
 		this.file = file;
 	}
 
-	@Configuration(type = ENCODING, displayName = "Encoding", ordinal = 2)
+	@BeanProperty(description = "Character set for reading the file")
 	public Charset getEncoding() {
 		return encoding;
 	}

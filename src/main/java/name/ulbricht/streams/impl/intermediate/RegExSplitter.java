@@ -1,14 +1,13 @@
 package name.ulbricht.streams.impl.intermediate;
 
-import static name.ulbricht.streams.api.ConfigurationType.STRING;
 import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
+import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
 @JavaBean(description = "Uses a regular expression to split a string into multiple strings and returns them as a stream.")
@@ -17,7 +16,7 @@ public final class RegExSplitter implements Function<Stream<String>, Stream<Stri
 
 	private String pattern = "\\s";
 
-	@Configuration(type = STRING, displayName = "Split Pattern")
+	@BeanProperty(description = "Regular expression for splitting")
 	public String getPattern() {
 		return this.pattern;
 	}

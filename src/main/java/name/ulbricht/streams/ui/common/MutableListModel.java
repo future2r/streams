@@ -1,4 +1,4 @@
-package name.ulbricht.streams.ui;
+package name.ulbricht.streams.ui.common;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +10,7 @@ import javax.swing.event.EventListenerList;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
-class MutableListModel<T> implements ListModel<T> {
+public class MutableListModel<T> implements ListModel<T> {
 
 	private final List<T> elements = new ArrayList<>();
 	private final EventListenerList eventListers = new EventListenerList();
@@ -30,27 +30,27 @@ class MutableListModel<T> implements ListModel<T> {
 		return this.elements.get(index);
 	}
 
-	List<T> getAllElements() {
+	public List<T> getAllElements() {
 		return Collections.unmodifiableList(this.elements);
 	}
 
-	void addElement(final T element) {
+	public void addElement(final T element) {
 		addElementAt(this.elements.size(), element);
 	}
 
-	void addElementAt(final int index, final T element) {
+	public void addElementAt(final int index, final T element) {
 		this.elements.add(index, element);
 		fireElementAdded(index);
 	}
 
-	void removeElementAt(final int index) {
+	public void removeElementAt(final int index) {
 		if (index >= 0 && index < this.elements.size()) {
 			this.elements.remove(index);
 			fireElementRemoved(index);
 		}
 	}
 
-	void removeAllElements() {
+	public void removeAllElements() {
 		if (!this.elements.isEmpty()) {
 			int toIndex = this.elements.size() - 1;
 			this.elements.clear();
@@ -58,7 +58,7 @@ class MutableListModel<T> implements ListModel<T> {
 		}
 	}
 
-	void replaceAllElements(final List<T> newElemens) {
+	public void replaceAllElements(final List<T> newElemens) {
 		removeAllElements();
 		if (!newElemens.isEmpty()) {
 			this.elements.addAll(newElemens);
@@ -66,7 +66,7 @@ class MutableListModel<T> implements ListModel<T> {
 		}
 	}
 
-	void moveElementUp(final int index) {
+	public void moveElementUp(final int index) {
 		if (index > 0) {
 			final var previousIndex = index - 1;
 			final var element = this.elements.get(index);
@@ -79,7 +79,7 @@ class MutableListModel<T> implements ListModel<T> {
 		}
 	}
 
-	void moveElementDown(final int index) {
+	public void moveElementDown(final int index) {
 		if (index >= 0 && index < this.elements.size() - 1) {
 			final var nextIndex = index + 1;
 			final var element = this.elements.get(index);
@@ -92,11 +92,11 @@ class MutableListModel<T> implements ListModel<T> {
 		}
 	}
 
-	void updateElement(final int index) {
+	public void updateElement(final int index) {
 		fireElementChanged(index);
 	}
 
-	void updateElement(final T element) {
+	public void updateElement(final T element) {
 		final int index = this.elements.indexOf(element);
 		if (index >= 0)
 			updateElement(index);

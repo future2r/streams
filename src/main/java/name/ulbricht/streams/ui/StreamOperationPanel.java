@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
@@ -89,12 +90,10 @@ final class StreamOperationPanel extends JPanel {
 	}
 
 	private static String createConfigurationText(final Object streamOperation) {
-		final var configurations = StreamOperations.getConfigurations(streamOperation);
-		if (!configurations.isEmpty()) {
-			return configurations.entrySet().stream()
-					.sorted((e1, e2) -> Integer.compare(e1.getValue().ordinal(), e2.getValue().ordinal()))
-					.map(e -> String.format("%s=%s", e.getValue().displayName(),
-							StreamOperations.getConfigurationValue(e.getKey(), streamOperation)))
+		final var properties = StreamOperations.getProperties(streamOperation.getClass());
+		if (properties.length > 0) {
+			return Stream.of(properties).map(
+					p -> String.format("%s=%s", p.getName(), StreamOperations.getPropertyValue(p, streamOperation)))
 					.collect(Collectors.joining(", ", "", ""));
 		}
 		return "";

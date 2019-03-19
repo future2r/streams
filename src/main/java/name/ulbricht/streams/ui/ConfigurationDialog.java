@@ -10,7 +10,9 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyDescriptor;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +20,7 @@ import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -37,7 +40,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.EditorHint;
+import name.ulbricht.streams.api.EditorType;
 import name.ulbricht.streams.api.StreamOperations;
 
 @SuppressWarnings("serial")
@@ -86,9 +90,8 @@ final class ConfigurationDialog extends JDialog {
 			contentPane.add(descriptionTextArea, BorderLayout.NORTH);
 		}
 
-		StreamOperations.getConfigurations(this.operation).entrySet().stream()
-				.sorted((e1, e2) -> Integer.compare(e1.getValue().ordinal(), e2.getValue().ordinal()))
-				.forEach(e -> addConfiguration(configurationPanel, e.getKey(), e.getValue()));
+		Stream.of(StreamOperations.getProperties(this.operation.getClass()))
+				.forEach(p -> addConfiguration(configurationPanel, p));
 
 		contentPane.add(configurationPanel, BorderLayout.CENTER);
 
@@ -125,106 +128,122 @@ final class ConfigurationDialog extends JDialog {
 		});
 	}
 
-	private int addConfiguration(final JPanel panel, final String name, final Configuration configuration) {
-		var displayName = configuration.displayName();
-		if (displayName.isEmpty())
-			displayName = name;
+	private int addConfiguration(final JPanel panel, final PropertyDescriptor property) {
+		final var editorHint = StreamOperations.getEditorHint(property);
+		final var editorType = editorHint.map(EditorHint::value).orElse(EditorType.DEFAULT);
 
-		final var label = new JLabel(displayName + ':');
+		final var label = new JLabel(property.getName() + ':');
+		final var description = property.getShortDescription();
+		if (description != null)
+			label.setToolTipText(description);
 
-		switch (configuration.type()) {
-		case STRING: {
+		final var type = property.getPropertyType();
+		if (type == String.class) {
+			if (editorType == EditorType.MULTILINE_TEXT) {
+				final var textArea = new JTextArea(7, 80);
+				if (description != null)
+					textArea.setToolTipText(description);
+				textArea.setText(StreamOperations.getPropertyValue(property, this.operation));
+				textArea.setCaretPosition(0);
+				applyFunctions
+						.add(() -> StreamOperations.setPropertyValue(property, this.operation, textArea.getText()));
+
+				return addScrollableComponent(panel, label, textArea);
+			}
+
 			final var textField = new JTextField(30);
-			textField.setText(StreamOperations.getConfigurationValue(name, this.operation));
-			applyFunctions.add(() -> StreamOperations.setConfigurationValue(name, this.operation, textField.getText()));
+			if (description != null)
+				textField.setToolTipText(description);
+			textField.setText(StreamOperations.getPropertyValue(property, this.operation));
+			applyFunctions.add(() -> StreamOperations.setPropertyValue(property, this.operation, textField.getText()));
 
 			return addComponent(panel, label, textField);
-		}
-		case MULTILINE_STRING: {
-			final var textArea = new JTextArea(7, 80);
-			textArea.setText(StreamOperations.getConfigurationValue(name, this.operation));
-			textArea.setCaretPosition(0);
-			applyFunctions.add(() -> StreamOperations.setConfigurationValue(name, this.operation, textArea.getText()));
 
-			return addScrollableComponent(panel, label, textArea);
-		}
-		case INTEGER: {
+		} else if (type == Integer.class || type == Integer.TYPE) {
 			final var spinner = new JSpinner(new SpinnerNumberModel(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
-			spinner.setValue(StreamOperations.getConfigurationValue(name, this.operation));
-			applyFunctions.add(() -> StreamOperations.setConfigurationValue(name, this.operation,
+			if (description != null)
+				spinner.setToolTipText(description);
+			spinner.setValue(StreamOperations.getPropertyValue(property, this.operation));
+			applyFunctions.add(() -> StreamOperations.setPropertyValue(property, this.operation,
 					((Number) spinner.getValue()).intValue()));
 
 			return addComponent(panel, label, spinner);
-		}
-		case LONG: {
+		} else if (type == Long.class || type == Long.TYPE) {
 			final var spinner = new JSpinner(new SpinnerNumberModel(0L, Long.MIN_VALUE, Long.MAX_VALUE, 1L));
-			spinner.setValue(StreamOperations.getConfigurationValue(name, this.operation));
-			applyFunctions.add(() -> StreamOperations.setConfigurationValue(name, this.operation,
+			if (description != null)
+				spinner.setToolTipText(description);
+			spinner.setValue(StreamOperations.getPropertyValue(property, this.operation));
+			applyFunctions.add(() -> StreamOperations.setPropertyValue(property, this.operation,
 					((Number) spinner.getValue()).longValue()));
 
 			return addComponent(panel, label, spinner);
-		}
-		case DOUBLE: {
+
+		} else if (type == Double.class || type == Double.TYPE) {
 			final var spinner = new JSpinner(
 					new SpinnerNumberModel(0.0, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1.0));
-			spinner.setValue(StreamOperations.getConfigurationValue(name, this.operation));
-			applyFunctions.add(() -> StreamOperations.setConfigurationValue(name, this.operation,
+			if (description != null)
+				spinner.setToolTipText(description);
+			spinner.setValue(StreamOperations.getPropertyValue(property, this.operation));
+			applyFunctions.add(() -> StreamOperations.setPropertyValue(property, this.operation,
 					((Number) spinner.getValue()).doubleValue()));
 
 			return addComponent(panel, label, spinner);
-		}
-		case BOOLEAN: {
+
+		} else if (type == Boolean.class || type == Boolean.TYPE) {
 			final var checkBox = new JCheckBox();
-			checkBox.setSelected(StreamOperations.getConfigurationValue(name, this.operation));
+			if (description != null)
+				checkBox.setToolTipText(description);
+			checkBox.setSelected(StreamOperations.getPropertyValue(property, this.operation));
 			applyFunctions
-					.add(() -> StreamOperations.setConfigurationValue(name, this.operation, checkBox.isSelected()));
+					.add(() -> StreamOperations.setPropertyValue(property, this.operation, checkBox.isSelected()));
 
 			return addComponent(panel, label, checkBox);
-		}
-		case DIRECTORY: {
+
+		} else if (type == Path.class) {
 			final var textField = new JTextField(30);
+			if (description != null)
+				textField.setToolTipText(description);
 			textField.setEditable(false);
 			final var button = new JButton(Messages.getString("ConfigurationDialog.browse"));
-			button.addActionListener(e -> browseDirectory(textField));
-			textField.setText(Objects.toString(StreamOperations.getConfigurationValue(name, this.operation), ""));
+
+			if (editorType == EditorType.DIRECTORY)
+				button.addActionListener(e -> browseDirectory(textField));
+			else
+				button.addActionListener(e -> browseFile(textField));
+
+			textField.setText(Objects.toString(StreamOperations.getPropertyValue(property, this.operation), ""));
 			applyFunctions.add(
-					() -> StreamOperations.setConfigurationValue(name, this.operation, Paths.get(textField.getText())));
+					() -> StreamOperations.setPropertyValue(property, this.operation, Paths.get(textField.getText())));
 
 			return addComponent(panel, label, textField, button);
-		}
-		case FILE: {
-			final var textField = new JTextField(30);
-			textField.setEditable(false);
-			final var button = new JButton(Messages.getString("ConfigurationDialog.browse"));
-			button.addActionListener(e -> browseFile(textField));
-			textField.setText(Objects.toString(StreamOperations.getConfigurationValue(name, this.operation), ""));
-			applyFunctions.add(
-					() -> StreamOperations.setConfigurationValue(name, this.operation, Paths.get(textField.getText())));
 
-			return addComponent(panel, label, textField, button);
-		}
-		case ENCODING: {
+		} else if (type == Charset.class) {
 			final var comboBox = new JComboBox<String>(Charset.availableCharsets().keySet().toArray(new String[0]));
-			final Charset charset = StreamOperations.getConfigurationValue(name, this.operation);
+			if (description != null)
+				comboBox.setToolTipText(description);
+			final Charset charset = StreamOperations.getPropertyValue(property, this.operation);
 			if (charset != null)
 				comboBox.setSelectedItem(charset.name());
-			applyFunctions.add(() -> StreamOperations.setConfigurationValue(name, this.operation,
+			applyFunctions.add(() -> StreamOperations.setPropertyValue(property, this.operation,
 					Charset.forName((String) comboBox.getSelectedItem())));
 
 			return addComponent(panel, label, comboBox);
-		}
-		case LOCAL_DATE: {
+
+		} else if (type == LocalDate.class) {
 			final var textField = new JTextField(10);
-			final LocalDate date = StreamOperations.getConfigurationValue(name, this.operation);
+			if (description != null)
+				textField.setToolTipText(description);
+			final LocalDate date = StreamOperations.getPropertyValue(property, this.operation);
 			if (date != null)
 				textField.setText(date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)));
-			applyFunctions.add(() -> StreamOperations.setConfigurationValue(name, this.operation,
+			applyFunctions.add(() -> StreamOperations.setPropertyValue(property, this.operation,
 					LocalDate.parse(textField.getText(), DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))));
 
 			return addComponent(panel, label, textField);
-		}
-		default:
-			throw new IllegalArgumentException(configuration.type().name());
+
+		} else {
+			throw new IllegalArgumentException(
+					String.format("Cannot handle property '%s' of %s", property.getName(), property.getPropertyType()));
 		}
 	}
 

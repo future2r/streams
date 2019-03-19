@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.lang.module.ModuleDescriptor;
@@ -44,6 +43,9 @@ import name.ulbricht.streams.api.StreamOperationSet;
 import name.ulbricht.streams.api.StreamOperationType;
 import name.ulbricht.streams.api.StreamOperations;
 import name.ulbricht.streams.impl.Preset;
+import name.ulbricht.streams.ui.common.MutableComboBoxModel;
+import name.ulbricht.streams.ui.common.MutableListModel;
+import name.ulbricht.streams.ui.common.MutableTableModel;
 
 @SuppressWarnings("serial")
 public final class MainFrame extends JFrame {
@@ -75,14 +77,12 @@ public final class MainFrame extends JFrame {
 		this.mainTabbedPane.setFocusable(false);
 		addTab(this.mainTabbedPane, createSetupPanel(), "tabSetup.title", Icons.SETUP);
 		addTab(this.mainTabbedPane, createCodePanel(), "tabCode.title", Icons.CODE);
-		
+
 		this.executionPanel = createExecutionPanel();
 		addTab(this.mainTabbedPane, executionPanel, "tabExecution.title", Icons.EXECUTION);
 
-		final var contentPane = new JPanel(new BorderLayout(8, 8));
-		contentPane.setBackground(SystemColor.window);
-		contentPane.add(mainTabbedPane, BorderLayout.CENTER);
-
+		final var contentPane = new JPanel(new BorderLayout());
+		contentPane.add(this.mainTabbedPane, BorderLayout.CENTER);
 		contentPane.add(createToolBar(), BorderLayout.NORTH);
 
 		setContentPane(contentPane);
@@ -186,7 +186,7 @@ public final class MainFrame extends JFrame {
 
 		final var configureButton = new JButton(this.actions.add(Actions.action("configureSourceOperation",
 				this::configureSourceOperation, () -> this.currentSourceOperation != null
-						&& StreamOperations.supportsConfiguration(this.currentSourceOperation))));
+						&& StreamOperations.hasProperties(this.currentSourceOperation.getClass()))));
 
 		panel.add(this.sourceOperationComboBox, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.WEST,
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
@@ -221,7 +221,7 @@ public final class MainFrame extends JFrame {
 
 	private void configureSourceOperation() {
 		if (this.currentSourceOperation != null
-				&& StreamOperations.supportsConfiguration(this.currentSourceOperation)) {
+				&& StreamOperations.hasProperties(this.currentSourceOperation.getClass())) {
 			if (showConfigureDialog(this.currentSourceOperation)) {
 				this.sourceOperationPanel.updateContent(this.currentSourceOperation);
 			}
@@ -358,7 +358,7 @@ public final class MainFrame extends JFrame {
 
 	private void configureIntermediateOperation() {
 		final var intermediateOperation = this.intermediateOperationList.getSelectedValue();
-		if (intermediateOperation != null && StreamOperations.supportsConfiguration(intermediateOperation)) {
+		if (intermediateOperation != null && StreamOperations.hasProperties(intermediateOperation.getClass())) {
 			if (showConfigureDialog(intermediateOperation)) {
 				this.intermediateOperationListModel.updateElement(intermediateOperation);
 			}
@@ -388,7 +388,8 @@ public final class MainFrame extends JFrame {
 	}
 
 	private boolean isIntermediateOperationConfigurable() {
-		return getSelectedIntermediateOperation().map(StreamOperations::supportsConfiguration).orElse(Boolean.FALSE);
+		return getSelectedIntermediateOperation().map(Object::getClass).map(StreamOperations::hasProperties)
+				.orElse(Boolean.FALSE);
 	}
 
 	private MutableComboBoxModel<Class<?>> terminalOperationComboBoxModel;
@@ -421,7 +422,7 @@ public final class MainFrame extends JFrame {
 
 		final var configureButton = new JButton(this.actions.add(Actions.action("configureTerminalOperation",
 				this::configureTerminalOperation, () -> this.currentTerminalOperation != null
-						&& StreamOperations.supportsConfiguration(this.currentTerminalOperation))));
+						&& StreamOperations.hasProperties(this.currentTerminalOperation.getClass()))));
 
 		panel.add(this.terminalOperationComboBox, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.WEST,
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
@@ -454,7 +455,7 @@ public final class MainFrame extends JFrame {
 
 	private void configureTerminalOperation() {
 		if (this.currentTerminalOperation != null
-				&& StreamOperations.supportsConfiguration(this.currentTerminalOperation)) {
+				&& StreamOperations.hasProperties(this.currentTerminalOperation.getClass())) {
 			if (showConfigureDialog(this.currentTerminalOperation)) {
 				this.terminalOperationPanel.updateContent(this.currentTerminalOperation);
 			}

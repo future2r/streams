@@ -1,15 +1,14 @@
 package name.ulbricht.streams.impl.intermediate;
 
-import static name.ulbricht.streams.api.ConfigurationType.STRING;
 import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
+import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
 @JavaBean(description = "Returns a stream with only those elements of this stream, that pass a regular expression.")
@@ -18,7 +17,7 @@ public final class RegExFilter implements Function<Stream<String>, Stream<String
 
 	private String pattern = ".*";
 
-	@Configuration(type = STRING, displayName = "Filter Pattern")
+	@BeanProperty(description = "Regular expresstion to match")
 	public String getPattern() {
 		return this.pattern;
 	}

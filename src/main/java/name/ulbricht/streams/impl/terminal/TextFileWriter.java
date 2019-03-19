@@ -1,10 +1,9 @@
 package name.ulbricht.streams.impl.terminal;
 
-import static name.ulbricht.streams.api.ConfigurationType.ENCODING;
-import static name.ulbricht.streams.api.ConfigurationType.FILE;
 import static name.ulbricht.streams.api.StreamOperationType.TERMINAL;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
+import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -16,7 +15,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.EditorHint;
+import name.ulbricht.streams.api.EditorType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @JavaBean(description = "Writes all strings the the stream as lines into a text file.")
@@ -26,7 +26,8 @@ public final class TextFileWriter implements Function<Stream<String>, Void> {
 	private Path file = Paths.get(System.getProperty("user.dir"), "output.txt");
 	private Charset encoding = StandardCharsets.UTF_8;
 
-	@Configuration(type = FILE, displayName = "Current file", ordinal = 1)
+	@BeanProperty(description = "Path of the file to write")
+	@EditorHint(EditorType.FILE)
 	public Path getFile() {
 		return this.file;
 	}
@@ -35,7 +36,7 @@ public final class TextFileWriter implements Function<Stream<String>, Void> {
 		this.file = file;
 	}
 
-	@Configuration(type = ENCODING, displayName = "Encoding", ordinal = 2)
+	@BeanProperty(description = "Character set for writing the file")
 	public Charset getEncoding() {
 		return encoding;
 	}

@@ -1,9 +1,9 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.api.ConfigurationType.DIRECTORY;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
+import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,7 +12,8 @@ import java.nio.file.Paths;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Configuration;
+import name.ulbricht.streams.api.EditorHint;
+import name.ulbricht.streams.api.EditorType;
 import name.ulbricht.streams.api.StreamOperation;
 
 @JavaBean(description = "Finds all files in a directory and its subdirectories.")
@@ -21,7 +22,8 @@ public final class FindFiles implements Supplier<Stream<Path>> {
 
 	private Path directory = Paths.get(System.getProperty("user.dir"));
 
-	@Configuration(type = DIRECTORY, displayName = "Directory")
+	@BeanProperty(description = "Root directory for searching the files")
+	@EditorHint(EditorType.DIRECTORY)
 	public Path getDirectory() {
 		return this.directory;
 	}

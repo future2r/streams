@@ -1,15 +1,13 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.api.ConfigurationType.BOOLEAN;
-import static name.ulbricht.streams.api.ConfigurationType.INTEGER;
 import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 
+import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
 @JavaBean(description = "Generates a sequence of integer values as a new stream.")
@@ -20,7 +18,7 @@ public final class IntegerRange implements Supplier<Stream<Integer>> {
 	private int end = 100;
 	private boolean closed = false;
 
-	@Configuration(type = INTEGER, displayName = "Start", ordinal = 1)
+	@BeanProperty(description = "Lower limit of the range")
 	public int getStart() {
 		return this.start;
 	}
@@ -29,7 +27,7 @@ public final class IntegerRange implements Supplier<Stream<Integer>> {
 		this.start = start;
 	}
 
-	@Configuration(type = INTEGER, displayName = "End", ordinal = 2)
+	@BeanProperty(description = "Upper limit of the range")
 	public int getEnd() {
 		return this.end;
 	}
@@ -38,7 +36,7 @@ public final class IntegerRange implements Supplier<Stream<Integer>> {
 		this.end = end;
 	}
 
-	@Configuration(type = BOOLEAN, displayName = "Range is closed", ordinal = 3)
+	@BeanProperty(description = "A closed range includes the upper limit")
 	public boolean isClosed() {
 		return this.closed;
 	}

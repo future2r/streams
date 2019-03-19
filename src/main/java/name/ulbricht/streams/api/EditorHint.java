@@ -7,11 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Configuration {
+public @interface EditorHint {
 
-	ConfigurationType type();
-
-	String displayName() default "";
-
-	int ordinal() default 0;
+	EditorType value() default EditorType.DEFAULT;
 }

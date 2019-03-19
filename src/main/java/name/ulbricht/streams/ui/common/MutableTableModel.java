@@ -1,4 +1,4 @@
-package name.ulbricht.streams.ui;
+package name.ulbricht.streams.ui.common;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,37 +10,37 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-final class MutableTableModel<T> implements TableModel {
+public class MutableTableModel<T> implements TableModel {
 
-	static final class Column<T> {
+	public static final class Column<T> {
 
 		private final String columnName;
 		private final Class<?> columnClass;
 		private final Function<T, ?> valueAccessor;
 
-		Column(final String columnName) {
+		public Column(final String columnName) {
 			this(columnName, null, null);
 		}
 
-		Column(final String columnName, final Function<T, ?> valueAccessor) {
+		public Column(final String columnName, final Function<T, ?> valueAccessor) {
 			this(columnName, valueAccessor, null);
 		}
 
-		Column(final String columnName, final Function<T, ?> valueAccessor, final Class<?> columnClass) {
+		public Column(final String columnName, final Function<T, ?> valueAccessor, final Class<?> columnClass) {
 			this.columnName = Objects.requireNonNull(columnName, "columnName must not be null");
 			this.valueAccessor = valueAccessor;
 			this.columnClass = columnClass;
 		}
 
-		String getColumnName() {
+		public String getColumnName() {
 			return this.columnName;
 		}
 
-		Class<?> getColumnClass() {
+		public Class<?> getColumnClass() {
 			return this.columnClass != null ? this.columnClass : Object.class;
 		}
 
-		Object getValue(final T logger) {
+		public Object getValue(final T logger) {
 			return this.valueAccessor != null ? this.valueAccessor.apply(logger) : null;
 		}
 	}
@@ -108,7 +108,7 @@ final class MutableTableModel<T> implements TableModel {
 		return this.rows.get(rowIndex);
 	}
 
-	void removeAll() {
+	public void removeAll() {
 		if (!this.rows.isEmpty()) {
 			final var rowCount = this.rows.size();
 			this.rows.clear();
@@ -116,14 +116,20 @@ final class MutableTableModel<T> implements TableModel {
 		}
 	}
 
-	void replaceAll(final List<T> newRows) {
-		removeAll();
-		this.rows.addAll(newRows);
-		if (!this.rows.isEmpty())
-			fireRowsInserted(0, this.rows.size() - 1);
+	public void addAll(final List<T> newRows) {
+		if (!newRows.isEmpty()) {
+			final int size = this.rows.size();
+			this.rows.addAll(newRows);
+			fireRowsInserted(size, this.rows.size() - 1);
+		}
 	}
 
-	void update(final T row) {
+	public void replaceAll(final List<T> newRows) {
+		removeAll();
+		addAll(newRows);
+	}
+
+	public void update(final T row) {
 		final var rowIndex = this.rows.indexOf(row);
 		fireRowUpdated(rowIndex);
 	}

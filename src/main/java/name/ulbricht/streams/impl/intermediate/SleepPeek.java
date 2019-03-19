@@ -1,13 +1,12 @@
 package name.ulbricht.streams.impl.intermediate;
 
-import static name.ulbricht.streams.api.ConfigurationType.LONG;
 import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
 
+import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.Configuration;
 import name.ulbricht.streams.api.StreamOperation;
 
 @JavaBean(description = "Sleeps for some time before forwarding the next element. This can be used for debugging purposes.")
@@ -16,7 +15,7 @@ public final class SleepPeek<T> implements Function<Stream<T>, Stream<T>> {
 
 	private long millis = 100;
 
-	@Configuration(displayName = "Milliseconds", type = LONG)
+	@BeanProperty(description = "Milliseconds to pause the thread")
 	public long getMillis() {
 		return this.millis;
 	}

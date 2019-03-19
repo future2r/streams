@@ -1,8 +1,8 @@
-package name.ulbricht.streams.ui;
+package name.ulbricht.streams.ui.common;
 
 import javax.swing.ComboBoxModel;
 
-final class MutableComboBoxModel<T> extends MutableListModel<T> implements ComboBoxModel<T> {
+public class MutableComboBoxModel<T> extends MutableListModel<T> implements ComboBoxModel<T> {
 
 	private T selectedItem;
 
