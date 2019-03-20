@@ -4,21 +4,55 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.ServiceLoader;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.EditorHint;
 import name.ulbricht.streams.api.Intermediate;
 import name.ulbricht.streams.api.Source;
+import name.ulbricht.streams.api.StreamOperationException;
+import name.ulbricht.streams.api.StreamOperationSet;
+import name.ulbricht.streams.api.StreamOperationsProvider;
 import name.ulbricht.streams.api.Terminal;
 
 public final class StreamOperations {
+
+	public static List<Class<?>> findSourceOperations() {
+		final var operations = new ArrayList<Class<?>>();
+		ServiceLoader.load(StreamOperationsProvider.class).forEach(l -> operations.addAll(l.getSourceOperations()));
+		operations.sort(Comparator.comparing(Class::getSimpleName));
+		return operations;
+	}
+
+	public static List<Class<?>> findIntermediateOperations() {
+		final var operations = new ArrayList<Class<?>>();
+		ServiceLoader.load(StreamOperationsProvider.class)
+				.forEach(l -> operations.addAll(l.getIntermediateOperations()));
+		operations.sort(Comparator.comparing(Class::getSimpleName));
+		return operations;
+	}
+
+	public static List<Class<?>> findTerminalOperations() {
+		final var operations = new ArrayList<Class<?>>();
+		ServiceLoader.load(StreamOperationsProvider.class).forEach(l -> operations.addAll(l.getTerminalOperations()));
+		operations.sort(Comparator.comparing(Class::getSimpleName));
+		return operations;
+	}
+
+	public static Map<String, Supplier<StreamOperationSet>> findPresets() {
+		final var presets = new HashMap<String, Supplier<StreamOperationSet>>();
+		ServiceLoader.load(StreamOperationsProvider.class).forEach(l -> presets.putAll(l.getPresets()));
+		return presets;
+	}
 
 	public static boolean isSourceOperation(final Class<?> streamOperationClass) {
 		return isAnnotatedWith(streamOperationClass, Source.class);
@@ -82,64 +116,6 @@ public final class StreamOperations {
 
 	public static Optional<EditorHint> getEditorHint(final PropertyDescriptor property) {
 		return Optional.ofNullable(property.getReadMethod().getAnnotation(EditorHint.class));
-	}
-
-	public static Class<?>[] findSourceOperations() {
-		return findOperations(Source.class);
-	}
-
-	public static Class<?>[] findIntermediateOperations() {
-		return findOperations(Intermediate.class);
-	}
-
-	public static Class<?>[] findTerminalOperations() {
-		return findOperations(Terminal.class);
-	}
-
-	private static Class<?>[] findOperations(final Class<? extends Annotation> annotationClass) {
-		final var module = ModuleLayer.boot().configuration().modules().stream()
-				.filter(m -> m.name().equals("name.ulbricht.streams.application")).findFirst().get();
-
-		try (final var moduleReader = module.reference().open()) {
-			return (Class<?>[]) moduleReader.list() //
-					.filter(s -> s.startsWith("name/ulbricht/streams/application/operations/") && s.endsWith(".class")) //
-					.map(s -> s.substring(0, s.length() - 6).replace('/', '.')) //
-					.map(StreamOperations::loadClass) //
-					.filter(Optional::isPresent) //
-					.map(Optional::get) //
-					.filter(c -> isCompatible(c, annotationClass)) //
-					.sorted(Comparator.comparing(Class::getSimpleName)) //
-					.toArray(Class<?>[]::new);
-		} catch (final IOException ex) {
-			throw new StreamOperationException(ex);
-		}
-	}
-
-	private static boolean isCompatible(final Class<?> candidateClass,
-			final Class<? extends Annotation> annotationClass) {
-		final var annotation = candidateClass.getAnnotation(annotationClass);
-		if (annotation != null) {
-			if (annotationClass == Source.class)
-				checkImplements(candidateClass, Supplier.class);
-			else if (annotationClass == Intermediate.class || annotationClass == Terminal.class)
-				checkImplements(candidateClass, Function.class);
-			return true;
-		}
-		return false;
-	}
-
-	private static void checkImplements(final Class<?> candidateClass, final Class<?> requiredInterface) {
-		if (!requiredInterface.isAssignableFrom(candidateClass))
-			throw new StreamOperationException(String.format("Operation %s must implement %s",
-					candidateClass.getSimpleName(), requiredInterface.getSimpleName()));
-	}
-
-	private static Optional<Class<?>> loadClass(final String className) {
-		try {
-			return Optional.of(Class.forName(className));
-		} catch (ClassNotFoundException e) {
-			return Optional.empty();
-		}
 	}
 
 	private static BeanInfo getBeanInfo(final Class<?> streamOperationClass) {

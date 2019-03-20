@@ -1,5 +1,7 @@
 package name.ulbricht.streams.application.ui.common;
 
+import java.util.List;
+
 import javax.swing.ComboBoxModel;
 
 public class MutableComboBoxModel<T> extends MutableListModel<T> implements ComboBoxModel<T> {
@@ -8,6 +10,10 @@ public class MutableComboBoxModel<T> extends MutableListModel<T> implements Comb
 
 	@SafeVarargs
 	public MutableComboBoxModel(final T... initialElements) {
+		super(initialElements);
+	}
+	
+	public MutableComboBoxModel(final List<T> initialElements) {
 		super(initialElements);
 	}
 

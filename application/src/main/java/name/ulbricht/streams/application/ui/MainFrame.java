@@ -14,7 +14,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -36,14 +35,15 @@ import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 
+import name.ulbricht.streams.api.StreamOperationException;
 import name.ulbricht.streams.api.StreamOperationSet;
+import name.ulbricht.streams.api.basic.Empty;
+import name.ulbricht.streams.api.basic.SystemOut;
 import name.ulbricht.streams.application.ui.common.MutableComboBoxModel;
 import name.ulbricht.streams.application.ui.common.MutableListModel;
 import name.ulbricht.streams.application.ui.common.MutableTableModel;
-import name.ulbricht.streams.application.ui.helper.Preset;
 import name.ulbricht.streams.application.ui.helper.SourceCodeBuilder;
 import name.ulbricht.streams.application.ui.helper.StreamExecutor;
-import name.ulbricht.streams.application.ui.helper.StreamOperationException;
 import name.ulbricht.streams.application.ui.helper.StreamOperations;
 
 @SuppressWarnings("serial")
@@ -87,7 +87,8 @@ public final class MainFrame extends JFrame {
 		setContentPane(contentPane);
 		pack();
 
-		SwingUtilities.invokeLater(() -> presetSelected(Preset.DEFAULT));
+		SwingUtilities
+				.invokeLater(() -> presetSelected(new StreamOperationSet(new Empty<>(), List.of(), new SystemOut<>())));
 		SwingUtilities.invokeLater(() -> this.sourceOperationComboBox.requestFocusInWindow());
 	}
 
@@ -104,10 +105,10 @@ public final class MainFrame extends JFrame {
 		fileMenu.add(this.actions.add(Actions.action("exit", this::dispose)));
 
 		final var presetsMenu = menuBar.add(new JMenu(Messages.getString("presetsMenu.text")));
-		Stream.of(Preset.values()).forEach(preset -> {
+		StreamOperations.findPresets().entrySet().stream().forEach(entry -> {
 			final var menuItem = presetsMenu
-					.add(new JMenuItem(preset.getDisplayName(), Icons.getIcon(Icons.APPLICATION, Icons.Size.X_SMALL)));
-			menuItem.addActionListener(e -> presetSelected(preset));
+					.add(new JMenuItem(entry.getKey(), Icons.getIcon(Icons.APPLICATION, Icons.Size.X_SMALL)));
+			menuItem.addActionListener(e -> presetSelected(entry.getValue().get()));
 		});
 
 		final var helpMenu = menuBar.add(new JMenu(Messages.getString("helpMenu.text")));
@@ -126,16 +127,14 @@ public final class MainFrame extends JFrame {
 		return toolBar;
 	}
 
-	private void presetSelected(final Preset preset) {
-		final var operations = preset.operations();
-
-		final var source = operations.getSource();
+	private void presetSelected(final StreamOperationSet preset) {
+		final var source = preset.getSource();
 		this.sourceOperationComboBox.setSelectedItem(source.getClass());
 		setSourceOperation(source);
 
-		this.intermediateOperationListModel.replaceAllElements(operations.getIntermediats());
+		this.intermediateOperationListModel.replaceAllElements(preset.getIntermediats());
 
-		final var terminalOperation = operations.getTerminal();
+		final var terminalOperation = preset.getTerminal();
 		this.terminalOperationComboBox.setSelectedItem(terminalOperation.getClass());
 		setTerminalOperation(terminalOperation);
 

@@ -41,6 +41,8 @@
 	<modules>
 		<module>api</module>
 		<module>application</module>
+		<module>script</module>
+		<module>operations</module>
 	</modules>
 
 	<build>

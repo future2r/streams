@@ -17,7 +17,11 @@ public class MutableListModel<T> implements ListModel<T> {
 
 	@SafeVarargs
 	public MutableListModel(final T... initialElements) {
-		this.elements.addAll(List.of(Objects.requireNonNull(initialElements, "initialElements must not be null")));
+		this(List.of(Objects.requireNonNull(initialElements, "initialElements must not be null")));
+	}
+
+	public MutableListModel(final List<T> initialElements) {
+		this.elements.addAll(Objects.requireNonNull(initialElements, "initialElements must not be null"));
 	}
 
 	@Override
