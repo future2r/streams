@@ -1,7 +1,5 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
-
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.Map;
@@ -10,18 +8,18 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.EditorHint;
 import name.ulbricht.streams.api.EditorType;
-import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.Source;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @JavaBean(description = "Returns an infinite sequential ordered Stream produced by iterative application of a function to an initial element.")
-@StreamOperation(type = SOURCE)
+@Source
 public final class JavaScriptIterator extends JavaScriptOperation implements Supplier<Stream<Object>> {
 
 	private String initialScript = "seed = 1";
 	private String hasNextScript = "hasNext = element <= 42";
 	private String nextScript = "next = element + 1";
 
-	@BeanProperty(description = "This script must store the initial in 'seed'")
+	@BeanProperty(description = "This script must store the initial value in 'seed'")
 	@EditorHint(EditorType.MULTILINE_TEXT)
 	public String getInitialScript() {
 		return this.initialScript;

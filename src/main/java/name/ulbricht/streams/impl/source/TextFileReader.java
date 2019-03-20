@@ -1,6 +1,5 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
 import java.beans.BeanProperty;
@@ -16,10 +15,10 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.EditorHint;
 import name.ulbricht.streams.api.EditorType;
-import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.Source;
 
 @JavaBean(description = "Reads a text file and provides a stream with all lines.")
-@StreamOperation(type = SOURCE, output = String.class)
+@Source
 public final class TextFileReader implements Supplier<Stream<String>> {
 
 	private Path file = Paths.get(System.getProperty("user.dir"), "input.txt");

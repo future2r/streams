@@ -5,12 +5,33 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public final class StreamOperations {
+
+	public static boolean isSourceOperation(final Class<?> streamOperationClass) {
+		return isAnnotatedWith(streamOperationClass, Source.class);
+	}
+
+	public static boolean isIntermediateOperation(final Class<?> streamOperationClass) {
+		return isAnnotatedWith(streamOperationClass, Intermediate.class);
+	}
+
+	public static boolean isTerminalOperation(final Class<?> streamOperationClass) {
+		return isAnnotatedWith(streamOperationClass, Terminal.class);
+	}
+
+	private static boolean isAnnotatedWith(final Class<?> streamOperationClass,
+			Class<? extends Annotation> annotationClass) {
+		return Objects.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
+				.getAnnotation(annotationClass) != null;
+	}
 
 	public static Object createOperation(final Class<?> streamOperationClass) throws StreamOperationException {
 		try {
@@ -19,29 +40,6 @@ public final class StreamOperations {
 		} catch (final ReflectiveOperationException ex) {
 			throw new StreamOperationException("Could not create operation from " + streamOperationClass, ex);
 		}
-	}
-
-	public static String getDisplayName(final Class<?> streamOperationClass) {
-		final var beanInfo = getBeanInfo(streamOperationClass);
-
-		final var streamOperationAnnotation = Objects
-				.requireNonNull(streamOperationClass, "streamOperationClass must not be null")
-				.getAnnotation(StreamOperation.class);
-
-		final var name = beanInfo.getBeanDescriptor().getName();
-		final var input = streamOperationAnnotation.input().getSimpleName();
-		final var output = streamOperationAnnotation.output().getSimpleName();
-
-		switch (streamOperationAnnotation.type()) {
-		case SOURCE:
-			return String.format("%s (%s)", name, output);
-		case INTERMEDIATE:
-			return String.format("%s (%s -> %s)", name, input, output);
-		case TERMINAL:
-			return String.format("%s (%s)", name, input);
-		}
-
-		throw new IllegalArgumentException("Unsupported operation type: " + streamOperationAnnotation.type());
 	}
 
 	public static String getDescription(final Class<?> streamOperationClass) {
@@ -53,8 +51,9 @@ public final class StreamOperations {
 	}
 
 	public static PropertyDescriptor[] getProperties(final Class<?> streamOperationClass) {
-		final var beanInfo = getBeanInfo(streamOperationClass);
-		return Stream.of(beanInfo.getPropertyDescriptors()).filter(p -> !p.getName().equals("class"))
+		return Stream.of(getBeanInfo(streamOperationClass).getPropertyDescriptors())
+				.filter(p -> !p.getName().equals("class"))
+				.filter(pd -> pd.getValue("transient") == null || Boolean.FALSE.equals(pd.getValue("transient")))
 				.toArray(PropertyDescriptor[]::new);
 	}
 
@@ -80,8 +79,19 @@ public final class StreamOperations {
 		return Optional.ofNullable(property.getReadMethod().getAnnotation(EditorHint.class));
 	}
 
-	@SuppressWarnings("unchecked")
-	public static Class<?>[] findOperations(final StreamOperationType streamOperationType) {
+	public static Class<?>[] findSourceOperations() {
+		return findOperations(Source.class);
+	}
+
+	public static Class<?>[] findIntermediateOperations() {
+		return findOperations(Intermediate.class);
+	}
+
+	public static Class<?>[] findTerminalOperations() {
+		return findOperations(Terminal.class);
+	}
+
+	private static Class<?>[] findOperations(final Class<? extends Annotation> annotationClass) {
 		final var module = ModuleLayer.boot().configuration().modules().stream()
 				.filter(m -> m.name().equals("name.ulbricht.streams")).findFirst().get();
 
@@ -92,22 +102,31 @@ public final class StreamOperations {
 					.map(StreamOperations::loadClass) //
 					.filter(Optional::isPresent) //
 					.map(Optional::get) //
-					.filter(c -> isCompatible(c, streamOperationType)) //
-					.sorted(Comparator
-							.comparing(c -> StreamOperations.getDisplayName((Class<? extends StreamOperations>) c))) //
+					.filter(c -> isCompatible(c, annotationClass)) //
+					.sorted(Comparator.comparing(Class::getSimpleName)) //
 					.toArray(Class<?>[]::new);
 		} catch (final IOException ex) {
 			throw new StreamOperationException(ex);
 		}
 	}
 
-	private static boolean isCompatible(final Class<?> candidateClass, final StreamOperationType streamOperationType) {
-		final var streamOperationAnnotation = candidateClass.getAnnotation(StreamOperation.class);
-		if (streamOperationAnnotation != null && streamOperationAnnotation.type() == streamOperationType) {
-			streamOperationAnnotation.type().checkClassCompatibility(candidateClass);
+	private static boolean isCompatible(final Class<?> candidateClass,
+			final Class<? extends Annotation> annotationClass) {
+		final var annotation = candidateClass.getAnnotation(annotationClass);
+		if (annotation != null) {
+			if (annotationClass == Source.class)
+				checkImplements(candidateClass, Supplier.class);
+			else if (annotationClass == Intermediate.class || annotationClass == Terminal.class)
+				checkImplements(candidateClass, Function.class);
 			return true;
 		}
 		return false;
+	}
+
+	private static void checkImplements(final Class<?> candidateClass, final Class<?> requiredInterface) {
+		if (!requiredInterface.isAssignableFrom(candidateClass))
+			throw new StreamOperationException(String.format("Operation %s must implement %s",
+					candidateClass.getSimpleName(), requiredInterface.getSimpleName()));
 	}
 
 	private static Optional<Class<?>> loadClass(final String className) {

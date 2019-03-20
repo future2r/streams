@@ -1,15 +1,13 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
-
 import java.beans.JavaBean;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.Source;
 
 @JavaBean(description = "Generates a sequence of long values with the powers of two as a new stream.")
-@StreamOperation(type = SOURCE, output = Long.class)
+@Source
 public final class PowersOfTwo implements Supplier<Stream<Long>> {
 
 	@Override

@@ -1,15 +1,13 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
-
 import java.beans.JavaBean;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.Source;
 
 @JavaBean(description = "Creates a stream with the keys of all Java system properties.")
-@StreamOperation(type = SOURCE)
+@Source
 public final class SystemProperties implements Supplier<Stream<Object>> {
 
 	@Override

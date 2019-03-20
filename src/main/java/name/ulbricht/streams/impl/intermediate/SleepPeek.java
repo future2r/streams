@@ -1,16 +1,14 @@
 package name.ulbricht.streams.impl.intermediate;
 
-import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
-
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.Intermediate;
 
 @JavaBean(description = "Sleeps for some time before forwarding the next element. This can be used for debugging purposes.")
-@StreamOperation(type = INTERMEDIATE)
+@Intermediate
 public final class SleepPeek<T> implements Function<Stream<T>, Stream<T>> {
 
 	private long millis = 100;

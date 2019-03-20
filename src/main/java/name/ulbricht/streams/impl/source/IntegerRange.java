@@ -1,17 +1,15 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
-
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.Source;
 
 @JavaBean(description = "Generates a sequence of integer values as a new stream.")
-@StreamOperation(type = SOURCE, output = Integer.class)
+@Source
 public final class IntegerRange implements Supplier<Stream<Integer>> {
 
 	private int start = 0;

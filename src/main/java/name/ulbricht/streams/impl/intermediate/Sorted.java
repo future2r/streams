@@ -1,15 +1,13 @@
 package name.ulbricht.streams.impl.intermediate;
 
-import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
-
 import java.beans.JavaBean;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.Intermediate;
 
 @JavaBean(description = "Returns a stream consisting of the elements of this stream, sorted according to natural order.")
-@StreamOperation(type = INTERMEDIATE, input = Comparable.class, output = Comparable.class)
+@Intermediate
 public final class Sorted<T extends Comparable<T>> implements Function<Stream<T>, Stream<T>> {
 
 	@Override

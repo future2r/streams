@@ -1,6 +1,5 @@
 package name.ulbricht.streams.impl.terminal;
 
-import static name.ulbricht.streams.api.StreamOperationType.TERMINAL;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
 import java.beans.BeanProperty;
@@ -17,10 +16,10 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.EditorHint;
 import name.ulbricht.streams.api.EditorType;
-import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.Terminal;
 
 @JavaBean(description = "Writes all strings the the stream as lines into a text file.")
-@StreamOperation(type = TERMINAL, input = String.class)
+@Terminal
 public final class TextFileWriter implements Function<Stream<String>, Void> {
 
 	private Path file = Paths.get(System.getProperty("user.dir"), "output.txt");

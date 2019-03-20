@@ -15,15 +15,15 @@ public final class SourceCodeBuilder {
 		final var sourceCode = new StringBuilder();
 
 		final var source = this.operations.getSource();
-		sourceCode.append(String.format("// %s%n", StreamOperations.getDisplayName(source.getClass())));
+		sourceCode.append(String.format("// %s%n", source.getClass().getSimpleName()));
 		sourceCode.append(source.toString().lines().collect(Collectors.joining("\n", "", "\n")));
 
-		sourceCode.append(this.operations.getIntermediats().stream().map(
-				op -> String.format("%n// %s%n%s%n", StreamOperations.getDisplayName(op.getClass()), op.toString()))
+		sourceCode.append(this.operations.getIntermediats().stream()
+				.map(op -> String.format("%n// %s%n%s%n", op.getClass().getSimpleName(), op.toString()))
 				.flatMap(String::lines).collect(Collectors.joining("\n", "", "\n")));
 
 		final var terminal = this.operations.getTerminal();
-		sourceCode.append(String.format("%n// %s%n", StreamOperations.getDisplayName(terminal.getClass())));
+		sourceCode.append(String.format("%n// %s%n", terminal.getClass().getSimpleName()));
 		sourceCode.append(terminal.toString().lines().collect(Collectors.joining("\n", "", ";")));
 
 		return sourceCode.toString();

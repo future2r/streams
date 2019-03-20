@@ -1,6 +1,5 @@
 package name.ulbricht.streams.impl.terminal;
 
-import static name.ulbricht.streams.api.StreamOperationType.TERMINAL;
 import static name.ulbricht.streams.impl.StringUtils.quote;
 
 import java.beans.BeanProperty;
@@ -9,10 +8,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.Terminal;
 
 @JavaBean(description = "Collects all strings in the stream into a single string.")
-@StreamOperation(type = TERMINAL, input = String.class)
+@Terminal
 public final class StringJoiner implements Function<Stream<String>, String> {
 
 	private String delimiter = ",";

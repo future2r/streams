@@ -1,15 +1,13 @@
 package name.ulbricht.streams.impl.intermediate;
 
-import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
-
 import java.beans.JavaBean;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.Intermediate;
 
 @JavaBean(description = "Returns a stream consisting of the distinct elements (according to the natural order) of this stream.")
-@StreamOperation(type = INTERMEDIATE)
+@Intermediate
 public final class Distinct<T> implements Function<Stream<T>, Stream<T>> {
 
 	@Override

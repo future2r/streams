@@ -1,7 +1,5 @@
 package name.ulbricht.streams.impl.intermediate;
 
-import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
-
 import java.beans.BeanProperty;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -11,10 +9,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.Intermediate;
 
 @JavaBean(description = "Maps an object to the value of a property.")
-@StreamOperation(type = INTERMEDIATE)
+@Intermediate
 public final class PropertyMapper implements Function<Stream<Object>, Stream<Object>> {
 
 	private String property = "class";

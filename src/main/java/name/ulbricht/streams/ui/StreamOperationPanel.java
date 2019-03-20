@@ -13,7 +13,6 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
-import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.api.StreamOperations;
 
 final class StreamOperationPanel extends JPanel {
@@ -56,34 +55,29 @@ final class StreamOperationPanel extends JPanel {
 	}
 
 	void updateContent(final Object streamOperation) {
-		this.nameLabel
-				.setText(streamOperation != null ? StreamOperations.getDisplayName(streamOperation.getClass()) : " ");
+		this.nameLabel.setText(streamOperation != null ? streamOperation.getClass().getSimpleName() : " ");
+
+		Icon icon = null;
+		String description = null;
 
 		if (streamOperation != null) {
-			final var streamOperationAnnotation = streamOperation.getClass().getAnnotation(StreamOperation.class);
+			final var streamOperationClass = streamOperation.getClass();
 
-			final Icon icon;
-			switch (streamOperationAnnotation.type()) {
-			case SOURCE:
-				icon = Icons.getSmallIcon(Icons.SOURCE_OPERATION);
-				break;
-			case INTERMEDIATE:
-				icon = Icons.getSmallIcon(Icons.INTERMEDIATE_OPERATION);
-				break;
-			case TERMINAL:
-				icon = Icons.getSmallIcon(Icons.TERMINAL_OPERATION);
-				break;
-			default:
-				icon = null;
-			}
-			this.nameLabel.setIcon(icon);
+			String iconName = null;
+			if (StreamOperations.isSourceOperation(streamOperationClass))
+				iconName = Icons.SOURCE_OPERATION;
+			else if (StreamOperations.isIntermediateOperation(streamOperationClass))
+				iconName = Icons.INTERMEDIATE_OPERATION;
+			else if (StreamOperations.isTerminalOperation(streamOperationClass))
+				iconName = Icons.TERMINAL_OPERATION;
 
-			final var description = StreamOperations.getDescription(streamOperation.getClass());
-			if (description != null)
-				this.setToolTipText(String.format("<html><p width=\"300px\">%s</p</html>", description));
-			else
-				this.setToolTipText(null);
+			icon = iconName != null ? Icons.getIcon(iconName, Icons.Size.X_SMALL) : null;
+			description = StreamOperations.getDescription(streamOperation.getClass());
 		}
+
+		this.nameLabel.setIcon(icon);
+		this.setToolTipText(
+				description != null ? String.format("<html><p width=\"300px\">%s</p</html>", description) : null);
 
 		this.configLabel.setText(streamOperation != null ? omit(createConfigurationText(streamOperation), 100) : " ");
 

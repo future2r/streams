@@ -16,30 +16,24 @@ public final class StreamExecutor {
 
 	public static class ExecutionLogger implements Consumer<Object> {
 
-		private long elementsProvided;
+		private volatile long elementsProvided;
 		private final Object operation;
-		private final String operationName;
 		private final Consumer<ExecutionLogger> updateHandler;
 
 		private ExecutionLogger(final Object operation, final Consumer<ExecutionLogger> updateHandler) {
 			this.operation = operation;
 			this.updateHandler = updateHandler;
-			this.operationName = StreamOperations.getDisplayName(this.operation.getClass());
 		}
 
 		@Override
 		public void accept(final Object element) {
 			this.elementsProvided++;
 			this.updateHandler.accept(this);
-			log.info(() -> String.format("%s: %s", this.operationName, element));
+			log.info(() -> String.format("%s: %s", this.operation.getClass().getSimpleName(), element));
 		}
 
 		public Object getOperation() {
 			return this.operation;
-		}
-		
-		public String getOperationName() {
-			return this.operationName;
 		}
 
 		public long getElementsProvided() {
@@ -60,7 +54,8 @@ public final class StreamExecutor {
 		this.operations = Objects.requireNonNull(operations, "operations must not be null");
 
 		final var sourceOperation = this.operations.getSource();
-		Stream tempStream = addExecutionLogger(((Supplier<Stream>) sourceOperation).get(), sourceOperation, updateHandler);
+		Stream tempStream = addExecutionLogger(((Supplier<Stream>) sourceOperation).get(), sourceOperation,
+				updateHandler);
 
 		for (final var intermediatOperation : this.operations.getIntermediats()) {
 			tempStream = addExecutionLogger(((Function<Stream, Stream>) intermediatOperation).apply(tempStream),

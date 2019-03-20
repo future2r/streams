@@ -8,7 +8,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import name.ulbricht.streams.api.StreamOperation;
 import name.ulbricht.streams.api.StreamOperations;
 
 final class StreamOperationClassListCellRenderer implements ListCellRenderer<Class<?>> {
@@ -19,35 +18,31 @@ final class StreamOperationClassListCellRenderer implements ListCellRenderer<Cla
 	public Component getListCellRendererComponent(final JList<? extends Class<?>> list, final Class<?> value,
 			final int index, final boolean isSelected, final boolean cellHasFocus) {
 
-		final var text = value != null ? StreamOperations.getDisplayName(value) : " ";
+		final var text = value != null ? value.getSimpleName() : " ";
 
 		final var component = delegate.getListCellRendererComponent(list, text, index, isSelected, cellHasFocus);
 
-		if (value != null && component instanceof JLabel) {
-			final var streamOperationAnnotation = value.getAnnotation(StreamOperation.class);
-
+		if (component instanceof JLabel) {
 			final var label = (JLabel) component;
 			Icon icon = null;
-			if (value != null) {
-				switch (streamOperationAnnotation.type()) {
-				case SOURCE:
-					icon = Icons.getSmallIcon(Icons.SOURCE_OPERATION);
-					break;
-				case INTERMEDIATE:
-					icon = Icons.getSmallIcon(Icons.INTERMEDIATE_OPERATION);
-					break;
-				case TERMINAL:
-					icon = Icons.getSmallIcon(Icons.TERMINAL_OPERATION);
-					break;
-				}
-			}
-			label.setIcon(icon);
+			String description = null;
 
-			final var description = StreamOperations.getDescription(value);
-			if (description != null)
-				label.setToolTipText(String.format("<html><p width=\"300px\">%s</p</html>", description));
-			else
-				label.setToolTipText(null);
+			if (value != null) {
+				String iconName = null;
+				if (StreamOperations.isSourceOperation(value))
+					iconName = Icons.SOURCE_OPERATION;
+				else if (StreamOperations.isIntermediateOperation(value))
+					iconName = Icons.INTERMEDIATE_OPERATION;
+				else if (StreamOperations.isTerminalOperation(value))
+					iconName = Icons.TERMINAL_OPERATION;
+
+				icon = iconName != null ? Icons.getIcon(iconName, Icons.Size.X_SMALL) : null;
+				description = StreamOperations.getDescription(value);
+			}
+
+			label.setIcon(icon);
+			label.setToolTipText(
+					description != null ? String.format("<html><p width=\"300px\">%s</p</html>", description) : null);
 		}
 
 		return component;

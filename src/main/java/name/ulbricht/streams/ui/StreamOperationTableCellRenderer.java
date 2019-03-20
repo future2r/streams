@@ -9,7 +9,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
 import name.ulbricht.streams.api.StreamExecutor;
-import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.StreamOperations;
 import name.ulbricht.streams.ui.common.MutableTableModel;
 
 public class StreamOperationTableCellRenderer implements TableCellRenderer {
@@ -29,19 +29,21 @@ public class StreamOperationTableCellRenderer implements TableCellRenderer {
 		if (component instanceof JLabel) {
 			final var label = (JLabel) component;
 			Icon icon = null;
+			
 			if (operation != null) {
-				switch (operation.getClass().getAnnotation(StreamOperation.class).type()) {
-				case SOURCE:
-					icon = Icons.getSmallIcon(Icons.SOURCE_OPERATION);
-					break;
-				case INTERMEDIATE:
-					icon = Icons.getSmallIcon(Icons.INTERMEDIATE_OPERATION);
-					break;
-				case TERMINAL:
-					icon = Icons.getSmallIcon(Icons.TERMINAL_OPERATION);
-					break;
-				}
+				final var streamOperationClass = operation.getClass();
+
+				String iconName = null;
+				if (StreamOperations.isSourceOperation(streamOperationClass))
+					iconName = Icons.SOURCE_OPERATION;
+				else if (StreamOperations.isIntermediateOperation(streamOperationClass))
+					iconName = Icons.INTERMEDIATE_OPERATION;
+				else if (StreamOperations.isTerminalOperation(streamOperationClass))
+					iconName = Icons.TERMINAL_OPERATION;
+				
+				icon = iconName != null ? Icons.getIcon(iconName, Icons.Size.X_SMALL) : null;
 			}
+
 			label.setIcon(icon);
 		}
 

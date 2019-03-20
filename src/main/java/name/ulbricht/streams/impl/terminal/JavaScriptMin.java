@@ -1,7 +1,5 @@
 package name.ulbricht.streams.impl.terminal;
 
-import static name.ulbricht.streams.api.StreamOperationType.TERMINAL;
-
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.Map;
@@ -11,11 +9,11 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.EditorHint;
 import name.ulbricht.streams.api.EditorType;
-import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.Terminal;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @JavaBean(description = "Returns the minimum element of this stream according to the provided Comparator.")
-@StreamOperation(type = TERMINAL)
+@Terminal
 public final class JavaScriptMin<T> extends JavaScriptOperation implements Function<Stream<T>, Optional<T>> {
 
 	private String script = "result = java.util.Objects.compare(element1, element2, java.util.Comparator.naturalOrder());";

@@ -40,7 +40,6 @@ import name.ulbricht.streams.api.SourceCodeBuilder;
 import name.ulbricht.streams.api.StreamExecutor;
 import name.ulbricht.streams.api.StreamOperationException;
 import name.ulbricht.streams.api.StreamOperationSet;
-import name.ulbricht.streams.api.StreamOperationType;
 import name.ulbricht.streams.api.StreamOperations;
 import name.ulbricht.streams.impl.Preset;
 import name.ulbricht.streams.ui.common.MutableComboBoxModel;
@@ -107,7 +106,7 @@ public final class MainFrame extends JFrame {
 		final var presetsMenu = menuBar.add(new JMenu(Messages.getString("presetsMenu.text")));
 		Stream.of(Preset.values()).forEach(preset -> {
 			final var menuItem = presetsMenu
-					.add(new JMenuItem(preset.getDisplayName(), Icons.getSmallIcon(Icons.APPLICATION)));
+					.add(new JMenuItem(preset.getDisplayName(), Icons.getIcon(Icons.APPLICATION, Icons.Size.X_SMALL)));
 			menuItem.addActionListener(e -> presetSelected(preset));
 		});
 
@@ -166,8 +165,7 @@ public final class MainFrame extends JFrame {
 		panel.setOpaque(false);
 		panel.setBorder(new TitledBorder(Messages.getString("sourcePanel.title")));
 
-		this.sourceOperationComboBoxModel = new MutableComboBoxModel<>(
-				StreamOperations.findOperations(StreamOperationType.SOURCE));
+		this.sourceOperationComboBoxModel = new MutableComboBoxModel<>(StreamOperations.findSourceOperations());
 		this.sourceOperationComboBox = new JComboBox<>(this.sourceOperationComboBoxModel);
 		this.sourceOperationComboBox.setMaximumRowCount(15);
 		if (this.sourceOperationComboBoxModel.getSize() > 0)
@@ -239,7 +237,7 @@ public final class MainFrame extends JFrame {
 		panel.setBorder(new TitledBorder(Messages.getString("intermediatePanel.title")));
 
 		this.intermediateOperationComboBoxModel = new MutableComboBoxModel<>(
-				StreamOperations.findOperations(StreamOperationType.INTERMEDIATE));
+				StreamOperations.findIntermediateOperations());
 		this.intermediateOperationComboBox = new JComboBox<>(this.intermediateOperationComboBoxModel);
 		this.intermediateOperationComboBox.setMaximumRowCount(15);
 		if (this.intermediateOperationComboBoxModel.getSize() > 0)
@@ -402,8 +400,7 @@ public final class MainFrame extends JFrame {
 		panel.setOpaque(false);
 		panel.setBorder(new TitledBorder(Messages.getString("terminalPanel.title")));
 
-		this.terminalOperationComboBoxModel = new MutableComboBoxModel<>(
-				StreamOperations.findOperations(StreamOperationType.TERMINAL));
+		this.terminalOperationComboBoxModel = new MutableComboBoxModel<>(StreamOperations.findTerminalOperations());
 		this.terminalOperationComboBox = new JComboBox<>(this.terminalOperationComboBoxModel);
 		this.terminalOperationComboBox.setMaximumRowCount(15);
 		if (this.terminalOperationComboBoxModel.getSize() > 0)
@@ -528,7 +525,7 @@ public final class MainFrame extends JFrame {
 
 		this.statisticsTableModel = new MutableTableModel<>(List.of(
 				new MutableTableModel.Column<>(Messages.getString("statisticsTableModel.nameColumn"),
-						StreamExecutor.ExecutionLogger::getOperationName, String.class),
+						l -> l.getOperation().getClass().getSimpleName(), String.class),
 				new MutableTableModel.Column<>(Messages.getString("statisticsTableModel.elementsColumn"),
 						StreamExecutor.ExecutionLogger::getElementsProvided, Long.class)));
 		this.statisticsTable = new JTable(this.statisticsTableModel);
@@ -608,7 +605,7 @@ public final class MainFrame extends JFrame {
 			final String iconResource) {
 		tabbedPane.add(Messages.getString(titleResource), component);
 		final var tabIndex = tabbedPane.indexOfComponent(component);
-		tabbedPane.setIconAt(tabIndex, Icons.getSmallIcon(iconResource));
+		tabbedPane.setIconAt(tabIndex, Icons.getIcon(iconResource, Icons.Size.X_SMALL));
 	}
 
 	private void showAbout() {

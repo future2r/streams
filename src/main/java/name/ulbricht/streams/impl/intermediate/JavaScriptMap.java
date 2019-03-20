@@ -1,7 +1,5 @@
 package name.ulbricht.streams.impl.intermediate;
 
-import static name.ulbricht.streams.api.StreamOperationType.INTERMEDIATE;
-
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.Map;
@@ -10,11 +8,11 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.EditorHint;
 import name.ulbricht.streams.api.EditorType;
-import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.Intermediate;
 import name.ulbricht.streams.impl.JavaScriptOperation;
 
 @JavaBean(description = "Returns a stream consisting of the results of applying the given function to the elements of this stream.")
-@StreamOperation(type = INTERMEDIATE)
+@Intermediate
 public final class JavaScriptMap<I, O> extends JavaScriptOperation implements Function<Stream<I>, Stream<O>> {
 
 	private String script = "mapped = element.getClass().getSimpleName();";

@@ -66,7 +66,7 @@ final class ConfigurationDialog extends JDialog {
 		this.operation = operation;
 
 		setTitle(String.format(Messages.getString("ConfigurationDialog.titlePattern"),
-				StreamOperations.getDisplayName(this.operation.getClass())));
+				this.operation.getClass().getSimpleName()));
 
 		final var contentPane = new JPanel(new BorderLayout(8, 8));
 		contentPane.setOpaque(false);

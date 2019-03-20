@@ -1,16 +1,14 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
-
 import java.beans.JavaBean;
 import java.time.ZoneId;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.Source;
 
 @JavaBean(description = "Creates a stream with all time zones.")
-@StreamOperation(type = SOURCE, output = ZoneId.class)
+@Source
 public final class TimeZones implements Supplier<Stream<ZoneId>> {
 
 	@Override

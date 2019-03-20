@@ -1,15 +1,13 @@
 package name.ulbricht.streams.impl.source;
 
-import static name.ulbricht.streams.api.StreamOperationType.SOURCE;
-
 import java.beans.JavaBean;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.StreamOperation;
+import name.ulbricht.streams.api.Source;
 
 @JavaBean(description = "Generates an infinite Fibonacci number sequence.")
-@StreamOperation(type = SOURCE, output = Long.class)
+@Source
 public final class FibonacciGenerator implements Supplier<Stream<Long>> {
 
 	@Override

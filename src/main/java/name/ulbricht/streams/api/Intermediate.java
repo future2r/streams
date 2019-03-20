@@ -7,11 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface StreamOperation {
+public @interface Intermediate {
 
-	StreamOperationType type();
-
-	Class<?> input() default Object.class;
-
-	Class<?> output() default Object.class;
+	// no members
 }
