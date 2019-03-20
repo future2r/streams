@@ -1,0 +1,109 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>name.ulbricht.streams</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
+	<artifactId>application</artifactId>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<compilerArgs>
+						<arg>--module-path</arg>
+						<arg>${project.build.directory}/../../api/target/release</arg>
+						<arg>--add-modules</arg>
+						<arg>name.ulbricht.streams.api</arg>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+
+			<!-- perform some additional tasks (Maven does not support this yet) -->
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+
+					<!-- patch the module jar to feature a main class and a version number -->
+					<!-- see https://issues.apache.org/jira/browse/MJAR-238 -->
+					<execution>
+						<id>patch-module-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<exec executable="${java.home}/bin/jar" failonerror="true">
+
+									<!-- add the main class -->
+									<arg value="--main-class" />
+									<arg value="name.ulbricht.streams.application.Streams" />
+
+									<!-- add the version number -->
+									<arg value="--module-version" />
+									<arg value="${project.version}" />
+
+									<!-- update only -->
+									<arg value="--update" />
+
+									<!-- file to update -->
+									<arg value="--file" />
+									<arg
+										value="${project.build.directory}/release/${project.artifactId}-${project.version}.jar" />
+								</exec>
+							</target>
+						</configuration>
+					</execution>
+
+					<!-- create runimage with a minimal JRE and all required modules and 
+						a launcher "bin/Streams" in the "runimage" folder -->
+					<!-- see https://maven.apache.org/plugins/maven-jlink-plugin -->
+					<execution>
+						<id>create-jre</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<exec executable="${java.home}/bin/jlink"
+									failonerror="true">
+									<!-- path to modules -->
+									<arg value="-p" />
+									<arg
+										value="${project.build.directory}/release;${project.build.directory}/../../api/target/release" />
+
+									<!-- name(s) of root module(s) -->
+									<arg value="--add-modules" />
+									<arg
+										value="name.ulbricht.streams.application,name.ulbricht.streams.api" />
+
+									<!-- target folder for the runimage -->
+									<arg value="--output" />
+									<arg value="${project.build.directory}/runimage" />
+
+									<!-- strip debug information -->
+									<arg value="--strip-debug" />
+
+									<!-- name of the launcher and module to launch -->
+									<arg value="--launcher" />
+									<arg value="Streams=name.ulbricht.streams.application" />
+								</exec>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
