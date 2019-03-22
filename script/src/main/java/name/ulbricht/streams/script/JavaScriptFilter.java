@@ -31,7 +31,7 @@ public final class JavaScriptFilter<T> extends JavaScriptOperation implements Fu
 		return this.script;
 	}
 
-	public void setScript(String script) {
+	public void setScript(final String script) {
 		this.script = script;
 	}
 

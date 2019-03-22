@@ -3,6 +3,7 @@ package name.ulbricht.streams.script;
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -15,16 +16,24 @@ import name.ulbricht.streams.api.Intermediate;
 @Intermediate
 public final class JavaScriptTakeWhile<T> extends JavaScriptOperation implements Function<Stream<T>, Stream<T>> {
 
-	private String script = "take = true;";
-	
+	private String script;
+
+	public JavaScriptTakeWhile() {
+		this("drop = true;");
+	}
+
+	public JavaScriptTakeWhile(final String script) {
+		this.script = Objects.requireNonNull(script, "script must not be null");
+	}
+
 	@BeanProperty(description = "The current element is provided as 'element', the result must a boolean value stored in 'take'.")
 	@EditorHint(EditorType.MULTILINE_TEXT)
 	public String getScript() {
 		return this.script;
 	}
 
-	public void setScript(String script) {
-		this.script = script;
+	public void setScript(final String script) {
+		this.script = Objects.requireNonNull(script, "script must not be null");
 	}
 
 	@Override

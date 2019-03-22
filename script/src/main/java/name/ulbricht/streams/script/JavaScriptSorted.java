@@ -15,6 +15,8 @@ import name.ulbricht.streams.api.Intermediate;
 @Intermediate
 public final class JavaScriptSorted<T> extends JavaScriptOperation implements Function<Stream<T>, Stream<T>> {
 
+	private String script;
+
 	public JavaScriptSorted() {
 		this("result = java.util.Objects.compare(element1, element2, java.util.Comparator.naturalOrder());");
 	}
@@ -23,15 +25,13 @@ public final class JavaScriptSorted<T> extends JavaScriptOperation implements Fu
 		this.script = Objects.requireNonNull(script, "script must not be null");
 	}
 
-	private String script;
-
 	@BeanProperty(description = "Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
 	@EditorHint(EditorType.MULTILINE_TEXT)
 	public String getScript() {
 		return this.script;
 	}
 
-	public void setScript(String script) {
+	public void setScript(final String script) {
 		this.script = script;
 	}
 

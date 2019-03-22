@@ -14,6 +14,8 @@ import name.ulbricht.streams.api.Intermediate;
 @JavaBean(description = "Returns a stream consisting of the results of replacing each element of this stream with the contents of a mapped stream produced by applying the provided mapping function to each element.")
 @Intermediate
 public final class JavaScriptFlatMap<I, O> extends JavaScriptOperation implements Function<Stream<I>, Stream<O>> {
+	
+	private String script;
 
 	public JavaScriptFlatMap() {
 		this("mappedStream = element.toString().chars().boxed()");
@@ -23,15 +25,13 @@ public final class JavaScriptFlatMap<I, O> extends JavaScriptOperation implement
 		this.script = Objects.requireNonNull(script, "script must not be null");
 	}
 
-	private String script;
-
 	@BeanProperty(description = "The current element is provided as 'element', the result must a Stream stored in 'mappedStream'.")
 	@EditorHint(EditorType.MULTILINE_TEXT)
 	public String getScript() {
 		return this.script;
 	}
 
-	public void setScript(String script) {
+	public void setScript(final String script) {
 		this.script = script;
 	}
 

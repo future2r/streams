@@ -18,7 +18,7 @@ import name.ulbricht.streams.operations.StringFormatter;
 import name.ulbricht.streams.operations.SystemProperties;
 import name.ulbricht.streams.operations.TextLines;
 
-public class ScriptStreamOperationsProvider implements StreamOperationsProvider {
+public class ScriptOperationsProvider implements StreamOperationsProvider {
 
 	private static final String MODULE_NAME = "name.ulbricht.streams.script";
 
@@ -40,10 +40,10 @@ public class ScriptStreamOperationsProvider implements StreamOperationsProvider 
 	@Override
 	public Map<String, Supplier<StreamOperationSet>> getPresets() {
 		return Map.of( //
-				"Count lines in all files", ScriptStreamOperationsProvider::createCountLines, //
-				"Filter by JavaScript", ScriptStreamOperationsProvider::createFilterJavaScript, //
-				"Display Java system properties", ScriptStreamOperationsProvider::createSystemProperties, //
-				"Modules and exported packages", ScriptStreamOperationsProvider::createModulesAndPackages //
+				"Count lines in all files", ScriptOperationsProvider::createCountLines, //
+				"Filter by JavaScript", ScriptOperationsProvider::createFilterJavaScript, //
+				"Display Java system properties", ScriptOperationsProvider::createSystemProperties, //
+				"Modules and exported packages", ScriptOperationsProvider::createModulesAndPackages //
 		);
 	}
 

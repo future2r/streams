@@ -14,5 +14,5 @@ module name.ulbricht.streams.script {
 
 	// provided services
 	provides name.ulbricht.streams.api.StreamOperationsProvider
-			with name.ulbricht.streams.script.ScriptStreamOperationsProvider;
+			with name.ulbricht.streams.script.ScriptOperationsProvider;
 }

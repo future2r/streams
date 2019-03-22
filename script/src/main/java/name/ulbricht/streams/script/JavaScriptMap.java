@@ -14,6 +14,8 @@ import name.ulbricht.streams.api.Intermediate;
 @JavaBean(description = "Returns a stream consisting of the results of applying the given function to the elements of this stream.")
 @Intermediate
 public final class JavaScriptMap<I, O> extends JavaScriptOperation implements Function<Stream<I>, Stream<O>> {
+	
+	private String script;
 
 	public JavaScriptMap() {
 		this("mapped = element.getClass().getSimpleName();");
@@ -22,8 +24,6 @@ public final class JavaScriptMap<I, O> extends JavaScriptOperation implements Fu
 	public JavaScriptMap(final String script) {
 		this.script = Objects.requireNonNull(script, "script must not be null");
 	}
-
-	private String script;
 
 	@BeanProperty(description = "The current element is provided as 'element', the mapped result must stored in 'mapped'.")
 	@EditorHint(EditorType.MULTILINE_TEXT)

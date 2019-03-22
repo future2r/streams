@@ -3,6 +3,7 @@ package name.ulbricht.streams.script;
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -15,16 +16,24 @@ import name.ulbricht.streams.api.Terminal;
 @Terminal
 public final class JavaScriptMax<T> extends JavaScriptOperation implements Function<Stream<T>, Optional<T>> {
 
-	private String script = "result = java.util.Objects.compare(element1, element2, java.util.Comparator.naturalOrder());";
-	
+	private String script;
+
+	public JavaScriptMax() {
+		this("result = java.util.Objects.compare(element1, element2, java.util.Comparator.naturalOrder());");
+	}
+
+	public JavaScriptMax(final String script) {
+		this.script = Objects.requireNonNull(script, "script must not be null");
+	}
+
 	@BeanProperty(description = "Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
 	@EditorHint(EditorType.MULTILINE_TEXT)
 	public String getScript() {
 		return this.script;
 	}
 
-	public void setScript(String script) {
-		this.script = script;
+	public void setScript(final String script) {
+		this.script = Objects.requireNonNull(script, "script must not be null");
 	}
 
 	@Override

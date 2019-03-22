@@ -3,6 +3,7 @@ package name.ulbricht.streams.script;
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -14,7 +15,15 @@ import name.ulbricht.streams.api.Terminal;
 @Terminal
 public final class JavaScriptAnyMatch<T> extends JavaScriptOperation implements Function<Stream<T>, Boolean> {
 
-	private String script = "matches = true;";
+	private String script;
+
+	public JavaScriptAnyMatch() {
+		this("matches = true;");
+	}
+
+	public JavaScriptAnyMatch(final String script) {
+		this.script = Objects.requireNonNull(script, "script must not be null");
+	}
 	
 	@BeanProperty(description = "The current element is provided as 'element', the result must a boolean value stored in 'matches'.")
 	@EditorHint(EditorType.MULTILINE_TEXT)
@@ -22,8 +31,8 @@ public final class JavaScriptAnyMatch<T> extends JavaScriptOperation implements 
 		return this.script;
 	}
 
-	public void setScript(String script) {
-		this.script = script;
+	public void setScript(final String script) {
+		this.script = Objects.requireNonNull(script, "script must not be null");
 	}
 
 	@Override
