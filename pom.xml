@@ -38,9 +38,9 @@
 
 	<modules>
 		<module>api</module>
-		<module>application</module>
-		<module>script</module>
 		<module>operations</module>
+		<module>script</module>
+		<module>application</module>
 	</modules>
 
 	<build>
