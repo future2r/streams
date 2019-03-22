@@ -1,7 +1,6 @@
 module name.ulbricht.streams.operations {
 
 	// JDK dependencies
-	requires java.logging;
 	requires java.desktop;
 
 	// directly required project dependencies

@@ -1,4 +1,6 @@
 module name.ulbricht.streams.api {
+	
+	// JDK dependencies
 	requires java.desktop;
 
 	// public available packages
