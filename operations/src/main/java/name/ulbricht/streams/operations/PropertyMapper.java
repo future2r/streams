@@ -6,6 +6,7 @@ import java.beans.Introspector;
 import java.beans.JavaBean;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -15,7 +16,15 @@ import name.ulbricht.streams.api.Intermediate;
 @Intermediate
 public final class PropertyMapper implements Function<Stream<Object>, Stream<Object>> {
 
-	private String property = "class";
+	private String property;
+
+	public PropertyMapper() {
+		this("class");
+	}
+
+	public PropertyMapper(final String property) {
+		this.property = Objects.requireNonNull(property, "property must not be null");
+	}
 
 	@BeanProperty(description = "Programatic name of the property")
 	public String getProperty() {
@@ -23,7 +32,7 @@ public final class PropertyMapper implements Function<Stream<Object>, Stream<Obj
 	}
 
 	public void setProperty(final String property) {
-		this.property = property;
+		this.property = Objects.requireNonNull(property, "property must not be null");
 	}
 
 	@Override

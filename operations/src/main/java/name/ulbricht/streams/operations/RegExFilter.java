@@ -4,6 +4,7 @@ import static name.ulbricht.streams.operations.StringUtils.quote;
 
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -14,7 +15,15 @@ import name.ulbricht.streams.api.Intermediate;
 @Intermediate
 public final class RegExFilter implements Function<Stream<String>, Stream<String>> {
 
-	private String pattern = ".*";
+	private String pattern;
+
+	public RegExFilter() {
+		this(".*");
+	}
+
+	public RegExFilter(final String pattern) {
+		this.pattern = Objects.requireNonNull(pattern, "pattern must not be null");
+	}
 
 	@BeanProperty(description = "Regular expresstion to match")
 	public String getPattern() {
@@ -22,7 +31,7 @@ public final class RegExFilter implements Function<Stream<String>, Stream<String
 	}
 
 	public void setPattern(final String pattern) {
-		this.pattern = pattern;
+		this.pattern = Objects.requireNonNull(pattern, "pattern must not be null");
 	}
 
 	@Override

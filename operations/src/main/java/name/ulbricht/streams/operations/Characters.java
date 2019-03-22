@@ -4,6 +4,7 @@ import static name.ulbricht.streams.operations.StringUtils.quote;
 
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -13,7 +14,15 @@ import name.ulbricht.streams.api.Source;
 @Source
 public final class Characters implements Supplier<Stream<Integer>> {
 
-	private String text = "Hello World!";
+	private String text;
+
+	public Characters() {
+		this("Hello World!");
+	}
+
+	public Characters(final String text) {
+		this.text = Objects.requireNonNull(text, "text must not be null");
+	}
 
 	@BeanProperty(description = "A text to get the characters from")
 	public String getText() {
@@ -21,7 +30,7 @@ public final class Characters implements Supplier<Stream<Integer>> {
 	}
 
 	public void setText(final String text) {
-		this.text = text;
+		this.text = Objects.requireNonNull(text, "text must not be null");;
 	}
 
 	@Override

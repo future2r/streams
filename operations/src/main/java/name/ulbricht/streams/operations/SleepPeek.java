@@ -11,7 +11,15 @@ import name.ulbricht.streams.api.Intermediate;
 @Intermediate
 public final class SleepPeek<T> implements Function<Stream<T>, Stream<T>> {
 
-	private long millis = 100;
+	private long millis;
+
+	public SleepPeek() {
+		this(100);
+	}
+
+	public SleepPeek(final long millis) {
+		this.millis = millis;
+	}
 
 	@BeanProperty(description = "Milliseconds to pause the thread")
 	public long getMillis() {

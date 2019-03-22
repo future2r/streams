@@ -11,7 +11,7 @@ import name.ulbricht.streams.api.basic.Distinct;
 import name.ulbricht.streams.api.basic.Sorted;
 import name.ulbricht.streams.api.basic.SystemOut;
 
-public class DefaultStreamOperationsProvider implements StreamOperationsProvider {
+public class OperationsProvider implements StreamOperationsProvider {
 
 	private static final String MODULE_NAME = "name.ulbricht.streams.operations";
 
@@ -33,11 +33,11 @@ public class DefaultStreamOperationsProvider implements StreamOperationsProvider
 	@Override
 	public Map<String, Supplier<StreamOperationSet>> getPresets() {
 		return Map.of( //
-				"Default", DefaultStreamOperationsProvider::createDefault, //
-				"Word length statistics", DefaultStreamOperationsProvider::createSplitWords, //
-				"Sort lines in a file", DefaultStreamOperationsProvider::createSortLines, //
-				"Group employees by department", DefaultStreamOperationsProvider::createEmployeesByDepartment, //
-				"Generate a file with sorted numbers", DefaultStreamOperationsProvider::createGenerateNumbers //
+				"Integers", OperationsProvider::createDefault, //
+				"Word length statistics", OperationsProvider::createSplitWords, //
+				"Sort lines in a file", OperationsProvider::createSortLines, //
+				"Group employees by department", OperationsProvider::createEmployeesByDepartment, //
+				"Generate a file with sorted numbers", OperationsProvider::createGenerateNumbers //
 		);
 	}
 

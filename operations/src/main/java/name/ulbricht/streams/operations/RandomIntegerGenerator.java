@@ -12,9 +12,23 @@ import name.ulbricht.streams.api.Source;
 @Source
 public final class RandomIntegerGenerator implements Supplier<Stream<Integer>> {
 
-	private long number = 10;
-	private int origin = 0;
-	private int bound = 100;
+	private long number;
+	private int origin;
+	private int bound;
+
+	public RandomIntegerGenerator() {
+		this(10, 0, 100);
+	}
+
+	public RandomIntegerGenerator(final long number) {
+		this(number, Integer.MIN_VALUE, Integer.MAX_VALUE);
+	}
+
+	public RandomIntegerGenerator(final long number, final int origin, final int bound) {
+		this.number = number;
+		this.origin = origin;
+		this.bound = bound;
+	}
 
 	@BeanProperty(description = "Number of elements to generate")
 	public long getNumber() {

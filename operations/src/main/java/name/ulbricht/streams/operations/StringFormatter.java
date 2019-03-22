@@ -13,6 +13,8 @@ import name.ulbricht.streams.api.Intermediate;
 @JavaBean(description = "Formats the elements into a string using a pattern.")
 @Intermediate
 public final class StringFormatter<T> implements Function<Stream<T>, Stream<String>> {
+	
+	private String format;
 
 	public StringFormatter() {
 		this("%s");
@@ -22,15 +24,13 @@ public final class StringFormatter<T> implements Function<Stream<T>, Stream<Stri
 		this.format = Objects.requireNonNull(format, "format must not be null");
 	}
 
-	private String format;
-
 	@BeanProperty(description = "Pattern to be used with String.format()")
 	public String getFormat() {
 		return this.format;
 	}
 
 	public void setFormat(final String format) {
-		this.format = format;
+		this.format = Objects.requireNonNull(format, "format must not be null");
 	}
 
 	@Override

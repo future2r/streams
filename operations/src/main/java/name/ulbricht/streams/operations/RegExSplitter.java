@@ -4,6 +4,7 @@ import static name.ulbricht.streams.operations.StringUtils.quote;
 
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -13,7 +14,15 @@ import name.ulbricht.streams.api.Intermediate;
 @Intermediate
 public final class RegExSplitter implements Function<Stream<String>, Stream<String>> {
 
-	private String pattern = "\\s";
+	private String pattern;
+
+	public RegExSplitter() {
+		this("\\s");
+	}
+
+	public RegExSplitter(final String pattern) {
+		this.pattern = Objects.requireNonNull(pattern, "pattern must not be null");
+	}
 
 	@BeanProperty(description = "Regular expression for splitting")
 	public String getPattern() {
@@ -21,7 +30,7 @@ public final class RegExSplitter implements Function<Stream<String>, Stream<Stri
 	}
 
 	public void setPattern(final String pattern) {
-		this.pattern = pattern;
+		this.pattern = Objects.requireNonNull(pattern, "pattern must not be null");
 	}
 
 	@Override

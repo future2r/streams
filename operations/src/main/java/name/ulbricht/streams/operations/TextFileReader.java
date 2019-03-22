@@ -6,10 +6,10 @@ import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -21,8 +21,21 @@ import name.ulbricht.streams.api.Source;
 @Source
 public final class TextFileReader implements Supplier<Stream<String>> {
 
-	private Path file = Paths.get(System.getProperty("user.dir"), "input.txt");
-	private Charset encoding = StandardCharsets.UTF_8;
+	private Path file;
+	private Charset encoding;
+
+	public TextFileReader() {
+		this(Paths.get(System.getProperty("user.dir"), "input.txt"));
+	}
+
+	public TextFileReader(final Path file) {
+		this(file, Charset.defaultCharset());
+	}
+
+	public TextFileReader(final Path file, final Charset encoding) {
+		this.file = Objects.requireNonNull(file, "file must not be null");
+		this.encoding = Objects.requireNonNull(encoding, "encoding must not be null");
+	}
 
 	@BeanProperty(description = "Path of the file to read")
 	@EditorHint(EditorType.FILE)
@@ -31,7 +44,7 @@ public final class TextFileReader implements Supplier<Stream<String>> {
 	}
 
 	public void setFile(final Path file) {
-		this.file = file;
+		this.file = Objects.requireNonNull(file, "file must not be null");
 	}
 
 	@BeanProperty(description = "Character set for reading the file")
@@ -40,7 +53,7 @@ public final class TextFileReader implements Supplier<Stream<String>> {
 	}
 
 	public void setEncoding(final Charset encoding) {
-		this.encoding = encoding;
+		this.encoding = Objects.requireNonNull(encoding, "encoding must not be null");
 	}
 
 	@Override

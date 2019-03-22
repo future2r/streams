@@ -12,7 +12,15 @@ import name.ulbricht.streams.api.Intermediate;
 @Intermediate
 public final class Skip<T> implements Function<Stream<T>, Stream<T>> {
 
-	private long skip = 5;
+	private long skip;
+
+	public Skip() {
+		this(5);
+	}
+
+	public Skip(final long skip) {
+		this.skip = skip;
+	}
 
 	@BeanProperty(description = "Number of elements to skip")
 	public long getSkip() {

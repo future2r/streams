@@ -9,7 +9,7 @@ module name.ulbricht.streams.operations {
 
 	// provided services
 	provides name.ulbricht.streams.api.StreamOperationsProvider
-			with name.ulbricht.streams.operations.DefaultStreamOperationsProvider;
+			with name.ulbricht.streams.operations.OperationsProvider;
 
 	// public available package
 	exports name.ulbricht.streams.operations;

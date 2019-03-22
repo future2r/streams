@@ -11,7 +11,15 @@ import name.ulbricht.streams.api.Intermediate;
 @Intermediate
 public final class Limit<T> implements Function<Stream<T>, Stream<T>> {
 
-	private long limit = 5;
+	private long limit;
+
+	public Limit() {
+		this(5);
+	}
+
+	public Limit(final long limit) {
+		this.limit = limit;
+	}
 
 	@BeanProperty(description = "Maximum number of elements")
 	public long getLimit() {

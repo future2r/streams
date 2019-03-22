@@ -16,6 +16,20 @@ public final class RandomDoubleGenerator implements Supplier<Stream<Double>> {
 	private double origin = 0.1;
 	private double bound = 0.5;
 
+	public RandomDoubleGenerator() {
+		this(10);
+	}
+
+	public RandomDoubleGenerator(final long number) {
+		this(number, Double.MIN_VALUE, Double.MAX_VALUE);
+	}
+
+	public RandomDoubleGenerator(final long number, final double origin, final double bound) {
+		this.number = number;
+		this.origin = origin;
+		this.bound = bound;
+	}
+
 	@BeanProperty(description = "Number of values to generate")
 	public long getNumber() {
 		return this.number;

@@ -12,9 +12,19 @@ import name.ulbricht.streams.api.Source;
 @Source
 public final class IntegerRange implements Supplier<Stream<Integer>> {
 
-	private int start = 0;
-	private int end = 100;
-	private boolean closed = false;
+	private int start;
+	private int end;
+	private boolean closed;
+
+	public IntegerRange() {
+		this(0, 100, false);
+	}
+
+	public IntegerRange(final int start, final int end, final boolean closed) {
+		this.start = start;
+		this.end = end;
+		this.closed = closed;
+	}
 
 	@BeanProperty(description = "Lower limit of the range")
 	public int getStart() {

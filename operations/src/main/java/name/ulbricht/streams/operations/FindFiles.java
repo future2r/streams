@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -19,7 +20,15 @@ import name.ulbricht.streams.api.Source;
 @Source
 public final class FindFiles implements Supplier<Stream<Path>> {
 
-	private Path directory = Paths.get(System.getProperty("user.dir"));
+	private Path directory;
+
+	public FindFiles() {
+		this(Paths.get(System.getProperty("user.dir")));
+	}
+
+	public FindFiles(final Path directory) {
+		this.directory = Objects.requireNonNull(directory, "directory must not be null");
+	}
 
 	@BeanProperty(description = "Root directory for searching the files")
 	@EditorHint(EditorType.DIRECTORY)
@@ -28,7 +37,7 @@ public final class FindFiles implements Supplier<Stream<Path>> {
 	}
 
 	public void setDirectory(final Path directory) {
-		this.directory = directory;
+		this.directory = Objects.requireNonNull(directory, "directory must not be null");
 	}
 
 	@Override

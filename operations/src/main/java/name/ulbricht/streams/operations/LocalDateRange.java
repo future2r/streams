@@ -3,6 +3,7 @@ package name.ulbricht.streams.operations;
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -12,9 +13,19 @@ import name.ulbricht.streams.api.Source;
 @Source
 public final class LocalDateRange implements Supplier<Stream<LocalDate>> {
 
-	private LocalDate start = LocalDate.now().withMonth(1).withDayOfMonth(1);
-	private LocalDate end = LocalDate.now().withMonth(12).withDayOfMonth(31);
-	private long increment = 1;
+	private LocalDate start;
+	private LocalDate end;
+	private long increment;
+
+	public LocalDateRange() {
+		this(LocalDate.now().withMonth(1).withDayOfMonth(1), LocalDate.now().withMonth(12).withDayOfMonth(31), 1);
+	}
+
+	public LocalDateRange(final LocalDate start, final LocalDate end, final long increment) {
+		this.start = Objects.requireNonNull(start, "start must mot be null");
+		this.end = Objects.requireNonNull(end, "end must mot be null");
+		this.increment = increment;
+	}
 
 	@BeanProperty(description = "The lower limit of the date range")
 	public LocalDate getStart() {
@@ -22,7 +33,7 @@ public final class LocalDateRange implements Supplier<Stream<LocalDate>> {
 	}
 
 	public void setStart(final LocalDate start) {
-		this.start = start;
+		this.start = Objects.requireNonNull(start, "start must mot be null");
 	}
 
 	@BeanProperty(description = "The upper limit of the date range")
@@ -31,7 +42,7 @@ public final class LocalDateRange implements Supplier<Stream<LocalDate>> {
 	}
 
 	public void setEnd(final LocalDate end) {
-		this.end = end;
+		this.end = Objects.requireNonNull(end, "end must mot be null");
 	}
 
 	@BeanProperty(description = "Number of days to increment")
@@ -45,7 +56,7 @@ public final class LocalDateRange implements Supplier<Stream<LocalDate>> {
 
 	@Override
 	public Stream<LocalDate> get() {
-		return Stream.iterate(this.start, e -> e.isBefore(this.end.plusDays(1)), e -> e.plusDays(1));
+		return Stream.iterate(this.start, e -> e.isBefore(this.end.plusDays(1)), e -> e.plusDays(this.increment));
 	}
 
 	@Override
