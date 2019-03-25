@@ -15,9 +15,11 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -32,7 +34,9 @@ import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.Timer;
 import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import name.ulbricht.streams.api.StreamOperationException;
@@ -63,6 +67,7 @@ public final class MainFrame extends JFrame {
 	private final Actions actions = Actions.of();
 	private final JTabbedPane mainTabbedPane;
 	private final JPanel executionPanel;
+	private final Timer memoryUsageTimer;
 
 	private MainFrame() {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -83,6 +88,7 @@ public final class MainFrame extends JFrame {
 		final var contentPane = new JPanel(new BorderLayout());
 		contentPane.add(this.mainTabbedPane, BorderLayout.CENTER);
 		contentPane.add(createToolBar(), BorderLayout.NORTH);
+		contentPane.add(createStatusBar(), BorderLayout.SOUTH);
 
 		setContentPane(contentPane);
 		pack();
@@ -90,10 +96,15 @@ public final class MainFrame extends JFrame {
 		SwingUtilities
 				.invokeLater(() -> presetSelected(new StreamOperationSet(new Empty<>(), List.of(), new SystemOut<>())));
 		SwingUtilities.invokeLater(() -> this.sourceOperationComboBox.requestFocusInWindow());
+
+		this.memoryUsageTimer = new Timer(1000, e -> updateMemoryUsage());
+		this.memoryUsageTimer.setInitialDelay(0);
+		this.memoryUsageTimer.start();
 	}
 
 	@Override
 	public void dispose() {
+		this.memoryUsageTimer.stop();
 		instance = null;
 		super.dispose();
 	}
@@ -125,6 +136,19 @@ public final class MainFrame extends JFrame {
 		toolBar.add(this.actions.add(Actions.action("interrupt", this::interrupt, () -> this.executionWorker != null)));
 
 		return toolBar;
+	}
+
+	private JLabel memoryLabel;
+
+	private JPanel createStatusBar() {
+		final var statusBar = new JPanel();
+		statusBar.setLayout(new BoxLayout(statusBar, BoxLayout.X_AXIS));
+		statusBar.setBorder(new EmptyBorder(2, 4, 2, 4));
+
+		this.memoryLabel = new JLabel(" ");
+		statusBar.add(this.memoryLabel);
+
+		return statusBar;
 	}
 
 	private void presetSelected(final StreamOperationSet preset) {
@@ -605,6 +629,16 @@ public final class MainFrame extends JFrame {
 		tabbedPane.add(Messages.getString(titleResource), component);
 		final var tabIndex = tabbedPane.indexOfComponent(component);
 		tabbedPane.setIconAt(tabIndex, Icons.getIcon(iconResource, Icons.Size.X_SMALL));
+	}
+
+	private void updateMemoryUsage() {
+		final var runtime = Runtime.getRuntime();
+		final var totalMemory = runtime.totalMemory();
+		final var usedMemory = totalMemory - runtime.freeMemory();
+		final var percent = (int) (((double) usedMemory / (double) totalMemory) * 100);
+
+		this.memoryLabel.setText(
+				String.format(Messages.getString("statusBar.memoryUsagePattern"), usedMemory, totalMemory, percent));
 	}
 
 	private void showAbout() {
