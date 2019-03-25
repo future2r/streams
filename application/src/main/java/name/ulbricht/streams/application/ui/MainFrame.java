@@ -609,8 +609,9 @@ public final class MainFrame extends JFrame {
 
 	private void showAbout() {
 		final var applicationName = Messages.getString("MainFrame.title");
-		final var version = ModuleLayer.boot().findModule("name.ulbricht.streams").map(Module::getDescriptor)
-				.flatMap(ModuleDescriptor::version).map(ModuleDescriptor.Version::toString).orElse("?");
+		final var version = ModuleLayer.boot().findModule("name.ulbricht.streams.application")
+				.map(Module::getDescriptor).flatMap(ModuleDescriptor::version).map(ModuleDescriptor.Version::toString)
+				.orElse("?");
 		final var jvmName = System.getProperty("java.vm.name");
 		final var javaVersion = System.getProperty("java.vm.version");
 
