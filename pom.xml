@@ -8,6 +8,7 @@
 	<groupId>name.ulbricht.streams</groupId>
 	<artifactId>parent</artifactId>
 	<version>1.0.0</version>
+	<name>Streams Build Parent</name>
 
 	<properties>
 		<maven.compiler.source>12</maven.compiler.source>
@@ -48,11 +49,39 @@
 	</modules>
 
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>3.0.0-M2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M3</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.1.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>1.8</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.0.0-M2</version>
 				<executions>
 					<execution>
 						<id>enforce-tooling-versions</id>
@@ -62,7 +91,7 @@
 						<configuration>
 							<rules>
 								<requireMavenVersion>
-									<version>[3.5.3,)</version>
+									<version>[3.6.0,)</version>
 								</requireMavenVersion>
 								<requireJavaVersion>
 									<version>${maven.compiler.release}</version>
@@ -74,18 +103,10 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
-			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M3</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.1.1</version>
 				<configuration>
+					<!-- Create the jar in a different directory to avoid duplicate module 
+						information to be found in the target directory. -->
 					<outputDirectory>${project.build.directory}/release</outputDirectory>
 				</configuration>
 			</plugin>

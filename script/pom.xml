@@ -10,6 +10,7 @@
 	</parent>
 
 	<artifactId>script</artifactId>
+	<name>JavaScript Operations</name>
 
 	<dependencies>
 		<dependency>
@@ -30,7 +31,6 @@
 			<!-- perform some additional tasks (Maven does not support this yet) -->
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.8</version>
 				<executions>
 
 					<!-- patch the module jar to feature a main class and/or a version number -->

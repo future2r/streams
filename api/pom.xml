@@ -10,16 +10,17 @@
 	</parent>
 
 	<artifactId>api</artifactId>
+	<name>API for Operations</name>
 
 	<build>
 		<plugins>
-		
+
 			<!-- perform some additional tasks (Maven does not support this yet) -->
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.8</version>
 				<executions>
-				
+
 					<!-- patch the module jar to feature a main class and/or a version number -->
 					<!-- see https://issues.apache.org/jira/browse/MJAR-238 -->
 					<execution>

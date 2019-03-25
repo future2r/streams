@@ -10,6 +10,7 @@
 	</parent>
 
 	<artifactId>application</artifactId>
+	<name>Graphical Application</name>
 
 	<dependencies>
 		<dependency>
@@ -24,8 +25,8 @@
 
 			<!-- perform some additional tasks (Maven does not support this yet) -->
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.8</version>
 				<executions>
 
 					<!-- patch the module jar to feature a main class and/or a version number -->
@@ -64,7 +65,7 @@
 						a launcher "bin/Streams" in the "runimage" folder -->
 					<!-- see https://maven.apache.org/plugins/maven-jlink-plugin -->
 					<execution>
-						<id>create-jre</id>
+						<id>create-runtime</id>
 						<phase>package</phase>
 						<goals>
 							<goal>run</goal>
@@ -75,21 +76,25 @@
 									failonerror="true">
 
 									<!-- paths to modules -->
-									<arg value="-p" />
+									<arg value="--module-path" />
 									<arg
 										value="${project.build.directory}/release;${project.basedir}/../api/target/release;${project.basedir}/../operations/target/release;${project.basedir}/../script/target/release;${project.basedir}/../entity/target/release" />
 
 									<!-- name(s) of root module(s) -->
 									<arg value="--add-modules" />
 									<arg
-										value="name.ulbricht.streams.application,name.ulbricht.streams.api,name.ulbricht.streams.operations,name.ulbricht.streams.script,name.ulbricht.streams.entity" />
+										value="jdk.localedata,name.ulbricht.streams.application,name.ulbricht.streams.api,name.ulbricht.streams.operations,name.ulbricht.streams.script,name.ulbricht.streams.entity" />
 
 									<!-- target folder for the runimage -->
 									<arg value="--output" />
 									<arg value="${project.build.directory}/runimage" />
 
-									<!-- strip debug information -->
+									<!-- optimize the size of the image -->
 									<arg value="--strip-debug" />
+									<arg value="--compress=2" />
+									<arg value="--include-locales=en,de" />
+									<arg value="--no-header-files" />
+									<arg value="--no-man-pages" />
 
 									<!-- name of the launcher and module to launch -->
 									<arg value="--launcher" />
