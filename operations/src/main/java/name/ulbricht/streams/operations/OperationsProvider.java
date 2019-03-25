@@ -36,7 +36,6 @@ public class OperationsProvider implements StreamOperationsProvider {
 				"Integers", OperationsProvider::createDefault, //
 				"Word length statistics", OperationsProvider::createSplitWords, //
 				"Sort lines in a file", OperationsProvider::createSortLines, //
-				"Group employees by department", OperationsProvider::createEmployeesByDepartment, //
 				"Generate a file with sorted numbers", OperationsProvider::createGenerateNumbers //
 		);
 	}
@@ -60,11 +59,6 @@ public class OperationsProvider implements StreamOperationsProvider {
 	private static StreamOperationSet createSortLines() {
 		return new StreamOperationSet(new TextFileReader(), List.of(new Distinct<>(), new Sorted<>()),
 				new TextFileWriter());
-	}
-
-	private static StreamOperationSet createEmployeesByDepartment() {
-		return new StreamOperationSet(new Employees(), List.of(new EmployeesFilter(), new EmployeesSorter()),
-				new EmployeesDepartmentGrouping());
 	}
 
 	private static StreamOperationSet createGenerateNumbers() {

@@ -77,12 +77,12 @@
 									<!-- paths to modules -->
 									<arg value="-p" />
 									<arg
-										value="${project.build.directory}/release;${project.build.directory}/../../api/target/release;${project.build.directory}/../../operations/target/release;${project.build.directory}/../../script/target/release" />
+										value="${project.build.directory}/release;${project.basedir}/../api/target/release;${project.basedir}/../operations/target/release;${project.basedir}/../script/target/release;${project.basedir}/../entity/target/release" />
 
 									<!-- name(s) of root module(s) -->
 									<arg value="--add-modules" />
 									<arg
-										value="name.ulbricht.streams.application,name.ulbricht.streams.api,name.ulbricht.streams.operations,name.ulbricht.streams.script" />
+										value="name.ulbricht.streams.application,name.ulbricht.streams.api,name.ulbricht.streams.operations,name.ulbricht.streams.script,name.ulbricht.streams.entity" />
 
 									<!-- target folder for the runimage -->
 									<arg value="--output" />

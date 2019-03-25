@@ -1,4 +1,4 @@
-package name.ulbricht.streams.operations;
+package name.ulbricht.streams.entity;
 
 import java.beans.JavaBean;
 import java.util.function.Supplier;

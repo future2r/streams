@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>name.ulbricht.streams</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
+	<artifactId>entity</artifactId>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+
+			<!-- perform some additional tasks (Maven does not support this yet) -->
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+
+					<!-- patch the module jar to feature a main class and/or a version number -->
+					<!-- see https://issues.apache.org/jira/browse/MJAR-238 -->
+					<execution>
+						<id>patch-module-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<exec executable="${java.home}/bin/jar" failonerror="true">
+
+									<!-- add the version number -->
+									<arg value="--module-version" />
+									<arg value="${project.version}" />
+
+									<!-- update only -->
+									<arg value="--update" />
+
+									<!-- file to update -->
+									<arg value="--file" />
+									<arg
+										value="${project.build.directory}/release/${project.artifactId}-${project.version}.jar" />
+								</exec>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
