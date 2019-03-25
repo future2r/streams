@@ -52,14 +52,14 @@ final class Actions {
 			final BooleanSupplier validator) {
 		final var action = new ActionImpl(actionListener, validator);
 		action.putValue(Action.ACTION_COMMAND_KEY, commandKey);
-		action.putValue(Action.NAME, Messages.getString("action." + commandKey + ".name"));
 
-		action.putValue(Action.SMALL_ICON,
-				Icons.getIcon(Messages.getString("action." + commandKey + ".smallIcon"), Icons.Size.X_SMALL));
-		action.putValue(Action.LARGE_ICON_KEY,
-				Icons.getIcon(Messages.getString("action." + commandKey + ".largeIcon"), Icons.Size.MEDIUM));
-
-		action.putValue(Action.SHORT_DESCRIPTION, Messages.getString("action." + commandKey + ".shortDescription"));
+		Messages.getOptionalString("action." + commandKey + ".name").ifPresent(s -> action.putValue(Action.NAME, s));
+		Messages.getOptionalString("action." + commandKey + ".smallIcon")
+				.ifPresent(s -> action.putValue(Action.SMALL_ICON, Icons.getIcon(s, Icons.Size.X_SMALL)));
+		Messages.getOptionalString("action." + commandKey + ".largeIcon")
+				.ifPresent(s -> action.putValue(Action.SMALL_ICON, Icons.getIcon(s, Icons.Size.MEDIUM)));
+		Messages.getOptionalString("action." + commandKey + ".shortDescription")
+				.ifPresent(s -> action.putValue(Action.SHORT_DESCRIPTION, s));
 
 		return action;
 	}

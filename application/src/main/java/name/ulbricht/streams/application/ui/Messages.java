@@ -1,6 +1,7 @@
 package name.ulbricht.streams.application.ui;
 
 import java.util.MissingResourceException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 final class Messages {
@@ -14,10 +15,14 @@ final class Messages {
 	}
 
 	public static String getString(final String key) {
+		return getOptionalString(key).orElse('!' + key + '!');
+	}
+
+	public static Optional<String> getOptionalString(final String key) {
 		try {
-			return RESOURCE_BUNDLE.getString(key);
+			return Optional.of(RESOURCE_BUNDLE.getString(key));
 		} catch (final MissingResourceException ex) {
-			return '!' + key + '!';
+			return Optional.empty();
 		}
 	}
 }
