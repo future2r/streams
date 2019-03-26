@@ -37,8 +37,7 @@ final class ConfigurationDialog extends JDialog {
 		super(owner);
 		this.operation = operation;
 
-		setTitle(String.format(Messages.getString("ConfigurationDialog.titlePattern"),
-				this.operation.getClass().getSimpleName()));
+		setTitle(String.format("Configuration of %s", this.operation.getClass().getSimpleName()));
 
 		final var contentPane = new JPanel(new BorderLayout(8, 8));
 		contentPane.setOpaque(false);
@@ -68,7 +67,7 @@ final class ConfigurationDialog extends JDialog {
 		final var buttonPanel = new JPanel(new BorderLayout(8, 8));
 		contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
-		final var closeButton = new JButton(Messages.getString("ConfigurationDialog.closeButton"));
+		final var closeButton = new JButton("Close");
 		closeButton.addActionListener(e -> dispose());
 		buttonPanel.add(closeButton, BorderLayout.EAST);
 

@@ -72,18 +72,18 @@ public final class MainFrame extends JFrame {
 	private MainFrame() {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setLocationByPlatform(true);
-		setTitle(Messages.getString("MainFrame.title"));
+		setTitle("Streams Designer");
 		setIconImages(Icons.getImages(Icons.APPLICATION));
 
 		setJMenuBar(createMenuBar());
 
 		this.mainTabbedPane = new JTabbedPane();
 		this.mainTabbedPane.setFocusable(false);
-		addTab(this.mainTabbedPane, createSetupPanel(), "tabSetup.title", Icons.SETUP);
-		addTab(this.mainTabbedPane, createCodePanel(), "tabCode.title", Icons.CODE);
+		addTab(this.mainTabbedPane, createSetupPanel(), "Setup", Icons.SETUP);
+		addTab(this.mainTabbedPane, createCodePanel(), "Source Code", Icons.CODE);
 
 		this.executionPanel = createExecutionPanel();
-		addTab(this.mainTabbedPane, executionPanel, "tabExecution.title", Icons.EXECUTION);
+		addTab(this.mainTabbedPane, executionPanel, "Execution", Icons.EXECUTION);
 
 		final var contentPane = new JPanel(new BorderLayout());
 		contentPane.add(this.mainTabbedPane, BorderLayout.CENTER);
@@ -112,18 +112,18 @@ public final class MainFrame extends JFrame {
 	private JMenuBar createMenuBar() {
 		final var menuBar = new JMenuBar();
 
-		final var fileMenu = menuBar.add(new JMenu(Messages.getString("fileMenu.text")));
-		fileMenu.add(this.actions.add(Actions.action("exit", this::dispose)));
+		final var fileMenu = menuBar.add(new JMenu("File"));
+		fileMenu.add(this.actions.add(Command.EXIT.action(this::dispose)));
 
-		final var presetsMenu = menuBar.add(new JMenu(Messages.getString("presetsMenu.text")));
+		final var presetsMenu = menuBar.add(new JMenu("Presets"));
 		StreamOperations.findPresets().entrySet().stream().forEach(entry -> {
-			final var menuItem = presetsMenu
-					.add(new JMenuItem(entry.getKey(), Icons.getIcon(Icons.APPLICATION, Icons.Size.X_SMALL)));
+			final var menuItem = presetsMenu.add(
+					new JMenuItem(entry.getKey(), Icons.getIcon(Icons.APPLICATION, Icons.Size.X_SMALL).orElse(null)));
 			menuItem.addActionListener(e -> presetSelected(entry.getValue().get()));
 		});
 
-		final var helpMenu = menuBar.add(new JMenu(Messages.getString("helpMenu.text")));
-		helpMenu.add(this.actions.add(Actions.action("about", this::showAbout)));
+		final var helpMenu = menuBar.add(new JMenu("Help"));
+		helpMenu.add(this.actions.add(Command.ABOUT.action(this::showAbout)));
 
 		return menuBar;
 	}
@@ -132,8 +132,8 @@ public final class MainFrame extends JFrame {
 		final var toolBar = new JToolBar();
 		toolBar.setFloatable(false);
 
-		toolBar.add(this.actions.add(Actions.action("execute", this::execute, () -> this.executionWorker == null)));
-		toolBar.add(this.actions.add(Actions.action("interrupt", this::interrupt, () -> this.executionWorker != null)));
+		toolBar.add(this.actions.add(Command.EXECUTE.action(this::execute, () -> this.executionWorker == null)));
+		toolBar.add(this.actions.add(Command.INTERRUPT.action(this::interrupt, () -> this.executionWorker != null)));
 
 		return toolBar;
 	}
@@ -186,7 +186,7 @@ public final class MainFrame extends JFrame {
 	private JPanel createSourcePanel() {
 		final var panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
-		panel.setBorder(new TitledBorder(Messages.getString("sourcePanel.title")));
+		panel.setBorder(new TitledBorder("Data Source"));
 
 		this.sourceOperationComboBoxModel = new MutableComboBoxModel<>(StreamOperations.findSourceOperations());
 		this.sourceOperationComboBox = new JComboBox<>(this.sourceOperationComboBoxModel);
@@ -205,8 +205,8 @@ public final class MainFrame extends JFrame {
 			}
 		});
 
-		final var configureButton = new JButton(this.actions.add(Actions.action("configureSourceOperation",
-				this::configureSourceOperation, () -> this.currentSourceOperation != null
+		final var configureButton = new JButton(this.actions.add(Command.SOURCE_CONFIGURE
+				.action(this::configureSourceOperation, () -> this.currentSourceOperation != null
 						&& StreamOperations.hasProperties(this.currentSourceOperation.getClass()))));
 
 		panel.add(this.sourceOperationComboBox, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.WEST,
@@ -256,7 +256,7 @@ public final class MainFrame extends JFrame {
 	private JPanel createIntermediatePanel() {
 		final var panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
-		panel.setBorder(new TitledBorder(Messages.getString("intermediatePanel.title")));
+		panel.setBorder(new TitledBorder("Intermediate Operations"));
 
 		this.intermediateOperationComboBoxModel = new MutableComboBoxModel<>(
 				StreamOperations.findIntermediateOperations());
@@ -267,7 +267,7 @@ public final class MainFrame extends JFrame {
 		this.intermediateOperationComboBox.setRenderer(new StreamOperationClassListCellRenderer());
 
 		final var addButton = new JButton(
-				this.actions.add(Actions.action("addIntermediateOperation", e -> addIntermediateOperation())));
+				this.actions.add(Command.INTERMEDIATE_ADD.action(e -> addIntermediateOperation())));
 
 		this.intermediateOperationListModel = new MutableListModel<>();
 		this.intermediateOperationList = new JList<>(this.intermediateOperationListModel);
@@ -282,16 +282,16 @@ public final class MainFrame extends JFrame {
 			}
 		});
 
-		final var moveUpButton = new JButton(this.actions.add(Actions.action("moveIntermediateOperationUp",
-				this::moveIntermediateOperationUp, this::canMoveIntermediateOperationUp)));
-		final var moveDownButton = new JButton(this.actions.add(Actions.action("moveIntermediateOperationDown",
-				this::moveIntermediateOperationDown, this::canMoveIntermediateOperationDown)));
-		final var removeButton = new JButton(this.actions.add(Actions.action("removeIntermediateOperation",
-				this::removeIntermediateOperation, this::isIntermediateOperationSelected)));
-		final var removeAllButton = new JButton(this.actions.add(Actions.action("removeAllIntermediateOperations",
-				this::removeAllIntermediateOperations, this::existIntermediateOperations)));
-		final var configureButton = new JButton(this.actions.add(Actions.action("configureIntermediateOperation",
-				this::configureIntermediateOperation, this::isIntermediateOperationConfigurable)));
+		final var moveUpButton = new JButton(this.actions.add(Command.INTERMEDIATE_MOVE_UP
+				.action(this::moveIntermediateOperationUp, this::canMoveIntermediateOperationUp)));
+		final var moveDownButton = new JButton(this.actions.add(Command.INTERMEDIATE_MOVE_DOWN
+				.action(this::moveIntermediateOperationDown, this::canMoveIntermediateOperationDown)));
+		final var removeButton = new JButton(this.actions.add(Command.INTERMEDIATE_REMOVE
+				.action(this::removeIntermediateOperation, this::isIntermediateOperationSelected)));
+		final var removeAllButton = new JButton(this.actions.add(Command.INTERMEDIATE_REMOVE_ALL
+				.action(this::removeAllIntermediateOperations, this::existIntermediateOperations)));
+		final var configureButton = new JButton(this.actions.add(Command.INTERMEDIATE_CONFIGURE
+				.action(this::configureIntermediateOperation, this::isIntermediateOperationConfigurable)));
 
 		panel.add(this.intermediateOperationComboBox, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.WEST,
 				GridBagConstraints.HORIZONTAL, new Insets(4, 4, 4, 4), 0, 0));
@@ -419,7 +419,7 @@ public final class MainFrame extends JFrame {
 	private JPanel createTerminalPanel() {
 		final var panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
-		panel.setBorder(new TitledBorder(Messages.getString("terminalPanel.title")));
+		panel.setBorder(new TitledBorder("Terminal Operation"));
 
 		this.terminalOperationComboBoxModel = new MutableComboBoxModel<>(StreamOperations.findTerminalOperations());
 		this.terminalOperationComboBox = new JComboBox<>(this.terminalOperationComboBoxModel);
@@ -438,8 +438,8 @@ public final class MainFrame extends JFrame {
 			}
 		});
 
-		final var configureButton = new JButton(this.actions.add(Actions.action("configureTerminalOperation",
-				this::configureTerminalOperation, () -> this.currentTerminalOperation != null
+		final var configureButton = new JButton(this.actions.add(Command.TERMINAL_CONFIGURE
+				.action(this::configureTerminalOperation, () -> this.currentTerminalOperation != null
 						&& StreamOperations.hasProperties(this.currentTerminalOperation.getClass()))));
 
 		panel.add(this.terminalOperationComboBox, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.WEST,
@@ -497,7 +497,7 @@ public final class MainFrame extends JFrame {
 		this.codeTextArea = new JTextArea();
 		this.codeTextArea.setEditable(false);
 
-		final var copyCodeButton = new JButton(Actions.action("copyCode", this::copyCode));
+		final var copyCodeButton = new JButton(Command.COPY_CODE.action(this::copyCode));
 
 		panel.add(new JScrollPane(this.codeTextArea), new GridBagConstraints(0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(4, 4, 4, 4), 0, 0));
@@ -541,19 +541,19 @@ public final class MainFrame extends JFrame {
 		log.addHandler(new TextAreaLogHandler(this.logTextArea));
 
 		this.statisticsTableModel = new MutableTableModel<>(List.of(
-				new MutableTableModel.Column<>(Messages.getString("statisticsTableModel.nameColumn"),
-						l -> l.getOperation().getClass().getSimpleName(), String.class),
-				new MutableTableModel.Column<>(Messages.getString("statisticsTableModel.elementsColumn"),
-						StreamExecutor.ExecutionLogger::getElementsProvided, Long.class)));
+				new MutableTableModel.Column<>("Operation", l -> l.getOperation().getClass().getSimpleName(),
+						String.class),
+				new MutableTableModel.Column<>("Elements Provided", StreamExecutor.ExecutionLogger::getElementsProvided,
+						Long.class)));
 		this.statisticsTable = new JTable(this.statisticsTableModel);
 		final var nameColumn = this.statisticsTable.getColumnModel().getColumn(0);
 		nameColumn.setCellRenderer(new StreamOperationTableCellRenderer());
 
 		final var tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 		tabbedPane.setFocusable(false);
-		addTab(tabbedPane, new JScrollPane(this.statisticsTable), "tabStatistics.title", Icons.STATISTICS);
-		addTab(tabbedPane, new JScrollPane(this.logTextArea), "tabLog.title", Icons.LOG);
-		addTab(tabbedPane, new JScrollPane(this.sysOutTextArea), "tabSysOut.title", Icons.CONSOLE);
+		addTab(tabbedPane, new JScrollPane(this.statisticsTable), "Log", Icons.STATISTICS);
+		addTab(tabbedPane, new JScrollPane(this.logTextArea), "Console", Icons.LOG);
+		addTab(tabbedPane, new JScrollPane(this.sysOutTextArea), "Statistics", Icons.CONSOLE);
 
 		panel.add(tabbedPane, BorderLayout.CENTER);
 
@@ -609,7 +609,10 @@ public final class MainFrame extends JFrame {
 	}
 
 	private void interrupt() {
-		Alerts.showError(this, Messages.getString("interrupt.message"));
+		Alerts.showError(this,
+				"A stream pipeline cannot easily be interrupted.\n"
+						+ "A stream pipeline is interrupted if an exception is thrown in any of the operations.\n"
+						+ "Also, you may limit the amount of data with the limit(long) operation.");
 	}
 
 	private static String toString(final Object result) {
@@ -618,11 +621,11 @@ public final class MainFrame extends JFrame {
 		return Objects.toString(result);
 	}
 
-	private static void addTab(final JTabbedPane tabbedPane, final Component component, final String titleResource,
+	private static void addTab(final JTabbedPane tabbedPane, final Component component, final String title,
 			final String iconResource) {
-		tabbedPane.add(Messages.getString(titleResource), component);
+		tabbedPane.add(title, component);
 		final var tabIndex = tabbedPane.indexOfComponent(component);
-		tabbedPane.setIconAt(tabIndex, Icons.getIcon(iconResource, Icons.Size.X_SMALL));
+		Icons.getIcon(iconResource, Icons.Size.X_SMALL).ifPresent(icon -> tabbedPane.setIconAt(tabIndex, icon));
 	}
 
 	private void updateMemoryUsage() {
@@ -632,21 +635,21 @@ public final class MainFrame extends JFrame {
 		final var percent = (int) (((double) usedMemory / (double) totalMemory) * 100);
 
 		this.memoryLabel.setText(
-				String.format(Messages.getString("statusBar.memoryUsagePattern"), usedMemory, totalMemory, percent));
+				String.format("Memory usage: %,d Bytes of %,d Bytes (%d %%)", usedMemory, totalMemory, percent));
 	}
 
 	private void showAbout() {
-		final var applicationName = Messages.getString("MainFrame.title");
+		final var applicationName = getTitle();
 		final var version = ModuleLayer.boot().findModule("name.ulbricht.streams.application")
 				.map(Module::getDescriptor).flatMap(ModuleDescriptor::version).map(ModuleDescriptor.Version::toString)
 				.orElse("?");
 		final var jvmName = System.getProperty("java.vm.name");
 		final var javaVersion = System.getProperty("java.vm.version");
 
-		final var title = String.format(Messages.getString("about.titlePattern"), applicationName);
+		final var title = String.format("About %s", applicationName);
 
-		final var message = String.format(Messages.getString("about.messagePattern"), applicationName, version, jvmName,
-				javaVersion);
+		final var message = String.format("%s%n%nVersion %s%nCopyright © 2019 Frank Ulbricht%n%n%s%nVersion %s",
+				applicationName, version, jvmName, javaVersion);
 
 		JOptionPane.showMessageDialog(this, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}

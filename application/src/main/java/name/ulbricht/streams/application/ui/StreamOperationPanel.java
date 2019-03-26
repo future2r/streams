@@ -71,7 +71,7 @@ final class StreamOperationPanel extends JPanel {
 			else if (StreamOperations.isTerminalOperation(streamOperationClass))
 				iconName = Icons.TERMINAL_OPERATION;
 
-			icon = iconName != null ? Icons.getIcon(iconName, Icons.Size.X_SMALL) : null;
+			icon = iconName != null ? Icons.getIcon(iconName, Icons.Size.X_SMALL).orElse(null) : null;
 			description = StreamOperations.getDescription(streamOperation.getClass());
 		}
 

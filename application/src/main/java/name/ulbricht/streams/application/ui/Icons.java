@@ -4,7 +4,7 @@ import java.awt.Image;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,27 +38,24 @@ public final class Icons {
 
 	private static final Map<String, ImageIcon> icons = new HashMap<>();
 
-	public static Icon getIcon(final String key, final Size size) {
-		return getImageIcon(key, size);
+	public static Optional<Icon> getIcon(final String key, final Size size) {
+		return getImageIcon(key, size).map(img -> (Icon) img);
 	}
 
 	public static List<Image> getImages(String key) {
-		return Stream.of(Size.values()).map(size -> getImageIcon(key, size)).filter(Objects::nonNull)
-				.map(ImageIcon::getImage).collect(Collectors.toList());
+		return Stream.of(Size.values()).map(size -> getImageIcon(key, size)).filter(Optional::isPresent)
+				.map(Optional::get).map(ImageIcon::getImage).collect(Collectors.toList());
 	}
 
-	private static ImageIcon getImageIcon(final String key, final Size size) {
+	private static Optional<ImageIcon> getImageIcon(final String key, final Size size) {
 		synchronized (icons) {
-			return icons.computeIfAbsent(key + '.' + size.dimension,
-					k -> loadIcon(String.format("%s-%d.png", key, size.dimension)));
+			return Optional.ofNullable(icons.computeIfAbsent(key + '.' + size.dimension,
+					k -> loadIcon(String.format("%s-%d.png", key, size.dimension)).orElse(null)));
 		}
 	}
 
-	private static ImageIcon loadIcon(final String resourceName) {
-		final var url = Icons.class.getResource(resourceName);
-		if (url != null)
-			return new ImageIcon(url);
-		return null;
+	private static Optional<ImageIcon> loadIcon(final String resourceName) {
+		return Optional.ofNullable(Icons.class.getResource(resourceName)).map(ImageIcon::new);
 	}
 
 	private Icons() {
