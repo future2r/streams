@@ -13,8 +13,6 @@ import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.EditorHint;
-import name.ulbricht.streams.api.EditorType;
 import name.ulbricht.streams.api.Source;
 
 @JavaBean(description = "Reads a text file and provides a stream with all lines.")
@@ -38,7 +36,6 @@ public final class TextFileReader implements Supplier<Stream<String>> {
 	}
 
 	@BeanProperty(description = "Path of the file to read")
-	@EditorHint(EditorType.FILE)
 	public Path getFile() {
 		return this.file;
 	}

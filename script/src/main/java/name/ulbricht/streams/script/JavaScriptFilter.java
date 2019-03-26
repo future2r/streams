@@ -7,8 +7,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.EditorHint;
-import name.ulbricht.streams.api.EditorType;
 import name.ulbricht.streams.api.Intermediate;
 
 @JavaBean(description = "Returns a stream consisting of the elements of this stream that match the given predicate.")
@@ -26,7 +24,6 @@ public final class JavaScriptFilter<T> extends JavaScriptOperation implements Fu
 	private String script;
 
 	@BeanProperty(description = "The current element is provided as 'element', the result must a boolean value stored in 'pass'.")
-	@EditorHint(EditorType.MULTILINE_TEXT)
 	public String getScript() {
 		return this.script;
 	}

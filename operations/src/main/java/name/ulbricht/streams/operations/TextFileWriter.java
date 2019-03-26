@@ -14,8 +14,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.EditorHint;
-import name.ulbricht.streams.api.EditorType;
 import name.ulbricht.streams.api.Terminal;
 
 @JavaBean(description = "Writes all strings the the stream as lines into a text file.")
@@ -39,7 +37,6 @@ public final class TextFileWriter implements Function<Stream<String>, Void> {
 	}
 
 	@BeanProperty(description = "Path of the file to write")
-	@EditorHint(EditorType.FILE)
 	public Path getFile() {
 		return this.file;
 	}

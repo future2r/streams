@@ -7,8 +7,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.EditorHint;
-import name.ulbricht.streams.api.EditorType;
 import name.ulbricht.streams.api.Intermediate;
 
 @JavaBean(description = "Returns, if this stream is ordered, a stream consisting of the longest prefix of elements taken from this stream that match the given predicate."
@@ -27,7 +25,6 @@ public final class JavaScriptTakeWhile<T> extends JavaScriptOperation implements
 	}
 
 	@BeanProperty(description = "The current element is provided as 'element', the result must a boolean value stored in 'take'.")
-	@EditorHint(EditorType.MULTILINE_TEXT)
 	public String getScript() {
 		return this.script;
 	}

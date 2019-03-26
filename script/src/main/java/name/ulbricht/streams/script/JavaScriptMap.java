@@ -7,8 +7,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.EditorHint;
-import name.ulbricht.streams.api.EditorType;
 import name.ulbricht.streams.api.Intermediate;
 
 @JavaBean(description = "Returns a stream consisting of the results of applying the given function to the elements of this stream.")
@@ -26,7 +24,6 @@ public final class JavaScriptMap<I, O> extends JavaScriptOperation implements Fu
 	}
 
 	@BeanProperty(description = "The current element is provided as 'element', the mapped result must stored in 'mapped'.")
-	@EditorHint(EditorType.MULTILINE_TEXT)
 	public String getScript() {
 		return this.script;
 	}

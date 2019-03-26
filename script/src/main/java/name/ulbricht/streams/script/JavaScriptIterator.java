@@ -7,8 +7,6 @@ import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.EditorHint;
-import name.ulbricht.streams.api.EditorType;
 import name.ulbricht.streams.api.Source;
 
 @JavaBean(description = "Returns an infinite sequential ordered Stream produced by iterative application of a function to an initial element.")
@@ -30,7 +28,6 @@ public final class JavaScriptIterator<T> extends JavaScriptOperation implements 
 	}
 
 	@BeanProperty(description = "This script must store the initial value in 'seed'")
-	@EditorHint(EditorType.MULTILINE_TEXT)
 	public String getInitialScript() {
 		return this.initialScript;
 	}
@@ -40,7 +37,6 @@ public final class JavaScriptIterator<T> extends JavaScriptOperation implements 
 	}
 
 	@BeanProperty(description = "Depending on the current element (provided as 'element'), this script must return a boolean value stored in 'hasNext'.")
-	@EditorHint(EditorType.MULTILINE_TEXT)
 	public String getHasNextScript() {
 		return this.hasNextScript;
 	}
@@ -50,7 +46,6 @@ public final class JavaScriptIterator<T> extends JavaScriptOperation implements 
 	}
 
 	@BeanProperty(description = "This script must store the next element 'next', depending on the current element provided as 'element'.")
-	@EditorHint(EditorType.MULTILINE_TEXT)
 	public String getNextScript() {
 		return this.nextScript;
 	}

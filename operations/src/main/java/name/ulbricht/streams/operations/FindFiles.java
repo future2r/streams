@@ -12,8 +12,6 @@ import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.EditorHint;
-import name.ulbricht.streams.api.EditorType;
 import name.ulbricht.streams.api.Source;
 
 @JavaBean(description = "Finds all files in a directory and its subdirectories.")
@@ -31,7 +29,6 @@ public final class FindFiles implements Supplier<Stream<Path>> {
 	}
 
 	@BeanProperty(description = "Root directory for searching the files")
-	@EditorHint(EditorType.DIRECTORY)
 	public Path getDirectory() {
 		return this.directory;
 	}

@@ -11,12 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.EditorHint;
 import name.ulbricht.streams.api.Intermediate;
 import name.ulbricht.streams.api.Source;
 import name.ulbricht.streams.api.StreamOperationException;
@@ -112,10 +110,6 @@ public final class StreamOperations {
 		} catch (final ReflectiveOperationException ex) {
 			throw new StreamOperationException("Could not write value for property " + property.getName(), ex);
 		}
-	}
-
-	public static Optional<EditorHint> getEditorHint(final PropertyDescriptor property) {
-		return Optional.ofNullable(property.getReadMethod().getAnnotation(EditorHint.class));
 	}
 
 	private static BeanInfo getBeanInfo(final Class<?> streamOperationClass) {

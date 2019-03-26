@@ -243,9 +243,8 @@ public final class MainFrame extends JFrame {
 	private void configureSourceOperation() {
 		if (this.currentSourceOperation != null
 				&& StreamOperations.hasProperties(this.currentSourceOperation.getClass())) {
-			if (showConfigureDialog(this.currentSourceOperation)) {
-				this.sourceOperationPanel.updateContent(this.currentSourceOperation);
-			}
+			showConfigureDialog(this.currentSourceOperation);
+			this.sourceOperationPanel.updateContent(this.currentSourceOperation);
 		}
 	}
 
@@ -380,9 +379,8 @@ public final class MainFrame extends JFrame {
 	private void configureIntermediateOperation() {
 		final var intermediateOperation = this.intermediateOperationList.getSelectedValue();
 		if (intermediateOperation != null && StreamOperations.hasProperties(intermediateOperation.getClass())) {
-			if (showConfigureDialog(intermediateOperation)) {
-				this.intermediateOperationListModel.updateElement(intermediateOperation);
-			}
+			showConfigureDialog(intermediateOperation);
+			this.intermediateOperationListModel.updateElement(intermediateOperation);
 		}
 	}
 
@@ -476,18 +474,14 @@ public final class MainFrame extends JFrame {
 	private void configureTerminalOperation() {
 		if (this.currentTerminalOperation != null
 				&& StreamOperations.hasProperties(this.currentTerminalOperation.getClass())) {
-			if (showConfigureDialog(this.currentTerminalOperation)) {
-				this.terminalOperationPanel.updateContent(this.currentTerminalOperation);
-			}
+			showConfigureDialog(this.currentTerminalOperation);
+			this.terminalOperationPanel.updateContent(this.currentTerminalOperation);
 		}
 	}
 
-	private boolean showConfigureDialog(final Object operation) {
-		if (ConfigurationDialog.showModal(this, operation)) {
-			streamSetupChanged();
-			return true;
-		}
-		return false;
+	private void showConfigureDialog(final Object operation) {
+		ConfigurationDialog.showModal(this, operation);
+		streamSetupChanged();
 	}
 
 	private void streamSetupChanged() {

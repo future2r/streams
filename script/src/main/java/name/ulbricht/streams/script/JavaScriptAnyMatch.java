@@ -7,8 +7,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.EditorHint;
-import name.ulbricht.streams.api.EditorType;
 import name.ulbricht.streams.api.Terminal;
 
 @JavaBean(description = "Returns whether any elements of this stream match the provided predicate.")
@@ -26,7 +24,6 @@ public final class JavaScriptAnyMatch<T> extends JavaScriptOperation implements 
 	}
 	
 	@BeanProperty(description = "The current element is provided as 'element', the result must a boolean value stored in 'matches'.")
-	@EditorHint(EditorType.MULTILINE_TEXT)
 	public String getScript() {
 		return this.script;
 	}

@@ -7,8 +7,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.EditorHint;
-import name.ulbricht.streams.api.EditorType;
 import name.ulbricht.streams.api.Terminal;
 
 @JavaBean(description = "erforms an action for each element of this stream.")
@@ -26,7 +24,6 @@ public final class JavaScriptForEach<T> extends JavaScriptOperation implements F
 	}
 	
 	@BeanProperty(description = "The current element is provided as 'element'.")
-	@EditorHint(EditorType.MULTILINE_TEXT)
 	public String getScript() {
 		return this.script;
 	}

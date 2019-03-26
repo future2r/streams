@@ -7,8 +7,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.EditorHint;
-import name.ulbricht.streams.api.EditorType;
 import name.ulbricht.streams.api.Intermediate;
 
 @JavaBean(description = "Returns a stream consisting of the elements of this stream, sorted according to the provided Comparator.")
@@ -26,7 +24,6 @@ public final class JavaScriptSorted<T> extends JavaScriptOperation implements Fu
 	}
 
 	@BeanProperty(description = "Two elements are provided as 'element1' and 'element2', the result must an int stored in 'result'.")
-	@EditorHint(EditorType.MULTILINE_TEXT)
 	public String getScript() {
 		return this.script;
 	}

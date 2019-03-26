@@ -3,6 +3,7 @@ package name.ulbricht.streams.application.ui.common;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import javax.swing.event.EventListenerList;
@@ -16,19 +17,20 @@ public class MutableTableModel<T> implements TableModel {
 
 		private final String columnName;
 		private final Class<?> columnClass;
-		private final Function<T, ?> valueAccessor;
+		private Function<T, Object> valueReader;
+		private BiConsumer<T, Object> valueWriter;
 
 		public Column(final String columnName) {
 			this(columnName, null, null);
 		}
 
-		public Column(final String columnName, final Function<T, ?> valueAccessor) {
-			this(columnName, valueAccessor, null);
+		public Column(final String columnName, final Function<T, Object> valueReader) {
+			this(columnName, valueReader, null);
 		}
 
-		public Column(final String columnName, final Function<T, ?> valueAccessor, final Class<?> columnClass) {
+		public Column(final String columnName, final Function<T, Object> valueReader, final Class<?> columnClass) {
 			this.columnName = Objects.requireNonNull(columnName, "columnName must not be null");
-			this.valueAccessor = valueAccessor;
+			this.valueReader = valueReader;
 			this.columnClass = columnClass;
 		}
 
@@ -40,8 +42,33 @@ public class MutableTableModel<T> implements TableModel {
 			return this.columnClass != null ? this.columnClass : Object.class;
 		}
 
-		public Object getValue(final T logger) {
-			return this.valueAccessor != null ? this.valueAccessor.apply(logger) : null;
+		public Function<T, Object> getValueReader() {
+			return this.valueReader;
+		}
+
+		public void setValueReader(Function<T, Object> valueReader) {
+			this.valueReader = valueReader;
+		}
+
+		Object getValue(final T row) {
+			return this.valueReader != null ? this.valueReader.apply(row) : null;
+		}
+
+		public BiConsumer<T, Object> getValueWriter() {
+			return this.valueWriter;
+		}
+
+		public void setValueWriter(BiConsumer<T, Object> valueWriter) {
+			this.valueWriter = valueWriter;
+		}
+
+		void setValue(final T row, final Object value) {
+			if (this.valueWriter != null)
+				this.valueWriter.accept(row, value);
+		}
+
+		public boolean isEditable() {
+			return this.valueWriter != null;
 		}
 	}
 
@@ -85,12 +112,14 @@ public class MutableTableModel<T> implements TableModel {
 
 	@Override
 	public boolean isCellEditable(final int rowIndex, final int columnIndex) {
-		return false;
+		return getColumn(columnIndex).isEditable();
 	}
 
 	@Override
 	public void setValueAt(final Object aValue, final int rowIndex, final int columnIndex) {
-		throw new UnsupportedOperationException();
+		final var row = getRow(rowIndex);
+		final var column = getColumn(columnIndex);
+		column.setValue(row, aValue);
 	}
 
 	@Override
@@ -102,6 +131,10 @@ public class MutableTableModel<T> implements TableModel {
 	@Override
 	public void removeTableModelListener(final TableModelListener l) {
 		this.eventListeners.remove(TableModelListener.class, l);
+	}
+
+	public Column<T> getColumn(final int columnIndex) {
+		return this.columns.get(columnIndex);
 	}
 
 	public T getRow(final int rowIndex) {

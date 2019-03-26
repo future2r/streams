@@ -7,8 +7,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.EditorHint;
-import name.ulbricht.streams.api.EditorType;
 import name.ulbricht.streams.api.Source;
 
 @JavaBean(description = "Splits a text into lines and returns them as a new stream.")
@@ -32,7 +30,6 @@ public final class TextLines implements Supplier<Stream<String>> {
 	}
 
 	@BeanProperty(description = "Lines of text to create the stream elements")
-	@EditorHint(EditorType.MULTILINE_TEXT)
 	public String getText() {
 		return this.text;
 	}
