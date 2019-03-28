@@ -31,7 +31,7 @@ public class BasicStreamOperationsProvider implements StreamOperationsProvider {
 	@Override
 	public Map<String, Supplier<StreamOperationSet>> getPresets() {
 		return Map.of( //
-				"Print integers raNGE", BasicStreamOperationsProvider::createDefault);
+				"Print integers range", BasicStreamOperationsProvider::createDefault);
 	}
 
 	private static StreamOperationSet createDefault() {
