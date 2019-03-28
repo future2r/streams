@@ -15,9 +15,9 @@ public final class AllOperationsTest {
 	public void testProvider() {
 		final var provider = new BasicStreamOperationsProvider();
 
-		assertAll(() -> assertEquals(4, provider.getSourceOperations().size()),
-				() -> assertEquals(17, provider.getIntermediateOperations().size()),
-				() -> assertEquals(9, provider.getTerminalOperations().size()),
+		assertAll(() -> assertEquals(4, provider.getSourceOperations().count()),
+				() -> assertEquals(17, provider.getIntermediateOperations().count()),
+				() -> assertEquals(9, provider.getTerminalOperations().count()),
 				() -> assertEquals(1, provider.getPresets().size()));
 	}
 
@@ -30,8 +30,7 @@ public final class AllOperationsTest {
 	public static Stream<Class<?>> testConstructors() {
 		final var provider = new BasicStreamOperationsProvider();
 
-		return Stream.concat(
-				Stream.concat(provider.getSourceOperations().stream(), provider.getIntermediateOperations().stream()),
-				provider.getTerminalOperations().stream());
+		return Stream.concat(Stream.concat(provider.getSourceOperations(), provider.getIntermediateOperations()),
+				provider.getTerminalOperations());
 	}
 }

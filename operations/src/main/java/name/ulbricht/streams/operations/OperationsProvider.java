@@ -3,6 +3,7 @@ package name.ulbricht.streams.operations;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperationSet;
 import name.ulbricht.streams.api.StreamOperationsProvider;
@@ -18,17 +19,17 @@ public class OperationsProvider implements StreamOperationsProvider {
 	private static final String MODULE_NAME = "name.ulbricht.streams.operations";
 
 	@Override
-	public List<Class<?>> getSourceOperations() {
+	public Stream<Class<?>> getSourceOperations() {
 		return StreamOperationsScanner.findSourceOperations(MODULE_NAME);
 	}
 
 	@Override
-	public List<Class<?>> getIntermediateOperations() {
+	public Stream<Class<?>> getIntermediateOperations() {
 		return StreamOperationsScanner.findIntermediateOperations(MODULE_NAME);
 	}
 
 	@Override
-	public List<Class<?>> getTerminalOperations() {
+	public Stream<Class<?>> getTerminalOperations() {
 		return StreamOperationsScanner.findTerminalOperations(MODULE_NAME);
 	}
 

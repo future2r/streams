@@ -5,14 +5,15 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ServiceLoader;
+import java.util.ServiceLoader.Provider;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Intermediate;
@@ -25,25 +26,21 @@ import name.ulbricht.streams.api.Terminal;
 public final class StreamOperations {
 
 	public static List<Class<?>> findSourceOperations() {
-		final var operations = new ArrayList<Class<?>>();
-		ServiceLoader.load(StreamOperationsProvider.class).forEach(l -> operations.addAll(l.getSourceOperations()));
-		operations.sort(Comparator.comparing(Class::getSimpleName));
-		return operations;
+		return ServiceLoader.load(StreamOperationsProvider.class).stream().map(Provider::get)
+				.flatMap(StreamOperationsProvider::getSourceOperations)
+				.sorted(Comparator.comparing(Class::getSimpleName)).collect(Collectors.toList());
 	}
 
 	public static List<Class<?>> findIntermediateOperations() {
-		final var operations = new ArrayList<Class<?>>();
-		ServiceLoader.load(StreamOperationsProvider.class)
-				.forEach(l -> operations.addAll(l.getIntermediateOperations()));
-		operations.sort(Comparator.comparing(Class::getSimpleName));
-		return operations;
+		return ServiceLoader.load(StreamOperationsProvider.class).stream().map(Provider::get)
+				.flatMap(StreamOperationsProvider::getIntermediateOperations)
+				.sorted(Comparator.comparing(Class::getSimpleName)).collect(Collectors.toList());
 	}
 
 	public static List<Class<?>> findTerminalOperations() {
-		final var operations = new ArrayList<Class<?>>();
-		ServiceLoader.load(StreamOperationsProvider.class).forEach(l -> operations.addAll(l.getTerminalOperations()));
-		operations.sort(Comparator.comparing(Class::getSimpleName));
-		return operations;
+		return ServiceLoader.load(StreamOperationsProvider.class).stream().map(Provider::get)
+				.flatMap(StreamOperationsProvider::getTerminalOperations)
+				.sorted(Comparator.comparing(Class::getSimpleName)).collect(Collectors.toList());
 	}
 
 	public static Map<String, Supplier<StreamOperationSet>> findPresets() {

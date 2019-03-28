@@ -7,19 +7,20 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class StreamOperationsScanner {
 
-	public static List<Class<?>> findSourceOperations(final String moduleName) {
-		return findOperations(moduleName, Source.class);
+	public static Stream<Class<?>> findSourceOperations(final String moduleName) {
+		return findOperations(moduleName, Source.class).stream();
 	}
 
-	public static List<Class<?>> findIntermediateOperations(final String moduleName) {
-		return findOperations(moduleName, Intermediate.class);
+	public static Stream<Class<?>> findIntermediateOperations(final String moduleName) {
+		return findOperations(moduleName, Intermediate.class).stream();
 	}
 
-	public static List<Class<?>> findTerminalOperations(final String moduleName) {
-		return findOperations(moduleName, Terminal.class);
+	public static Stream<Class<?>> findTerminalOperations(final String moduleName) {
+		return findOperations(moduleName, Terminal.class).stream();
 	}
 
 	private static List<Class<?>> findOperations(final String moduleName,

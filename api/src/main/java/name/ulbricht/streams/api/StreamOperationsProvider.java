@@ -1,16 +1,16 @@
 package name.ulbricht.streams.api;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public interface StreamOperationsProvider {
 
-	List<Class<?>> getSourceOperations();
+	Stream<Class<?>> getSourceOperations();
 
-	List<Class<?>> getIntermediateOperations();
+	Stream<Class<?>> getIntermediateOperations();
 
-	List<Class<?>> getTerminalOperations();
-	
+	Stream<Class<?>> getTerminalOperations();
+
 	Map<String, Supplier<StreamOperationSet>> getPresets();
 }

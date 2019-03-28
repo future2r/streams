@@ -3,15 +3,16 @@ package name.ulbricht.streams.script;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperationSet;
 import name.ulbricht.streams.api.StreamOperationsProvider;
 import name.ulbricht.streams.api.StreamOperationsScanner;
 import name.ulbricht.streams.api.basic.Count;
 import name.ulbricht.streams.api.basic.Sorted;
+import name.ulbricht.streams.api.basic.StringLines;
 import name.ulbricht.streams.api.basic.SystemOut;
 import name.ulbricht.streams.api.basic.SystemOutPeek;
-import name.ulbricht.streams.api.basic.StringLines;
 import name.ulbricht.streams.operations.FileLines;
 import name.ulbricht.streams.operations.FindFiles;
 import name.ulbricht.streams.operations.Modules;
@@ -23,17 +24,17 @@ public class ScriptOperationsProvider implements StreamOperationsProvider {
 	private static final String MODULE_NAME = "name.ulbricht.streams.script";
 
 	@Override
-	public List<Class<?>> getSourceOperations() {
+	public Stream<Class<?>> getSourceOperations() {
 		return StreamOperationsScanner.findSourceOperations(MODULE_NAME);
 	}
 
 	@Override
-	public List<Class<?>> getIntermediateOperations() {
+	public Stream<Class<?>> getIntermediateOperations() {
 		return StreamOperationsScanner.findIntermediateOperations(MODULE_NAME);
 	}
 
 	@Override
-	public List<Class<?>> getTerminalOperations() {
+	public Stream<Class<?>> getTerminalOperations() {
 		return StreamOperationsScanner.findTerminalOperations(MODULE_NAME);
 	}
 
