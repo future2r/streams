@@ -2,6 +2,7 @@ package name.ulbricht.streams.application.ui;
 
 import java.util.Objects;
 import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 import javax.swing.JTextArea;
@@ -13,11 +14,13 @@ final class TextAreaLogHandler extends Handler {
 
 	TextAreaLogHandler(final JTextArea textArea) {
 		this.textArea = Objects.requireNonNull(textArea, "textArea must not be null");
+		setLevel(Level.FINE);
 	}
 
 	@Override
 	public void publish(final LogRecord record) {
-		SwingUtilities.invokeLater(() -> this.textArea.append(record.getMessage() + '\n'));
+		if (isLoggable(record))
+			SwingUtilities.invokeLater(() -> this.textArea.append(record.getMessage() + '\n'));
 	}
 
 	@Override

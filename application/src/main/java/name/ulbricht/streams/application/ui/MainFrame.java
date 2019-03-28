@@ -13,9 +13,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -26,6 +29,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -55,6 +59,10 @@ public final class MainFrame extends JFrame {
 
 	private static final Logger log = Logger.getLogger("name.ulbricht.streams");
 
+	static {
+		log.setLevel(Level.ALL);
+	}
+
 	private static MainFrame instance;
 
 	public static synchronized MainFrame getInstance() {
@@ -75,8 +83,6 @@ public final class MainFrame extends JFrame {
 		setTitle("Streams Designer");
 		setIconImages(Icons.getImages(Icons.APPLICATION));
 
-		setJMenuBar(createMenuBar());
-
 		this.mainTabbedPane = new JTabbedPane();
 		this.mainTabbedPane.setFocusable(false);
 		addTab(this.mainTabbedPane, createSetupPanel(), "Setup", Icons.SETUP);
@@ -89,6 +95,8 @@ public final class MainFrame extends JFrame {
 		contentPane.add(this.mainTabbedPane, BorderLayout.CENTER);
 		contentPane.add(createToolBar(), BorderLayout.NORTH);
 		contentPane.add(createStatusBar(), BorderLayout.SOUTH);
+
+		setJMenuBar(createMenuBar());
 
 		setContentPane(contentPane);
 		pack();
@@ -121,6 +129,19 @@ public final class MainFrame extends JFrame {
 					new JMenuItem(entry.getKey(), Icons.getIcon(Icons.APPLICATION, Icons.Size.X_SMALL).orElse(null)));
 			menuItem.addActionListener(e -> presetSelected(entry.getValue().get()));
 		});
+
+		final var settingsMenu = menuBar.add(new JMenu("Settings"));
+		final var logMenu = settingsMenu.add(new JMenu("Log Level"));
+		final var logGroup = new ButtonGroup();
+		for (final var level : new Level[] { Level.OFF, Level.SEVERE, Level.WARNING, Level.INFO, Level.CONFIG,
+				Level.FINE, Level.FINER, Level.FINEST, Level.ALL }) {
+			final var menuItem = (JRadioButtonMenuItem) logMenu.add(new JRadioButtonMenuItem(level.getName()));
+			logGroup.add(menuItem);
+			menuItem.addActionListener(e -> {
+				this.logHandler.setLevel(level);
+			});
+			menuItem.setSelected(level == this.logHandler.getLevel());
+		}
 
 		final var helpMenu = menuBar.add(new JMenu("Help"));
 		helpMenu.add(this.actions.add(Command.ABOUT.action(this::showAbout)));
@@ -525,6 +546,7 @@ public final class MainFrame extends JFrame {
 	private JTextArea logTextArea;
 	private MutableTableModel<StreamExecutor.ExecutionLogger> statisticsTableModel;
 	private JTable statisticsTable;
+	private Handler logHandler;
 
 	private JPanel createExecutionPanel() {
 		final var panel = new JPanel(new BorderLayout());
@@ -538,7 +560,8 @@ public final class MainFrame extends JFrame {
 		this.logTextArea = new JTextArea();
 		this.logTextArea.setEditable(false);
 
-		log.addHandler(new TextAreaLogHandler(this.logTextArea));
+		logHandler = new TextAreaLogHandler(this.logTextArea);
+		log.addHandler(logHandler);
 
 		this.statisticsTableModel = new MutableTableModel<>(List.of(
 				new MutableTableModel.Column<>("Operation", l -> l.getOperation().getClass().getSimpleName(),

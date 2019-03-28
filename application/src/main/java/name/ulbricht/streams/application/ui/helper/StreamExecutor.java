@@ -32,7 +32,7 @@ public final class StreamExecutor {
 		public void accept(final Object element) {
 			this.elementsProvided++;
 			this.updateHandler.accept(this);
-			log.info(() -> String.format("%s: %s", this.operation.getClass().getSimpleName(), element));
+			log.fine(() -> String.format("%s: %s", this.operation.getClass().getSimpleName(), element));
 		}
 
 		public Object getOperation() {
