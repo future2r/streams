@@ -35,6 +35,7 @@ public final class Icons {
 	static final String STATISTICS = "statistics";
 	static final String INFO = "info";
 	static final String INTERRUPT = "interrupt";
+	static final String COPY = "copy";
 
 	private static final Map<String, ImageIcon> icons = new HashMap<>();
 

@@ -23,7 +23,7 @@ enum Command {
 
 	TERMINAL_CONFIGURE("Configure\u2026"),
 
-	COPY_CODE("Copy to Clipboard");
+	COPY_CODE("Copy to Clipboard", "copy");
 
 	private final String displayName;
 	private final String iconBaseName;

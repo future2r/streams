@@ -86,7 +86,7 @@ public final class MainFrame extends JFrame {
 		this.mainTabbedPane = new JTabbedPane();
 		this.mainTabbedPane.setFocusable(false);
 		addTab(this.mainTabbedPane, createSetupPanel(), "Setup", Icons.SETUP);
-		addTab(this.mainTabbedPane, createCodePanel(), "Source Code", Icons.CODE);
+		addTab(this.mainTabbedPane, createCodeComponent(), "Source Code", Icons.CODE);
 
 		this.executionPanel = createExecutionPanel();
 		addTab(this.mainTabbedPane, executionPanel, "Execution", Icons.EXECUTION);
@@ -153,8 +153,12 @@ public final class MainFrame extends JFrame {
 		final var toolBar = new JToolBar();
 		toolBar.setFloatable(false);
 
-		toolBar.add(this.actions.add(Command.EXECUTE.action(this::execute, () -> this.executionWorker == null)));
-		toolBar.add(this.actions.add(Command.INTERRUPT.action(this::interrupt, () -> this.executionWorker != null)));
+		toolBar.add(this.actions.add(Command.EXECUTE.action(this::execute, () -> this.executionWorker == null)))
+				.setFocusable(false);
+		toolBar.add(this.actions.add(Command.INTERRUPT.action(this::interrupt, () -> this.executionWorker != null)))
+				.setFocusable(false);
+		toolBar.addSeparator();
+		toolBar.add(this.actions.add(Command.COPY_CODE.action(this::copyCode))).setFocusable(false);
 
 		return toolBar;
 	}
@@ -511,26 +515,17 @@ public final class MainFrame extends JFrame {
 
 	private JTextArea codeTextArea;
 
-	private JPanel createCodePanel() {
-		final var panel = new JPanel(new GridBagLayout());
-		panel.setOpaque(false);
-
+	private Component createCodeComponent() {
 		this.codeTextArea = new JTextArea();
 		this.codeTextArea.setEditable(false);
 
-		final var copyCodeButton = new JButton(Command.COPY_CODE.action(this::copyCode));
-
-		panel.add(new JScrollPane(this.codeTextArea), new GridBagConstraints(0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(4, 4, 4, 4), 0, 0));
-		panel.add(copyCodeButton, new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.EAST,
-				GridBagConstraints.NONE, new Insets(4, 4, 4, 4), 0, 0));
-
-		return panel;
+		return new JScrollPane(this.codeTextArea);
 	}
 
 	private void copyCode() {
 		this.codeTextArea.selectAll();
 		this.codeTextArea.copy();
+		this.codeTextArea.setCaretPosition(0);
 	}
 
 	private void updateSourceCode() {
