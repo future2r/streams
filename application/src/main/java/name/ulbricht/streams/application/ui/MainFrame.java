@@ -31,6 +31,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -73,8 +74,6 @@ public final class MainFrame extends JFrame {
 	}
 
 	private final Actions actions = Actions.of();
-	private final JTabbedPane mainTabbedPane;
-	private final JPanel executionPanel;
 	private final Timer memoryUsageTimer;
 
 	private MainFrame() {
@@ -83,23 +82,29 @@ public final class MainFrame extends JFrame {
 		setTitle("Streams Designer");
 		setIconImages(Icons.getImages(Icons.APPLICATION));
 
-		this.mainTabbedPane = new JTabbedPane();
-		this.mainTabbedPane.setFocusable(false);
-		addTab(this.mainTabbedPane, createSetupPanel(), "Setup", Icons.SETUP);
-		addTab(this.mainTabbedPane, createCodeComponent(), "Source Code", Icons.CODE);
+		final var configSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		configSplitPane.setLeftComponent(createSetupComponent());
+		configSplitPane.setRightComponent(createCodeComponent());
 
-		this.executionPanel = createExecutionPanel();
-		addTab(this.mainTabbedPane, executionPanel, "Execution", Icons.EXECUTION);
+		final var mainSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		mainSplitPane.setTopComponent(configSplitPane);
+		mainSplitPane.setBottomComponent(createExecutionComponent());
 
 		final var contentPane = new JPanel(new BorderLayout());
-		contentPane.add(this.mainTabbedPane, BorderLayout.CENTER);
+		contentPane.add(mainSplitPane, BorderLayout.CENTER);
 		contentPane.add(createToolBar(), BorderLayout.NORTH);
 		contentPane.add(createStatusBar(), BorderLayout.SOUTH);
 
 		setJMenuBar(createMenuBar());
 
 		setContentPane(contentPane);
-		pack();
+
+		final var screenSize = this.getGraphicsConfiguration().getBounds();
+		setSize((int) (screenSize.width * 0.7), (int) (screenSize.height * 0.8));
+
+		doLayout();
+		configSplitPane.setDividerLocation((int)(getWidth() * 0.4));
+		mainSplitPane.setDividerLocation((int)(getHeight() * 0.6));
 
 		SwingUtilities
 				.invokeLater(() -> presetSelected(new StreamOperationSet(new Empty<>(), List.of(), new SystemOut<>())));
@@ -190,7 +195,7 @@ public final class MainFrame extends JFrame {
 		this.actions.validate();
 	}
 
-	private JPanel createSetupPanel() {
+	private Component createSetupComponent() {
 		final var panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
 
@@ -543,7 +548,7 @@ public final class MainFrame extends JFrame {
 	private JTable statisticsTable;
 	private Handler logHandler;
 
-	private JPanel createExecutionPanel() {
+	private Component createExecutionComponent() {
 		final var panel = new JPanel(new BorderLayout());
 		panel.setOpaque(false);
 
@@ -567,11 +572,11 @@ public final class MainFrame extends JFrame {
 		final var nameColumn = this.statisticsTable.getColumnModel().getColumn(0);
 		nameColumn.setCellRenderer(new StreamOperationTableCellRenderer());
 
-		final var tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
+		final var tabbedPane = new JTabbedPane();
 		tabbedPane.setFocusable(false);
-		addTab(tabbedPane, new JScrollPane(this.statisticsTable), "Log", Icons.STATISTICS);
-		addTab(tabbedPane, new JScrollPane(this.logTextArea), "Console", Icons.LOG);
-		addTab(tabbedPane, new JScrollPane(this.sysOutTextArea), "Statistics", Icons.CONSOLE);
+		addTab(tabbedPane, new JScrollPane(this.statisticsTable), "Statistics", Icons.STATISTICS);
+		addTab(tabbedPane, new JScrollPane(this.logTextArea), "Log", Icons.LOG);
+		addTab(tabbedPane, new JScrollPane(this.sysOutTextArea), "Console", Icons.CONSOLE);
 
 		panel.add(tabbedPane, BorderLayout.CENTER);
 
@@ -599,7 +604,6 @@ public final class MainFrame extends JFrame {
 			});
 
 			this.statisticsTableModel.replaceAll(this.executionWorker.getExecutor().getExecutionLoggers());
-			this.mainTabbedPane.setSelectedComponent(this.executionPanel);
 
 			this.actions.validate();
 

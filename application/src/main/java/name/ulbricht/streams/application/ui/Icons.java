@@ -24,8 +24,6 @@ public final class Icons {
 	}
 
 	static final String APPLICATION = "app";
-	static final String SETUP = "setup";
-	static final String CODE = "code";
 	static final String EXECUTION = "execution";
 	static final String SOURCE_OPERATION = "source";
 	static final String INTERMEDIATE_OPERATION = "intermediate";
