@@ -1,4 +1,4 @@
-package name.ulbricht.streams.operations;
+package name.ulbricht.streams.api.basic;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

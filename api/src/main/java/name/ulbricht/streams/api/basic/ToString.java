@@ -1,4 +1,4 @@
-package name.ulbricht.streams.operations;
+package name.ulbricht.streams.api.basic;
 
 import java.beans.JavaBean;
 import java.util.Objects;
@@ -9,7 +9,7 @@ import name.ulbricht.streams.api.Intermediate;
 
 @JavaBean(description = "Returns a stream with the string representation of the elements of this stream.")
 @Intermediate
-public final class ToStringMapper<T> implements Function<Stream<T>, Stream<String>> {
+public final class ToString<T> implements Function<Stream<T>, Stream<String>> {
 
 	@Override
 	public Stream<String> apply(final Stream<T> stream) {

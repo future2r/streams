@@ -8,8 +8,10 @@ import name.ulbricht.streams.api.StreamOperationSet;
 import name.ulbricht.streams.api.StreamOperationsProvider;
 import name.ulbricht.streams.api.StreamOperationsScanner;
 import name.ulbricht.streams.api.basic.Distinct;
+import name.ulbricht.streams.api.basic.LowerCase;
 import name.ulbricht.streams.api.basic.Sorted;
-import name.ulbricht.streams.api.basic.SystemOut;
+import name.ulbricht.streams.api.basic.StringLines;
+import name.ulbricht.streams.api.basic.ToString;
 
 public class OperationsProvider implements StreamOperationsProvider {
 
@@ -33,19 +35,14 @@ public class OperationsProvider implements StreamOperationsProvider {
 	@Override
 	public Map<String, Supplier<StreamOperationSet>> getPresets() {
 		return Map.of( //
-				"Integers", OperationsProvider::createDefault, //
 				"Word length statistics", OperationsProvider::createSplitWords, //
 				"Sort lines in a file", OperationsProvider::createSortLines, //
 				"Generate a file with sorted numbers", OperationsProvider::createGenerateNumbers //
 		);
 	}
 
-	private static StreamOperationSet createDefault() {
-		return new StreamOperationSet(new IntegerRange(), List.of(new SleepPeek<>()), new SystemOut<>());
-	}
-
 	private static StreamOperationSet createSplitWords() {
-		final var source = new TextLines();
+		final var source = new StringLines();
 		source.setText(
 				"Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. "
 						+ "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. "
@@ -63,6 +60,6 @@ public class OperationsProvider implements StreamOperationsProvider {
 
 	private static StreamOperationSet createGenerateNumbers() {
 		return new StreamOperationSet(new RandomIntegerGenerator(),
-				List.of(new Distinct<>(), new Sorted<>(), new ToStringMapper<>()), new TextFileWriter());
+				List.of(new Distinct<>(), new Sorted<>(), new ToString<>()), new TextFileWriter());
 	}
 }

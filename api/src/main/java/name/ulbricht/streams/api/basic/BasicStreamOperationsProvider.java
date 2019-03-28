@@ -29,6 +29,11 @@ public class BasicStreamOperationsProvider implements StreamOperationsProvider {
 
 	@Override
 	public Map<String, Supplier<StreamOperationSet>> getPresets() {
-		return Map.of();
+		return Map.of( //
+				"Print integers raNGE", BasicStreamOperationsProvider::createDefault);
+	}
+
+	private static StreamOperationSet createDefault() {
+		return new StreamOperationSet(new IntegerRange(), List.of(new SleepPeek<>()), new SystemOut<>());
 	}
 }

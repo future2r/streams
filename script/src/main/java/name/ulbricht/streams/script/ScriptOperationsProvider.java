@@ -11,12 +11,12 @@ import name.ulbricht.streams.api.basic.Count;
 import name.ulbricht.streams.api.basic.Sorted;
 import name.ulbricht.streams.api.basic.SystemOut;
 import name.ulbricht.streams.api.basic.SystemOutPeek;
+import name.ulbricht.streams.api.basic.StringLines;
 import name.ulbricht.streams.operations.FileLines;
 import name.ulbricht.streams.operations.FindFiles;
 import name.ulbricht.streams.operations.Modules;
 import name.ulbricht.streams.operations.StringFormatter;
 import name.ulbricht.streams.operations.SystemProperties;
-import name.ulbricht.streams.operations.TextLines;
 
 public class ScriptOperationsProvider implements StreamOperationsProvider {
 
@@ -55,7 +55,7 @@ public class ScriptOperationsProvider implements StreamOperationsProvider {
 	}
 
 	private static StreamOperationSet createFilterJavaScript() {
-		return new StreamOperationSet(new TextLines(),
+		return new StreamOperationSet(new StringLines(),
 				List.of(new JavaScriptFilter<>("pass = element.indexOf('H') >= 0")), new SystemOut<>());
 	}
 

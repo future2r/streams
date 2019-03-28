@@ -1,4 +1,4 @@
-package name.ulbricht.streams.operations;
+package name.ulbricht.streams.api.basic;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
@@ -14,5 +14,4 @@ public final class IntegerRangeTest {
 
 		assertArrayEquals(new Integer[] { 42, 43, 44, 45, 46 }, result);
 	}
-
 }

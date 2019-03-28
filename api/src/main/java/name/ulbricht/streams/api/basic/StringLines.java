@@ -1,4 +1,4 @@
-package name.ulbricht.streams.operations;
+package name.ulbricht.streams.api.basic;
 
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
@@ -9,13 +9,13 @@ import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Source;
 
-@JavaBean(description = "Splits a text into lines and returns them as a new stream.")
+@JavaBean(description = "Splits a string into lines and returns them as a new stream.")
 @Source
-public final class TextLines implements Supplier<Stream<String>> {
+public final class StringLines implements Supplier<Stream<String>> {
 
 	private String text;
 
-	public TextLines() {
+	public StringLines() {
 		this("Hello World!\n" // en
 				+ "Hallo Welt!\n" // de
 				+ "Salut tout le monde!\n" // fr
@@ -25,7 +25,7 @@ public final class TextLines implements Supplier<Stream<String>> {
 		);
 	}
 
-	public TextLines(final String text) {
+	public StringLines(final String text) {
 		this.text = Objects.requireNonNull(text, "text must not be null");
 	}
 

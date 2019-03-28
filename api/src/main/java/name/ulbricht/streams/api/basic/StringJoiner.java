@@ -1,6 +1,4 @@
-package name.ulbricht.streams.operations;
-
-import static name.ulbricht.streams.operations.StringUtils.quote;
+package name.ulbricht.streams.api.basic;
 
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
@@ -65,5 +63,9 @@ public final class StringJoiner implements Function<Stream<String>, String> {
 	public String toString() {
 		return String.format(".collect(Collectors.joining(\"%s\", \"%s\", \"%s\"))", quote(this.delimiter),
 				quote(this.prefix), quote(this.suffix));
+	}
+	
+	public static String quote(final String s) {
+		return s.replace("\\", "\\\\");
 	}
 }

@@ -1,4 +1,4 @@
-package name.ulbricht.streams.operations;
+package name.ulbricht.streams.api.basic;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
@@ -6,13 +6,13 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-public final class ToStringMapperTest {
+public final class ToStringTest {
 
 	@Test
 	public void testExecution() {
 		final var stream = Stream.<Object>of("Hello", 1, 0.42);
 
-		final var operation = new ToStringMapper<Object>();
+		final var operation = new ToString<Object>();
 
 		final var result = operation.apply(stream).toArray(String[]::new);
 

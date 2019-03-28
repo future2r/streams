@@ -1,46 +1,46 @@
-package name.ulbricht.streams.operations;
+package name.ulbricht.streams.api.basic;
 
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.function.Supplier;
-import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Source;
 
-@JavaBean(description = "Generates a sequence of integer values as a new stream.")
+@JavaBean(description = "Generates a sequence of long values as a new stream.")
 @Source
-public final class IntegerRange implements Supplier<Stream<Integer>> {
+public final class LongRange implements Supplier<Stream<Long>> {
 
-	private int start;
-	private int end;
+	private long start;
+	private long end;
 	private boolean closed;
 
-	public IntegerRange() {
+	public LongRange() {
 		this(0, 100, false);
 	}
 
-	public IntegerRange(final int start, final int end, final boolean closed) {
+	public LongRange(final long start, final long end, final boolean closed) {
 		this.start = start;
 		this.end = end;
 		this.closed = closed;
 	}
 
 	@BeanProperty(description = "Lower limit of the range")
-	public int getStart() {
+	public long getStart() {
 		return this.start;
 	}
 
-	public void setStart(final int start) {
+	public void setStart(final long start) {
 		this.start = start;
 	}
 
 	@BeanProperty(description = "Upper limit of the range")
-	public int getEnd() {
+	public long getEnd() {
 		return this.end;
 	}
 
-	public void setEnd(final int end) {
+	public void setEnd(final long end) {
 		this.end = end;
 	}
 
@@ -54,18 +54,17 @@ public final class IntegerRange implements Supplier<Stream<Integer>> {
 	}
 
 	@Override
-	public Stream<Integer> get() {
-		final IntStream stream;
+	public Stream<Long> get() {
+		final LongStream stream;
 		if (this.closed)
-			stream = IntStream.rangeClosed(this.start, this.end);
+			stream = LongStream.rangeClosed(this.start, this.end);
 		else
-			stream = IntStream.range(this.start, this.end);
+			stream = LongStream.range(this.start, this.end);
 		return stream.boxed();
 	}
 
 	@Override
 	public String toString() {
-		return String.format("IntStream.range%s(%s, %s).boxed()", this.closed ? "Closed" : "",
-				Integer.toString(this.start), Integer.toString(this.end));
+		return String.format("LongStream.range%s(%d, %d).boxed()", this.closed ? "Closed" : "", this.start, this.end);
 	}
 }
