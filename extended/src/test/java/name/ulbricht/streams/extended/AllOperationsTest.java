@@ -15,10 +15,10 @@ public final class AllOperationsTest {
 	public void testProvider() {
 		final var provider = new ExtendedOperationsProvider();
 
-		assertAll(() -> assertEquals(13, provider.getSourceOperations().count()),
-				() -> assertEquals(5, provider.getIntermediateOperations().count()),
-				() -> assertEquals(2, provider.getTerminalOperations().count()),
-				() -> assertEquals(3, provider.getPresets().size()));
+		assertAll(() -> assertEquals(10, provider.getSourceOperations().count()),
+				() -> assertEquals(4, provider.getIntermediateOperations().count()),
+				() -> assertEquals(1, provider.getTerminalOperations().count()),
+				() -> assertEquals(1, provider.getPresets().size()));
 	}
 
 	@ParameterizedTest

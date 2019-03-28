@@ -45,6 +45,7 @@
 		<module>extended</module>
 		<module>script</module>
 		<module>entity</module>
+		<module>files</module>
 		<module>application</module>
 	</modules>
 

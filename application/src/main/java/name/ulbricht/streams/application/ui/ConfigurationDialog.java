@@ -68,7 +68,11 @@ final class ConfigurationDialog extends JDialog {
 		contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
 		final var closeButton = new JButton("Close");
-		closeButton.addActionListener(e -> dispose());
+		closeButton.addActionListener(e -> {
+			if (propertiesTable.isEditing())
+				propertiesTable.getCellEditor().stopCellEditing();
+			dispose();
+		});
 		buttonPanel.add(closeButton, BorderLayout.EAST);
 
 		getRootPane().setDefaultButton(closeButton);

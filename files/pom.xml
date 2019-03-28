@@ -9,8 +9,8 @@
 		<version>1.0.0</version>
 	</parent>
 
-	<artifactId>extended</artifactId>
-	<name>Extended Operations</name>
+	<artifactId>files</artifactId>
+	<name>File Operations</name>
 
 	<dependencies>
 		<dependency>

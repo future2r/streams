@@ -107,7 +107,7 @@ public final class MainFrame extends JFrame {
 		mainSplitPane.setDividerLocation((int)(getHeight() * 0.6));
 
 		SwingUtilities
-				.invokeLater(() -> presetSelected(new StreamOperationSet(new Empty<>(), List.of(), new SystemOut<>())));
+				.invokeLater(() -> presetSelected(StreamOperations.DEFAULT_PRESET));
 		SwingUtilities.invokeLater(() -> this.sourceOperationComboBox.requestFocusInWindow());
 
 		this.memoryUsageTimer = new Timer(1000, e -> updateMemoryUsage());

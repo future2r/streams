@@ -14,7 +14,8 @@ public final class SourceCodeBuilder {
 	}
 
 	public String getSourceCode() {
-		final var sourceCode = new StringBuilder();
+		final var sourceCode = new StringBuilder("/*\n * This code is for demonstration purpose only.\n"
+				+ " * It may not be optimal or performant.\n * Please do not use in production.\n */\n\n");
 
 		final var source = this.operations.getSource();
 		sourceCode.append(String.format("// %s%n", source.getClass().getSimpleName()));

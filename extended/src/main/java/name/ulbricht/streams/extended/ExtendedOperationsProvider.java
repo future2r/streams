@@ -8,11 +8,8 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperationSet;
 import name.ulbricht.streams.api.StreamOperationsProvider;
 import name.ulbricht.streams.api.StreamOperationsScanner;
-import name.ulbricht.streams.api.basic.Distinct;
 import name.ulbricht.streams.api.basic.LowerCase;
-import name.ulbricht.streams.api.basic.Sorted;
 import name.ulbricht.streams.api.basic.StringLines;
-import name.ulbricht.streams.api.basic.ToString;
 
 public class ExtendedOperationsProvider implements StreamOperationsProvider {
 
@@ -35,11 +32,7 @@ public class ExtendedOperationsProvider implements StreamOperationsProvider {
 
 	@Override
 	public Map<String, Supplier<StreamOperationSet>> getPresets() {
-		return Map.of( //
-				"Word length statistics", ExtendedOperationsProvider::createSplitWords, //
-				"Sort lines in a file", ExtendedOperationsProvider::createSortLines, //
-				"Generate a file with sorted numbers", ExtendedOperationsProvider::createGenerateNumbers //
-		);
+		return Map.of("Word length statistics", ExtendedOperationsProvider::createSplitWords);
 	}
 
 	private static StreamOperationSet createSplitWords() {
@@ -52,15 +45,5 @@ public class ExtendedOperationsProvider implements StreamOperationsProvider {
 
 		return new StreamOperationSet(source, List.of(new RegExSplitter(), new LowerCase()),
 				new StringLengthGrouping());
-	}
-
-	private static StreamOperationSet createSortLines() {
-		return new StreamOperationSet(new TextFileReader(), List.of(new Distinct<>(), new Sorted<>()),
-				new TextFileWriter());
-	}
-
-	private static StreamOperationSet createGenerateNumbers() {
-		return new StreamOperationSet(new RandomIntegerGenerator(),
-				List.of(new Distinct<>(), new Sorted<>(), new ToString<>()), new TextFileWriter());
 	}
 }

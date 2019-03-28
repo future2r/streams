@@ -1,6 +1,5 @@
 package name.ulbricht.streams.extended;
 
-import static name.ulbricht.streams.extended.StringUtils.quote;
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.Objects;
@@ -40,5 +39,9 @@ public final class StringFormatter<T> implements Function<Stream<T>, Stream<Stri
 	@Override
 	public String toString() {
 		return String.format(".map(e -> String.format(\"%s\", e))", quote(this.format));
+	}
+
+	private static String quote(final String s) {
+		return s.replace("\\", "\\\\");
 	}
 }

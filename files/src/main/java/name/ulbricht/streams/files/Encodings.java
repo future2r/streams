@@ -1,4 +1,4 @@
-package name.ulbricht.streams.extended;
+package name.ulbricht.streams.files;
 
 import java.beans.JavaBean;
 import java.nio.charset.Charset;

@@ -1,4 +1,4 @@
-package name.ulbricht.streams.extended;
+package name.ulbricht.streams.files;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
@@ -10,7 +10,9 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-public final class TextFileWriterTest {
+import name.ulbricht.streams.files.FileWriter;
+
+public final class FileWriterTest {
 
 	@Test
 	public void testExecution() throws IOException {
@@ -18,7 +20,7 @@ public final class TextFileWriterTest {
 
 		final var stream = Stream.of("This", "is", "a", "test");
 
-		final var operation = new TextFileWriter(tempFile, StandardCharsets.UTF_8);
+		final var operation = new FileWriter(tempFile, StandardCharsets.UTF_8);
 
 		operation.apply(stream);
 

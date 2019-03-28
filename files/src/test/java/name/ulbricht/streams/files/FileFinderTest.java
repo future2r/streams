@@ -1,4 +1,4 @@
-package name.ulbricht.streams.extended;
+package name.ulbricht.streams.files;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -7,11 +7,13 @@ import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 
-public final class FindFilesTest {
+import name.ulbricht.streams.files.FileFinder;
+
+public final class FileFinderTest {
 
 	@Test
 	public void testExecution() {
-		final var operation = new FindFiles(Paths.get(System.getProperty("user.dir"), "testfiles"));
+		final var operation = new FileFinder(Paths.get(System.getProperty("user.dir"), "testfiles"));
 
 		final var result = operation.get().toArray(Path[]::new);
 

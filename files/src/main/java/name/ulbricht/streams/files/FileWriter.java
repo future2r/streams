@@ -1,6 +1,5 @@
-package name.ulbricht.streams.extended;
+package name.ulbricht.streams.files;
 
-import static name.ulbricht.streams.extended.StringUtils.quote;
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.io.IOException;
@@ -17,20 +16,20 @@ import name.ulbricht.streams.api.Terminal;
 
 @JavaBean(description = "Writes all strings the the stream as lines into a text file.")
 @Terminal
-public final class TextFileWriter implements Function<Stream<String>, Void> {
+public final class FileWriter implements Function<Stream<String>, Void> {
 
 	private Path file;
 	private Charset encoding;
 
-	public TextFileWriter() {
+	public FileWriter() {
 		this(Paths.get(System.getProperty("user.dir"), "output.txt"));
 	}
 
-	public TextFileWriter(final Path file) {
+	public FileWriter(final Path file) {
 		this(file, Charset.defaultCharset());
 	}
 
-	public TextFileWriter(final Path file, final Charset encoding) {
+	public FileWriter(final Path file, final Charset encoding) {
 		this.file = Objects.requireNonNull(file, "file must not be null");
 		this.encoding = Objects.requireNonNull(encoding, "encoding must not be null");
 	}
@@ -74,5 +73,9 @@ public final class TextFileWriter implements Function<Stream<String>, Void> {
 				+ "  } catch (IOException ex) {}\n" //
 				+ "})", //
 				this.encoding.name());
+	}
+
+	private static String quote(final String s) {
+		return s.replace("\\", "\\\\");
 	}
 }

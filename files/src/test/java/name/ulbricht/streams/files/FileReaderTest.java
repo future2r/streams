@@ -1,4 +1,4 @@
-package name.ulbricht.streams.extended;
+package name.ulbricht.streams.files;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
@@ -7,11 +7,13 @@ import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 
-public final class TextFileReaderTest {
+import name.ulbricht.streams.files.FileReader;
+
+public final class FileReaderTest {
 
 	@Test
 	public void testExecution() {
-		final var operation = new TextFileReader(Paths.get(System.getProperty("user.dir"), "testfiles", "text.txt"),
+		final var operation = new FileReader(Paths.get(System.getProperty("user.dir"), "testfiles", "text.txt"),
 				StandardCharsets.UTF_8);
 
 		final var result = operation.get().toArray(String[]::new);

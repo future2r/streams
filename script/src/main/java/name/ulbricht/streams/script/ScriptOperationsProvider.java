@@ -8,13 +8,10 @@ import java.util.stream.Stream;
 import name.ulbricht.streams.api.StreamOperationSet;
 import name.ulbricht.streams.api.StreamOperationsProvider;
 import name.ulbricht.streams.api.StreamOperationsScanner;
-import name.ulbricht.streams.api.basic.Count;
 import name.ulbricht.streams.api.basic.Sorted;
 import name.ulbricht.streams.api.basic.StringLines;
 import name.ulbricht.streams.api.basic.SystemOut;
 import name.ulbricht.streams.api.basic.SystemOutPeek;
-import name.ulbricht.streams.extended.FileLines;
-import name.ulbricht.streams.extended.FindFiles;
 import name.ulbricht.streams.extended.Modules;
 import name.ulbricht.streams.extended.StringFormatter;
 import name.ulbricht.streams.extended.SystemProperties;
@@ -41,18 +38,10 @@ public class ScriptOperationsProvider implements StreamOperationsProvider {
 	@Override
 	public Map<String, Supplier<StreamOperationSet>> getPresets() {
 		return Map.of( //
-				"Count lines in all files", ScriptOperationsProvider::createCountLines, //
 				"Filter by JavaScript", ScriptOperationsProvider::createFilterJavaScript, //
 				"Display Java system properties", ScriptOperationsProvider::createSystemProperties, //
 				"Modules and exported packages", ScriptOperationsProvider::createModulesAndPackages //
 		);
-	}
-
-	private static StreamOperationSet createCountLines() {
-		return new StreamOperationSet(new FindFiles(),
-				List.of(new JavaScriptFilter<>("pass = element.getFileName().toString().endsWith(\".java\")"),
-						new FileLines()),
-				new Count<>());
 	}
 
 	private static StreamOperationSet createFilterJavaScript() {

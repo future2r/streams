@@ -1,6 +1,5 @@
 package name.ulbricht.streams.extended;
 
-import static name.ulbricht.streams.extended.StringUtils.quote;
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.Objects;
@@ -40,5 +39,9 @@ public final class RegExSplitter implements Function<Stream<String>, Stream<Stri
 	@Override
 	public String toString() {
 		return String.format(".flatMap(s -> Stream.of(s.split(\"%s\")))", quote(this.pattern));
+	}
+
+	private static String quote(final String s) {
+		return s.replace("\\", "\\\\");
 	}
 }

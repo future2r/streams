@@ -33,6 +33,7 @@ final class PropertyValueTableCellEditor extends AbstractCellEditor implements T
 
 	private PropertyValueEditor editor;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Component getTableCellEditorComponent(final JTable table, final Object value, final boolean isSelected,
 			final int row, final int column) {
@@ -41,15 +42,23 @@ final class PropertyValueTableCellEditor extends AbstractCellEditor implements T
 		final var property = model.getRow(row);
 		final var propertyType = property.getPropertyType();
 
-		final var editorClass = editors.get(propertyType);
-		if (editorClass != null) {
-			try {
-				this.editor = editorClass.getConstructor((Class<?>[]) null).newInstance((Object[]) null);
-				this.editor.setValue(value);
-				return this.editor.getComponent();
-			} catch (final ReflectiveOperationException ex) {
-				throw new RuntimeException("Could not created editor of " + editorClass, ex);
+		if (propertyType.isEnum()) {
+			this.editor = new EnumEditor((Class<? extends Enum<?>>) propertyType);
+
+		} else {
+			final Class<? extends PropertyValueEditor> editorClass = editors.get(propertyType);
+			if (editorClass != null) {
+				try {
+					this.editor = editorClass.getConstructor().newInstance();
+				} catch (final ReflectiveOperationException ex) {
+					throw new RuntimeException("Could not created editor of " + editorClass, ex);
+				}
 			}
+		}
+
+		if (this.editor != null) {
+			this.editor.setValue(value);
+			return this.editor.getComponent();
 		}
 
 		throw new UnsupportedOperationException("No editor for " + propertyType);

@@ -1,6 +1,5 @@
-package name.ulbricht.streams.extended;
+package name.ulbricht.streams.files;
 
-import static name.ulbricht.streams.extended.StringUtils.quote;
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.io.IOException;
@@ -16,20 +15,20 @@ import name.ulbricht.streams.api.Source;
 
 @JavaBean(description = "Reads a text file and provides a stream with all lines.")
 @Source
-public final class TextFileReader implements Supplier<Stream<String>> {
+public final class FileReader implements Supplier<Stream<String>> {
 
 	private Path file;
 	private Charset encoding;
 
-	public TextFileReader() {
+	public FileReader() {
 		this(Paths.get(System.getProperty("user.dir"), "input.txt"));
 	}
 
-	public TextFileReader(final Path file) {
+	public FileReader(final Path file) {
 		this(file, Charset.defaultCharset());
 	}
 
-	public TextFileReader(final Path file, final Charset encoding) {
+	public FileReader(final Path file, final Charset encoding) {
 		this.file = Objects.requireNonNull(file, "file must not be null");
 		this.encoding = Objects.requireNonNull(encoding, "encoding must not be null");
 	}
@@ -65,5 +64,9 @@ public final class TextFileReader implements Supplier<Stream<String>> {
 	public String toString() {
 		return String.format("Files.lines(Paths.get(\"%s\"), Charset.forName(\"%s\"))", quote(this.file.toString()),
 				this.encoding.name());
+	}
+
+	private static String quote(final String s) {
+		return s.replace("\\", "\\\\");
 	}
 }

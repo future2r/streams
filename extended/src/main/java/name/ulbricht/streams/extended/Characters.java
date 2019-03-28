@@ -1,6 +1,5 @@
 package name.ulbricht.streams.extended;
 
-import static name.ulbricht.streams.extended.StringUtils.quote;
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.util.Objects;
@@ -41,5 +40,9 @@ public final class Characters implements Supplier<Stream<Integer>> {
 	@Override
 	public String toString() {
 		return String.format("\"%s\".chars().boxed()", quote(this.text));
+	}
+	
+	private static String quote(final String s) {
+		return s.replace("\\", "\\\\");
 	}
 }

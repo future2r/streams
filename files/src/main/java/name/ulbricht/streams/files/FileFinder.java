@@ -1,6 +1,5 @@
-package name.ulbricht.streams.extended;
+package name.ulbricht.streams.files;
 
-import static name.ulbricht.streams.extended.StringUtils.quote;
 import java.beans.BeanProperty;
 import java.beans.JavaBean;
 import java.io.IOException;
@@ -15,15 +14,15 @@ import name.ulbricht.streams.api.Source;
 
 @JavaBean(description = "Finds all files in a directory and its subdirectories.")
 @Source
-public final class FindFiles implements Supplier<Stream<Path>> {
+public final class FileFinder implements Supplier<Stream<Path>> {
 
 	private Path directory;
 
-	public FindFiles() {
+	public FileFinder() {
 		this(Paths.get(System.getProperty("user.dir")));
 	}
 
-	public FindFiles(final Path directory) {
+	public FileFinder(final Path directory) {
 		this.directory = Objects.requireNonNull(directory, "directory must not be null");
 	}
 
@@ -50,5 +49,9 @@ public final class FindFiles implements Supplier<Stream<Path>> {
 	public String toString() {
 		return String.format("Files.find(Paths.get(\"%s\"), Integer.MAX_VALUE, (p, a) -> a.isRegularFile())",
 				quote(this.directory.toString()));
+	}
+
+	private static String quote(final String s) {
+		return s.replace("\\", "\\\\");
 	}
 }
