@@ -36,7 +36,8 @@ public class EntityOperationsProvider implements StreamOperationsProvider {
 	}
 
 	private static StreamOperationSet createEmployeesByDepartment() {
-		return new StreamOperationSet(new Employees(), List.of(new EmployeesFilter(), new EmployeesSorter()),
-				new EmployeesDepartmentGrouping());
+		return new StreamOperationSet(new Employees(),
+				List.of(new EmployeesSalaryFilter(), new EmployeesSorter(Field.LAST_NAME)),
+				new EmployeesGrouping(Field.DEPARTMENT));
 	}
 }

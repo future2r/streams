@@ -9,11 +9,11 @@ import name.ulbricht.streams.api.Intermediate;
 
 @JavaBean(description = "Filters employees by their salary.")
 @Intermediate
-public final class EmployeesFilter implements Function<Stream<Employee>, Stream<Employee>> {
+public final class EmployeesSalaryFilter implements Function<Stream<Employee>, Stream<Employee>> {
 
 	private int salary = 2000;
 
-	@BeanProperty(description = "Monthly salary")
+	@BeanProperty(description = "Minimum monthly salary")
 	public int getSalary() {
 		return this.salary;
 	}
