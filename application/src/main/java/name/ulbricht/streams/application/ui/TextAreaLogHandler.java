@@ -14,7 +14,13 @@ final class TextAreaLogHandler extends Handler {
 
 	TextAreaLogHandler(final JTextArea textArea) {
 		this.textArea = Objects.requireNonNull(textArea, "textArea must not be null");
-		setLevel(Level.FINE);
+		setLevel(AppPreferences.getLogLevel());
+	}
+
+	@Override
+	public synchronized void setLevel(final Level newLevel) throws SecurityException {
+		super.setLevel(newLevel);
+		AppPreferences.setLogLevel(getLevel());
 	}
 
 	@Override
