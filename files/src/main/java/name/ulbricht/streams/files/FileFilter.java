@@ -39,6 +39,7 @@ public final class FileFilter implements Function<Stream<Path>, Stream<Path>> {
 		this.pattern = Objects.requireNonNull(pattern, "pattern must not be null");
 	}
 
+	@BeanProperty(description = "Syntax used in the pattern")
 	public Syntax getSyntax() {
 		return this.syntax;
 	}
