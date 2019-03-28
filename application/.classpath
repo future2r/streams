@@ -35,12 +35,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/operations">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/api">
+	<classpathentry combineaccessrules="false" kind="src" path="/script">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
@@ -50,7 +45,12 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/script">
+	<classpathentry combineaccessrules="false" kind="src" path="/api">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/extended">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

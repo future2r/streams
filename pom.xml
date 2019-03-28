@@ -42,7 +42,7 @@
 
 	<modules>
 		<module>api</module>
-		<module>operations</module>
+		<module>extended</module>
 		<module>script</module>
 		<module>entity</module>
 		<module>application</module>

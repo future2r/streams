@@ -13,11 +13,11 @@ import name.ulbricht.streams.api.basic.Sorted;
 import name.ulbricht.streams.api.basic.StringLines;
 import name.ulbricht.streams.api.basic.SystemOut;
 import name.ulbricht.streams.api.basic.SystemOutPeek;
-import name.ulbricht.streams.operations.FileLines;
-import name.ulbricht.streams.operations.FindFiles;
-import name.ulbricht.streams.operations.Modules;
-import name.ulbricht.streams.operations.StringFormatter;
-import name.ulbricht.streams.operations.SystemProperties;
+import name.ulbricht.streams.extended.FileLines;
+import name.ulbricht.streams.extended.FindFiles;
+import name.ulbricht.streams.extended.Modules;
+import name.ulbricht.streams.extended.StringFormatter;
+import name.ulbricht.streams.extended.SystemProperties;
 
 public class ScriptOperationsProvider implements StreamOperationsProvider {
 

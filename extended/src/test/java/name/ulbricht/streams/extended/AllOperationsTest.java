@@ -1,4 +1,4 @@
-package name.ulbricht.streams.script;
+package name.ulbricht.streams.extended;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,12 +13,12 @@ public final class AllOperationsTest {
 
 	@Test
 	public void testProvider() {
-		final var provider = new ScriptOperationsProvider();
+		final var provider = new ExtendedOperationsProvider();
 
-		assertAll(() -> assertEquals(1, provider.getSourceOperations().count()),
-				() -> assertEquals(6, provider.getIntermediateOperations().count()),
-				() -> assertEquals(6, provider.getTerminalOperations().count()),
-				() -> assertEquals(4, provider.getPresets().size()));
+		assertAll(() -> assertEquals(13, provider.getSourceOperations().count()),
+				() -> assertEquals(5, provider.getIntermediateOperations().count()),
+				() -> assertEquals(2, provider.getTerminalOperations().count()),
+				() -> assertEquals(3, provider.getPresets().size()));
 	}
 
 	@ParameterizedTest
@@ -28,7 +28,7 @@ public final class AllOperationsTest {
 	}
 
 	public static Stream<Class<?>> testConstructors() {
-		final var provider = new ScriptOperationsProvider();
+		final var provider = new ExtendedOperationsProvider();
 
 		return Stream.concat(Stream.concat(provider.getSourceOperations(), provider.getIntermediateOperations()),
 				provider.getTerminalOperations());

@@ -7,7 +7,7 @@ module name.ulbricht.streams.script {
 
 	// directly required project dependencies
 	requires transitive name.ulbricht.streams.api;
-	requires name.ulbricht.streams.operations;
+	requires name.ulbricht.streams.extended;
 
 	// public available package
 	exports name.ulbricht.streams.script;
