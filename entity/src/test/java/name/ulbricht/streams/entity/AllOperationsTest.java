@@ -1,5 +1,6 @@
 package name.ulbricht.streams.entity;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.stream.Stream;
@@ -14,11 +15,10 @@ public final class AllOperationsTest {
 	public void testProvider() {
 		final var provider = new EntityOperationsProvider();
 
-		assertEquals(1, provider.getSourceOperations().count());
-		assertEquals(2, provider.getIntermediateOperations().count());
-		assertEquals(1, provider.getTerminalOperations().count());
-
-		assertEquals(1, provider.getPresets().size());
+		assertAll(() -> assertEquals(1, provider.getSourceOperations().count()),
+				() -> assertEquals(2, provider.getIntermediateOperations().count()),
+				() -> assertEquals(1, provider.getTerminalOperations().count()),
+				() -> assertEquals(1, provider.getPresets().count()));
 	}
 
 	@ParameterizedTest

@@ -18,7 +18,7 @@ public final class AllOperationsTest {
 		assertAll(() -> assertEquals(10, provider.getSourceOperations().count()),
 				() -> assertEquals(4, provider.getIntermediateOperations().count()),
 				() -> assertEquals(1, provider.getTerminalOperations().count()),
-				() -> assertEquals(1, provider.getPresets().size()));
+				() -> assertEquals(1, provider.getPresets().count()));
 	}
 
 	@ParameterizedTest

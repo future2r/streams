@@ -1,13 +1,12 @@
 package name.ulbricht.streams.entity;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.StreamOperationSet;
+import name.ulbricht.streams.api.StreamOperationsPreset;
 import name.ulbricht.streams.api.StreamOperationsProvider;
 import name.ulbricht.streams.api.StreamOperationsScanner;
+import name.ulbricht.streams.api.StreamOperationsSet;
 
 public class EntityOperationsProvider implements StreamOperationsProvider {
 
@@ -29,15 +28,10 @@ public class EntityOperationsProvider implements StreamOperationsProvider {
 	}
 
 	@Override
-	public Map<String, Supplier<StreamOperationSet>> getPresets() {
-		return Map.of( //
-				"Group employees by department", EntityOperationsProvider::createEmployeesByDepartment //
-		);
-	}
-
-	private static StreamOperationSet createEmployeesByDepartment() {
-		return new StreamOperationSet(new Employees(),
-				List.of(new EmployeesSalaryFilter(), new EmployeesSorter(Field.LAST_NAME)),
-				new EmployeesGrouping(Field.DEPARTMENT));
+	public Stream<StreamOperationsPreset> getPresets() {
+		return Stream.of(new StreamOperationsPreset("Group employees by department",
+				() -> new StreamOperationsSet(new Employees(),
+						List.of(new EmployeesSalaryFilter(), new EmployeesSorter(Field.LAST_NAME)),
+						new EmployeesGrouping(Field.DEPARTMENT))));
 	}
 }

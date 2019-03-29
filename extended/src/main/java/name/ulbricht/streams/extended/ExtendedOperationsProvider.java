@@ -1,13 +1,12 @@
 package name.ulbricht.streams.extended;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.StreamOperationSet;
+import name.ulbricht.streams.api.StreamOperationsPreset;
 import name.ulbricht.streams.api.StreamOperationsProvider;
 import name.ulbricht.streams.api.StreamOperationsScanner;
+import name.ulbricht.streams.api.StreamOperationsSet;
 import name.ulbricht.streams.api.basic.LowerCase;
 import name.ulbricht.streams.api.basic.StringLines;
 
@@ -31,19 +30,13 @@ public class ExtendedOperationsProvider implements StreamOperationsProvider {
 	}
 
 	@Override
-	public Map<String, Supplier<StreamOperationSet>> getPresets() {
-		return Map.of("Word length statistics", ExtendedOperationsProvider::createSplitWords);
-	}
-
-	private static StreamOperationSet createSplitWords() {
-		final var source = new StringLines();
-		source.setText(
-				"Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. "
-						+ "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. "
-						+ "Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. "
-						+ "Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
-
-		return new StreamOperationSet(source, List.of(new RegExSplitter(), new LowerCase()),
-				new StringLengthGrouping());
+	public Stream<StreamOperationsPreset> getPresets() {
+		return Stream.of(new StreamOperationsPreset("Word length statistics", () -> new StreamOperationsSet(
+				new StringLines(
+						"Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. "
+								+ "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. "
+								+ "Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. "
+								+ "Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
+				List.of(new RegExSplitter(), new LowerCase()), new StringLengthGrouping())));
 	}
 }

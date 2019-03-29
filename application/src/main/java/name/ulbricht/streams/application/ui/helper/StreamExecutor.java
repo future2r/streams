@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.StreamOperationException;
-import name.ulbricht.streams.api.StreamOperationSet;
+import name.ulbricht.streams.api.StreamOperationsSet;
 
 public final class StreamExecutor {
 
@@ -44,7 +44,7 @@ public final class StreamExecutor {
 		}
 	}
 
-	private final StreamOperationSet operations;
+	private final StreamOperationsSet operations;
 
 	@SuppressWarnings("rawtypes")
 	private final Stream stream;
@@ -53,7 +53,7 @@ public final class StreamExecutor {
 	private final List<ExecutionLogger> executionLoggers = new ArrayList<>();
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public StreamExecutor(final StreamOperationSet operations, final Consumer<ExecutionLogger> updateHandler) {
+	public StreamExecutor(final StreamOperationsSet operations, final Consumer<ExecutionLogger> updateHandler) {
 		this.operations = Objects.requireNonNull(operations, "operations must not be null");
 
 		final var sourceOperation = this.operations.getSource();

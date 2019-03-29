@@ -1,13 +1,12 @@
 package name.ulbricht.streams.api.basic;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import name.ulbricht.streams.api.StreamOperationSet;
+import name.ulbricht.streams.api.StreamOperationsPreset;
 import name.ulbricht.streams.api.StreamOperationsProvider;
 import name.ulbricht.streams.api.StreamOperationsScanner;
+import name.ulbricht.streams.api.StreamOperationsSet;
 
 public class BasicStreamOperationsProvider implements StreamOperationsProvider {
 
@@ -29,12 +28,8 @@ public class BasicStreamOperationsProvider implements StreamOperationsProvider {
 	}
 
 	@Override
-	public Map<String, Supplier<StreamOperationSet>> getPresets() {
-		return Map.of( //
-				"Print integers range", BasicStreamOperationsProvider::createDefault);
-	}
-
-	private static StreamOperationSet createDefault() {
-		return new StreamOperationSet(new IntegerRange(), List.of(new SleepPeek<>()), new SystemOut<>());
+	public Stream<StreamOperationsPreset> getPresets() {
+		return Stream.of(new StreamOperationsPreset("Print integers range",
+				() -> new StreamOperationsSet(new IntegerRange(), List.of(new SleepPeek<>()), new SystemOut<>())));
 	}
 }

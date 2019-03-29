@@ -7,26 +7,25 @@ import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.ServiceLoader.Provider;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import name.ulbricht.streams.api.Intermediate;
 import name.ulbricht.streams.api.Source;
 import name.ulbricht.streams.api.StreamOperationException;
-import name.ulbricht.streams.api.StreamOperationSet;
+import name.ulbricht.streams.api.StreamOperationsPreset;
 import name.ulbricht.streams.api.StreamOperationsProvider;
+import name.ulbricht.streams.api.StreamOperationsSet;
 import name.ulbricht.streams.api.Terminal;
 import name.ulbricht.streams.api.basic.Empty;
 import name.ulbricht.streams.api.basic.SystemOut;
 
 public final class StreamOperations {
 
-	public static StreamOperationSet DEFAULT_PRESET = new StreamOperationSet(new Empty<>(), List.of(),
+	public static StreamOperationsSet DEFAULT_PRESET = new StreamOperationsSet(new Empty<>(), List.of(),
 			new SystemOut<>());
 
 	public static List<Class<?>> findSourceOperations() {
@@ -47,14 +46,11 @@ public final class StreamOperations {
 				.sorted(Comparator.comparing(Class::getSimpleName)).collect(Collectors.toList());
 	}
 
-	public static Map<String, Supplier<StreamOperationSet>> findPresets() {
+	public static List<StreamOperationsPreset> findPresets() {
 		return Stream
-				.concat(Map.<String, Supplier<StreamOperationSet>>of("Empty", () -> DEFAULT_PRESET).entrySet().stream(),
-						ServiceLoader.load(StreamOperationsProvider.class).stream().map(Provider::get)
-								.flatMap(p -> p.getPresets().entrySet().stream()))
-				.collect(
-						Collectors.<Map.Entry<String, Supplier<StreamOperationSet>>, String, Supplier<StreamOperationSet>>toMap(
-								Map.Entry::getKey, Map.Entry::getValue));
+				.concat(Stream.of(new StreamOperationsPreset("Empty", () -> DEFAULT_PRESET)), ServiceLoader
+						.load(StreamOperationsProvider.class).stream().map(Provider::get).flatMap(p -> p.getPresets()))
+				.collect(Collectors.toList());
 	}
 
 	public static boolean isSourceOperation(final Class<?> streamOperationClass) {

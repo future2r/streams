@@ -3,13 +3,13 @@ package name.ulbricht.streams.application.ui.helper;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import name.ulbricht.streams.api.StreamOperationSet;
+import name.ulbricht.streams.api.StreamOperationsSet;
 
 public final class SourceCodeBuilder {
 
-	private final StreamOperationSet operations;
+	private final StreamOperationsSet operations;
 
-	public SourceCodeBuilder(final StreamOperationSet operations) {
+	public SourceCodeBuilder(final StreamOperationsSet operations) {
 		this.operations = Objects.requireNonNull(operations, "operations must not be null");
 	}
 

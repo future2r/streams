@@ -45,9 +45,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import name.ulbricht.streams.api.StreamOperationException;
-import name.ulbricht.streams.api.StreamOperationSet;
-import name.ulbricht.streams.api.basic.Empty;
-import name.ulbricht.streams.api.basic.SystemOut;
+import name.ulbricht.streams.api.StreamOperationsSet;
 import name.ulbricht.streams.application.ui.common.MutableComboBoxModel;
 import name.ulbricht.streams.application.ui.common.MutableListModel;
 import name.ulbricht.streams.application.ui.common.MutableTableModel;
@@ -103,11 +101,10 @@ public final class MainFrame extends JFrame {
 		setSize((int) (screenSize.width * 0.7), (int) (screenSize.height * 0.8));
 
 		doLayout();
-		configSplitPane.setDividerLocation((int)(getWidth() * 0.4));
-		mainSplitPane.setDividerLocation((int)(getHeight() * 0.6));
+		configSplitPane.setDividerLocation((int) (getWidth() * 0.4));
+		mainSplitPane.setDividerLocation((int) (getHeight() * 0.6));
 
-		SwingUtilities
-				.invokeLater(() -> presetSelected(StreamOperations.DEFAULT_PRESET));
+		SwingUtilities.invokeLater(() -> presetSelected(StreamOperations.DEFAULT_PRESET));
 		SwingUtilities.invokeLater(() -> this.sourceOperationComboBox.requestFocusInWindow());
 
 		this.memoryUsageTimer = new Timer(1000, e -> updateMemoryUsage());
@@ -129,10 +126,10 @@ public final class MainFrame extends JFrame {
 		fileMenu.add(this.actions.add(Command.EXIT.action(this::dispose)));
 
 		final var presetsMenu = menuBar.add(new JMenu("Presets"));
-		StreamOperations.findPresets().entrySet().stream().forEach(entry -> {
-			final var menuItem = presetsMenu.add(
-					new JMenuItem(entry.getKey(), Icons.getIcon(Icons.APPLICATION, Icons.Size.X_SMALL).orElse(null)));
-			menuItem.addActionListener(e -> presetSelected(entry.getValue().get()));
+		StreamOperations.findPresets().forEach(p -> {
+			final var menuItem = presetsMenu
+					.add(new JMenuItem(p.getName(), Icons.getIcon(Icons.APPLICATION, Icons.Size.X_SMALL).orElse(null)));
+			menuItem.addActionListener(e -> presetSelected(p.getOperations()));
 		});
 
 		final var settingsMenu = menuBar.add(new JMenu("Settings"));
@@ -181,7 +178,7 @@ public final class MainFrame extends JFrame {
 		return statusBar;
 	}
 
-	private void presetSelected(final StreamOperationSet preset) {
+	private void presetSelected(final StreamOperationsSet preset) {
 		final var source = preset.getSource();
 		this.sourceOperationComboBox.setSelectedItem(source.getClass());
 		setSourceOperation(source);
@@ -535,7 +532,7 @@ public final class MainFrame extends JFrame {
 
 	private void updateSourceCode() {
 		if (this.currentSourceOperation != null && this.currentTerminalOperation != null) {
-			final var operations = new StreamOperationSet(this.currentSourceOperation,
+			final var operations = new StreamOperationsSet(this.currentSourceOperation,
 					this.intermediateOperationListModel.getAllElements(), this.currentTerminalOperation);
 			SourceCodeBuilder builder = new SourceCodeBuilder(operations);
 			this.codeTextArea.setText(builder.getSourceCode());
@@ -591,7 +588,7 @@ public final class MainFrame extends JFrame {
 			this.sysOutTextArea.setText("");
 			this.statisticsTableModel.removeAll();
 
-			final var operations = new StreamOperationSet(this.currentSourceOperation,
+			final var operations = new StreamOperationsSet(this.currentSourceOperation,
 					this.intermediateOperationListModel.getAllElements(), this.currentTerminalOperation);
 			final var executor = new StreamExecutor(operations,
 					logger -> SwingUtilities.invokeLater(() -> this.statisticsTableModel.update(logger)));
